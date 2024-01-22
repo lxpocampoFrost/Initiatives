@@ -1,7 +1,6 @@
 import { Box } from '@mui/material';
-import React from 'react';
 import { useTheme } from '@mui/material/styles';
-
+import Button from './Button/Button';
 const UserDetails = () => {
 	const theme = useTheme();
 	return (
@@ -47,23 +46,10 @@ const UserDetails = () => {
 					View my posts
 				</Box>
 			</Box>
-			<Box
-				sx={{
-					backgroundColor: '#0A80B2',
-					borderRadius: '16px',
-					padding: '8px 16px',
-					fontFamily: 'Figtree-Medium,sans-serif',
-					fontWeight: '500',
-					fontSize: '16px',
-					lineHeight: '1.5',
-					width: '100%',
-					boxSizing: 'border-box',
-					cursor: 'pointer',
-					textAlign: 'center',
-				}}
-			>
-				Post
-			</Box>
+			<Button
+				text='Post'
+				action={() => console.log('click')}
+			/>
 		</Box>
 	);
 };
