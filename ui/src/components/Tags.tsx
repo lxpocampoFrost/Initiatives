@@ -1,27 +1,33 @@
-import Box from '@mui/material/Box';
+import styled from '@emotion/styled';
 
-const Tags = () => {
+interface TagData { 
+    name: string;
+}
+
+const TagContainer = styled.div`
+  font-family: 'Figtree-SemiBold', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 14.4px;
+  background-color: rgba(255, 255, 255, 0.12);
+  padding: 6px 12px;
+  color: #FFFFFF;
+  max-width: max-content;
+  border-radius: 50px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #FFFFFF;
+    color: #11141B;
+    transition: 0.3s ease-in-out;
+  }
+`;
+
+const Tags = ({name}:TagData) => {
   return (
-    <Box 
-        fontFamily="Figtree-SemiBold, sans-serif"
-        fontWeight="700"
-        fontSize="12px"
-        backgroundColor="rgba(255, 255, 255, 0.12)"
-        padding="6px 12px"
-        color="#FFFFFF"
-        maxWidth="max-content"
-        borderRadius="50px"
-        sx={{
-            cursor: "pointer",
-            '&:hover': {
-                backgroundColor: "#FFFFFF",
-                color: "#11141B",
-                transition: '0.3s ease-in-out'
-            }
-        }}
-    >
-      Tags
-    </Box>
+    <TagContainer>
+      {name}
+    </TagContainer >
   );
 };
 

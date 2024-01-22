@@ -1,6 +1,11 @@
 import Box from '@mui/material/Box';
 import Tags from '@/components/Tags';
+import styled from '@emotion/styled';
 
+const TagWrapper = styled.div`
+    display: flex;
+    gap: 4px
+`
 
 export default function ComponentLibrary() {
 	return (
@@ -8,7 +13,17 @@ export default function ComponentLibrary() {
             backgroundColor = 'rgba(12, 14, 19, 1)'
             padding="32px"
         >
-            <Tags />
+            <TagWrapper>
+                <Tags 
+                    name='All'
+                />
+                <Tags 
+                    name='Frontend'
+                />
+                <Tags 
+                    name='Backend'
+                />
+            </TagWrapper>
         </Box>
 	);
 }
