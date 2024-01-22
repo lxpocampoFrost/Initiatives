@@ -1,9 +1,10 @@
-import Box from '@mui/material/Box';
+import { Box } from '@mui/material';
+import Search from '../components/Search';
 
 export default function Home() {
-	return (
-		<>
-			<Box>Hello World!</Box>
-		</>
-	);
+  return (
+    <>
+      <Search />
+    </>
+  );
 }
