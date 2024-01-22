@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { IconButton, TextField } from '@mui/material';
 
 const Search = () => {
   const [isTextFieldVisible, setIsTextFieldVisible] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleIconClick = () => {
     setIsTextFieldVisible(true);
+
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
   };
 
   return (
@@ -38,10 +43,10 @@ const Search = () => {
             border: 'none',
           },
         }}
-        onClick={handleIconClick}
       />
 
       <IconButton
+        onClick={handleIconClick}
         type="button"
         aria-label="search"
         sx={{ width: '24px', height: '24px', marginLeft: '4px' }}

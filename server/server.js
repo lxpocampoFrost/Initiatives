@@ -11,10 +11,7 @@ const resolvers = require('./src/graphql/resolvers');
 const { verifyJwt } = require('./src/utils/auth');
 const { errorHandler } = require('./src/utils/error');
 
-const graphqlUploadExpress = require('graphql-upload/graphqlUploadExpress.js');
-
 const app = express();
-app.use(graphqlUploadExpress());
 app.use(cors());
 
 const server = new ApolloServer({
