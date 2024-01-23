@@ -8,6 +8,7 @@ import Modal from '@/components/Modal/Modal';
 import PostItem from '@/components/PostList/PostItem';
 import UserDetails from '@/components/UserDetails';
 import Search from '@/components/Search';
+import Dropdown from '@/components/Dropdown/Dropdown';
 
 const TagWrapper = styled.div`
 	display: flex;
@@ -40,6 +41,9 @@ export default function ComponentLibrary() {
 				<Tags name='Frontend' />
 				<Tags name='Backend' />
 			</TagWrapper>
+			<Box marginTop={4}>
+				<Dropdown />
+			</Box>
 			<PostItem data={postItemData} />
 			<UserDetails />
 			<Box>
