@@ -1,12 +1,8 @@
 //@ts-nocheck
 import { useEffect, useRef } from 'react';
 import { Box } from '@mui/material';
-interface EditorProps {
-	mode?: String;
-	postData?: any;
-}
 
-const Editor = ({ mode, postData }: EditorProps) => {
+const Editor = () => {
 	const editorRef = useRef(null);
 
 	const initializeEditor = async () => {
@@ -28,10 +24,13 @@ const Editor = ({ mode, postData }: EditorProps) => {
 		const Table = (await import('@editorjs/table')).default;
 
 		const editor = new EditorJS({
+			placeholder: 'Untitled',
 			holder: 'editor-js',
 			inlineToolbar: true,
 			tools: {
-				header: Header,
+				header: {
+					class: Header,
+				},
 				paragraph: {
 					class: Paragraph,
 					inlineToolbar: true,
@@ -78,22 +77,18 @@ const Editor = ({ mode, postData }: EditorProps) => {
 				marker: Marker,
 				table: Table,
 			},
-			data:
-				mode === 'view' || mode === 'edit'
-					? postData.post
-					: {
-							blocks: [
-								{
-									type: 'header',
-									data: {
-										text: 'Untitled',
-										level: 1,
-									},
-								},
-							],
-					  },
+			data: {
+				blocks: [
+					{
+						type: 'paragraph',
+						data: {
+							text: '',
+							level: 1,
+						},
+					},
+				],
+			},
 			autofocus: true,
-			readOnly: mode === 'view' ? true : false,
 			tunes: ['textVariant'],
 			onChange: () => {
 				editor.save().then((outputData) => {
@@ -109,10 +104,12 @@ const Editor = ({ mode, postData }: EditorProps) => {
 	};
 
 	useEffect(() => {
+		console.log('Editor mounted');
 		initializeEditor();
-
 		return () => {
+			console.log('Editor unmounted');
 			if (editorRef.current) {
+				console.log('editor', editorRef);
 				editorRef.current.destroy();
 			}
 		};
