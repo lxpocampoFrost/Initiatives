@@ -9,6 +9,7 @@ const Button = ({ text = 'Post', action }: ButtonProps) => {
 		<Box
 			sx={{
 				backgroundColor: '#0A80B2',
+				transition: '0.3s ease',
 				borderRadius: '16px',
 				padding: '8px 16px',
 				fontFamily: 'Figtree-Medium,sans-serif',
@@ -19,6 +20,9 @@ const Button = ({ text = 'Post', action }: ButtonProps) => {
 				boxSizing: 'border-box',
 				cursor: 'pointer',
 				textAlign: 'center',
+				'&:hover': {
+					backgroundColor: '#4FA9D0',
+				},
 			}}
 			onClick={action}
 		>
