@@ -3,7 +3,6 @@ import { Box, Pagination } from "@mui/material";
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 
-
 interface PostListData {
     totalPages: number,
     currentPage: number,
@@ -102,24 +101,6 @@ const PaginationControl = ({ totalPages, currentPage, handlePageChange }:PostLis
                     [nextArrowText]: {
                         content: '"Next"',
                     },
-                    // [theme.breakpoints.down('sm')]: {
-                    //     '.MuiPagination-ul > li': {
-                    //         width: 'auto'
-                    //     },
-                    //     '.MuiPagination-ul > li:first-of-type': {
-                    //         order: '2',
-                    //         flexBasis: '50%',
-                    //     },
-                    //     '.MuiPagination-ul > li:last-of-type': {
-                    //         order: '2',
-                    //         flexBasis: '50%',
-                    //         display: 'flex',
-                    //         justifyContent: 'flex-end',
-                    //     },
-                    //     '.MuiPagination-ul': {
-                    //         justifyContent: 'center',
-                    //     }
-                    // }
             }}>
                 <Pagination 
                     count={totalPages} 
