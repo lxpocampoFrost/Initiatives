@@ -31,7 +31,7 @@ const Modal = ({ title = 'Create Post', isOpen, onClose, children }: ModalProps)
 				},
 				'.MuiDialog-paperFullWidth': {
 					margin: '0',
-					maxWidth: 'unset',
+					maxWidth: '792px',
 					width: '100%',
 				},
 			}}
