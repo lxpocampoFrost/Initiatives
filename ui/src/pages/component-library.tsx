@@ -8,6 +8,7 @@ import PostItem from '@/components/PostList/PostItem';
 import UserDetails from '@/components/UserDetails';
 import Search from '@/components/Search';
 import Dropdown from '@/components/Dropdown/Dropdown';
+import PaginationControl from '@/components/PostList/Pagination';
 
 const TagWrapper = styled.div`
   display: flex;
@@ -22,8 +23,33 @@ const postItemData = {
   tags: ['Html', 'CSS'],
 };
 
+const postItems = [
+    {
+        title: 'Help with Java Functions',
+        post: "Sample Body",
+        created_by: 'John Doe',
+        created_date: 'July 7,2023',
+        tags: ['Html', 'CSS'],
+    },
+    {
+        title: 'Help with Java Functions',
+        post: "Sample Body",
+        created_by: 'John Doe',
+        created_date: 'July 7,2023',
+        tags: ['Html', 'CSS'],
+    },
+    {
+        title: 'Help with Java Functions',
+        post: "Sample Body",
+        created_by: 'John Doe',
+        created_date: 'July 7,2023',
+        tags: ['Html', 'CSS'],
+    }
+]
+
 export default function ComponentLibrary() {
   const [modalOpen, setModalOpen] = useState(false);
+  const [page, setPage] = useState(1);
 
   return (
     <Box
@@ -56,6 +82,14 @@ export default function ComponentLibrary() {
       >
         Modal Content here
       </Modal>
+
+      <PaginationControl 
+        totalPages={10}
+        currentPage={page}
+        handlePageChange={(event, value) => {
+            setPage(value);
+        }}
+      />
     </Box>
   );
 }
