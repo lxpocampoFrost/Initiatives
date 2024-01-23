@@ -114,12 +114,9 @@ const Editor = () => {
 	};
 
 	useEffect(() => {
-		console.log('Editor mounted');
 		initializeEditor();
 		return () => {
-			console.log('Editor unmounted');
 			if (editorRef.current) {
-				console.log('editor', editorRef);
 				editorRef.current.destroy();
 			}
 		};
@@ -131,6 +128,10 @@ const Editor = () => {
 				id='editor-js'
 				sx={{
 					color: '#ffffff',
+					'.cdx-button': {
+						background: '#0A80B2',
+						color: '#ffffff',
+					},
 					'.tc-wrap': {
 						'--color-border': '#2C313C',
 					},
