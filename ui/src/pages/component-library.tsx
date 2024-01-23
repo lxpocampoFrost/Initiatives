@@ -2,6 +2,7 @@ import Box from '@mui/material/Box';
 import Tags from '@/components/Tags';
 import styled from '@emotion/styled';
 import PostItem from '@/components/PostList/PostItem';
+import UserDetails from '@/components/UserDetails';
 
 const TagWrapper = styled.div`
 	display: flex;
@@ -33,6 +34,7 @@ export default function ComponentLibrary() {
 				<Tags name='Backend' />
 			</TagWrapper>
 			<PostItem data={postItemData} />
+			<UserDetails />
 		</Box>
 	);
 }
