@@ -4,6 +4,7 @@ import Button from '@mui/material/Button';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 import { Stack } from '@mui/material/';
+import { useTheme } from '@mui/material/styles';
 
 const Dropdown = ({ options, type }: any) => {
   console.log('options', options);
@@ -23,6 +24,8 @@ const Dropdown = ({ options, type }: any) => {
     handleClose();
   };
 
+  const theme = useTheme();
+
   return (
     <>
       <ButtonGroup
@@ -30,6 +33,10 @@ const Dropdown = ({ options, type }: any) => {
         aria-label="contained button group"
         onClick={handleClick}
         sx={{
+          [theme.breakpoints.up('md')]: {
+            width: 'max-content',
+          },
+          width: '100%',
           backgroundColor: 'transparent',
           boxShadow: 'unset',
         }}
@@ -43,7 +50,7 @@ const Dropdown = ({ options, type }: any) => {
             textTransform: 'unset',
             fontFamily: 'Figtree-SemiBold, sans-serif',
             fontSize: '16px',
-            fontWeight: '400',
+            fontWeight: '600',
             lineHeight: '1.5',
             padding: '0',
             '&:hover': { backgroundColor: 'transparent' },

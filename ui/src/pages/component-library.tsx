@@ -7,6 +7,7 @@ import Modal from '@/components/Modal/Modal';
 import PostItem from '@/components/PostList/PostItem';
 import UserDetails from '@/components/UserDetails';
 import Search from '@/components/Search';
+import Dropdown from '@/components/Dropdown/Dropdown';
 import Filter from '@/components/Filter/Filter';
 
 const TagWrapper = styled.div`
@@ -24,6 +25,7 @@ const postItemData = {
 
 export default function ComponentLibrary() {
   const [modalOpen, setModalOpen] = useState(false);
+  const sortItem = ['Sort by', 'Latest', 'Oldest'];
 
   return (
     <Box
@@ -40,6 +42,9 @@ export default function ComponentLibrary() {
         <Tags name="Frontend" />
         <Tags name="Backend" />
       </TagWrapper>
+      <Box marginTop={4}>
+        <Dropdown options={sortItem} type="Sort by" />
+      </Box>
       <PostItem data={postItemData} />
       <UserDetails />
       <Box>
