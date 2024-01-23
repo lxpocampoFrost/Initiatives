@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Button from '@mui/material/Button';
 import Popover from '@mui/material/Popover';
@@ -7,7 +7,9 @@ import { Stack } from '@mui/material/';
 import { useTheme } from '@mui/material/styles';
 
 const Dropdown = ({ options, type }: any) => {
-  console.log('options', options);
+  useEffect(() => {
+    setSelectedValue(options[1]);
+  }, []);
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedValue, setSelectedValue] = useState('');
 
