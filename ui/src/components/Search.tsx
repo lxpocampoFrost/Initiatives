@@ -20,6 +20,7 @@ const Search = () => {
       <Box
         sx={{
           display: 'flex',
+          marginLeft: 'auto',
         }}
       >
         <TextField
