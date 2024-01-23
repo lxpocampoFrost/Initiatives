@@ -2,6 +2,7 @@ import { createContext, useState, useContext, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { ApolloProvider } from '@apollo/client';
 import { UserProvider } from './UserContext';
+import { NewApolloClient } from '../graphql/apolloClient';
 
 interface AuthContextData {
 	token: string | undefined;
@@ -59,6 +60,8 @@ export const TokenProvider = ({ children }: AuthProviderProps) => {
 		return;
 	}
 
+	const client = NewApolloClient(token ? token : undefined);
+
 	return (
 		<AuthContext.Provider
 			value={{
@@ -67,7 +70,9 @@ export const TokenProvider = ({ children }: AuthProviderProps) => {
 				isLoadingUser,
 			}}
 		>
-			{children}
+			<ApolloProvider client={client}>
+				<UserProvider>{children}</UserProvider>
+			</ApolloProvider>
 		</AuthContext.Provider>
 	);
 };

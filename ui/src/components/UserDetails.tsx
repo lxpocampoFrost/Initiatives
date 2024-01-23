@@ -1,8 +1,19 @@
 import { Box } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import Button from './Button/Button';
-const UserDetails = () => {
+import UserContext from '@/context/UserContext';
+import { useContext } from 'react';
+
+interface UserDetailsProp {
+	action: () => void;
+}
+
+const UserDetails = ({ action }: UserDetailsProp) => {
+	const { currentUserDetails } = useContext(UserContext);
 	const theme = useTheme();
+
+	const fullName = currentUserDetails?.firstName + ' ' + currentUserDetails?.lastName;
+
 	return (
 		<Box
 			sx={{
@@ -31,7 +42,7 @@ const UserDetails = () => {
 						lineHeight: '26.4px',
 					}}
 				>
-					John Doe
+					{fullName}
 				</Box>
 				<Box
 					sx={{
@@ -48,7 +59,7 @@ const UserDetails = () => {
 			</Box>
 			<Button
 				text='Post'
-				action={() => console.log('click')}
+				action={() => action()}
 			/>
 		</Box>
 	);
