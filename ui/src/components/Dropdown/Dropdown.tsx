@@ -44,7 +44,7 @@ const Dropdown = () => {
             textTransform: 'unset',
             fontFamily: 'Figtree-SemiBold, sans-serif',
             fontSize: '16px',
-            fontWeight: '400',
+            fontWeight: '600',
             lineHeight: '1.5',
             padding: '0',
             '&:hover': { backgroundColor: 'transparent' },
