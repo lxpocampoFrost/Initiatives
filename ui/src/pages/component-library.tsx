@@ -6,6 +6,7 @@ import { useState } from 'react';
 import Modal from '@/components/Modal/Modal';
 import PostItem from '@/components/PostList/PostItem';
 import UserDetails from '@/components/UserDetails';
+import Search from '@/components/Search';
 
 const TagWrapper = styled.div`
 	display: flex;
@@ -22,6 +23,7 @@ const postItemData = {
 
 export default function ComponentLibrary() {
 	const [modalOpen, setModalOpen] = useState(false);
+
 	return (
 		<Box
 			sx={{
@@ -37,6 +39,11 @@ export default function ComponentLibrary() {
 				<Tags name='Frontend' />
 				<Tags name='Backend' />
 			</TagWrapper>
+			<PostItem data={postItemData} />
+			<UserDetails />
+			<Box>
+				<Search />
+			</Box>
 			<Button onClick={() => setModalOpen(true)}>Add post</Button>
 			<Modal
 				title='Create Post'
@@ -45,8 +52,6 @@ export default function ComponentLibrary() {
 			>
 				Modal Content here
 			</Modal>
-			<PostItem data={postItemData} />
-			<UserDetails />
 		</Box>
 	);
 }
