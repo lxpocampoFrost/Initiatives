@@ -7,7 +7,7 @@ export default function Home() {
 	return (
 		<>
 			<Box>Hello {user?.given_name}</Box>
-			<Link href='components-library'> Go to components library</Link>
+			<Link href='component-library'> Go to components library</Link>
 		</>
 	);
 }

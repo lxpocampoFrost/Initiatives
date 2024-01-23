@@ -78,8 +78,16 @@ const Modal = ({ title = 'Create Post', isOpen, onClose, children }: ModalProps)
 				</IconButton>
 			</DialogTitle>
 			<DialogContent
+				className='modal-content'
 				sx={{
+					[theme.breakpoints.up('md')]: {
+						padding: '20px 24px',
+					},
+					padding: '16px',
 					color: '#ffffff',
+					'&::-webkit-scrollbar': {
+						display: 'none',
+					},
 				}}
 			>
 				{children}
