@@ -7,8 +7,8 @@ interface PostItemData {
 	title: any;
 	post: any;
 	created_by: any;
-	created_date: String;
-	tags: [String];
+	created_date: string;
+	tags: string[];
 }
 
 interface PostItemProps {
@@ -86,6 +86,9 @@ const PostItem = ({ data, handleClick }: PostItemProps) => {
 							opacity: '0.8',
 							mt: '10px',
 							fontFamily: 'Figtree-Regular, sans-serif',
+							fontWeight: '400',
+							fontSize: '14px',
+							lineHeight: '1.5',
 						}}
 					>
 						{post}
