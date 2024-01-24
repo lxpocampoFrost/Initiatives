@@ -9,9 +9,8 @@ interface ButtonProps {
 	lineHeight?: string;
 	disabled?: boolean;
 	loading?: boolean;
-	processStage: string;
 }
-const Button = ({ text = 'Post', disabled, processStage, loading, action, width = '100%', padding = '8px 16px', borderRadius = '16px', lineHeight = '1.5' }: ButtonProps) => {
+const Button = ({ text = 'Post', disabled, loading, action, width = '100%', padding = '8px 16px', borderRadius = '16px', lineHeight = '1.5' }: ButtonProps) => {
 	return (
 		<Box
 			className={`${disabled ? 'disabled' : ''}`}

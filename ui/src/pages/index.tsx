@@ -14,10 +14,12 @@ import { getBindnameForUserId, getColorForUserId } from '@/utils/helpers';
 
 import { useMutation } from '@apollo/client';
 import { DELETE_POST, GET_POSTS } from '@/graphql/queries';
+import DeleteModal from '@/components/Modal/DeleteModal';
 
 export default function Home() {
 	const { mode, setMode, selectedCardData, setSelectedCardData } = useMode();
 	const [modalOpen, setModalOpen] = useState(false);
+	const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
 
 	const [deletePost] = useMutation(DELETE_POST, {
 		refetchQueries: [{ query: GET_POSTS }],
@@ -51,9 +53,9 @@ export default function Home() {
 		const { data } = await deletePost({
 			variables: { postId: selectedCardData?.id },
 		});
-
 		if (data.deletePost) {
 			setModalOpen(false);
+			setDeleteModalOpen(false);
 			setSelectedCardData(null);
 		}
 	};
@@ -124,7 +126,7 @@ export default function Home() {
 				isOpen={modalOpen}
 				onClose={handleCloseModal}
 				onEdit={handleEditClick}
-				onDelete={handleDelete}
+				onDelete={() => setDeleteModalOpen(true)}
 			>
 				<Editor onSubmitSuccess={handleEditorSubmitSuccess} />
 
@@ -157,6 +159,12 @@ export default function Home() {
 					</>
 				)}
 			</Modal>
+
+			<DeleteModal
+				isOpen={isDeleteModalOpen}
+				onClose={() => setDeleteModalOpen(false)}
+				onDelete={handleDelete}
+			/>
 		</>
 	);
 }
