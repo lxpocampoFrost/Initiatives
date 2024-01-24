@@ -10,6 +10,7 @@ import UserDetails from '@/components/UserDetails';
 import Search from '@/components/Search';
 import Dropdown from '@/components/Dropdown/Dropdown';
 import Filter from '@/components/Filter/Filter';
+import DeleteModal from '@/components/Modal/DeleteModal';
 
 const TagWrapper = styled.div`
   display: flex;
@@ -28,6 +29,12 @@ export default function ComponentLibrary() {
   const [modalOpen, setModalOpen] = useState(false);
   const sortItem = ['Sort by', 'Latest', 'Oldest'];
   const postedItem = ['Posted by', 'Everyone', 'Me', 'Jm', 'Marie'];
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+
+  const handleDeleteClick = () => {
+    console.log('Deleting...');
+    setDeleteModalOpen(false);
+  };
 
   return (
     <Box
@@ -62,6 +69,12 @@ export default function ComponentLibrary() {
         <Editor />
       </Modal>
       <Filter />
+      <Button onClick={() => setDeleteModalOpen(true)}>Delete post</Button>
+      <DeleteModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setDeleteModalOpen(false)}
+        onDelete={handleDeleteClick}
+      />
     </Box>
   );
 }
