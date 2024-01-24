@@ -155,7 +155,7 @@ const resolvers = {
 				throw new Error('Failed to create post.');
 			}
 		},
-		updatePost: async (_, { postId, post, tagsId, files }) => {
+		updatePost: async (_, { postId, post, title }) => {
 			try {
 				const existingPost = await getPostById(postId);
 
@@ -164,8 +164,8 @@ const resolvers = {
 				}
 
 				const updatedPostData = {
+					title: title || existingPost.title,
 					post: post || existingPost.post,
-					tagsId: tagsId || existingPost.tagsId,
 					updated_date: new Date().toISOString(),
 				};
 
@@ -173,7 +173,7 @@ const resolvers = {
 
 				const updatedPost = await getPostById(updatedPostId);
 
-				return { data: updatedPost, postId: updatedPostId, message: 'Post updated successfully' };
+				return { data: updatedPost, success: true, message: 'Post updated successfully' };
 			} catch (error) {
 				console.error('Error:', error);
 			}

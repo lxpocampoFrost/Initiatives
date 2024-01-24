@@ -127,7 +127,7 @@ const getPostById = async (postId) => {
 
 const createPost = async (postData) => {
 	try {
-		const { tagsId, uploadedMediaFiles, ...postFields } = postData;
+		const { tagsId, ...postFields } = postData;
 
 		const result = await poolQuery('INSERT INTO posts SET ?', [postFields]);
 		const postId = result.insertId;
@@ -145,7 +145,7 @@ const createPost = async (postData) => {
 
 const updatePost = async (postId, updatedData) => {
 	try {
-		const { tagsId, uploadedMediaFiles, ...postFields } = updatedData;
+		const { tagsId, ...postFields } = updatedData;
 
 		await poolQuery('UPDATE posts SET ? WHERE id = ?', [postFields, postId]);
 

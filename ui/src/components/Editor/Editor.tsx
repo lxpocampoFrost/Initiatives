@@ -3,18 +3,18 @@ import { useEffect, useRef, useState, useContext } from 'react';
 import UserContext from '@/context/UserContext';
 
 import { Box } from '@mui/material';
-import { ADD_POST, GET_POSTS } from '@/graphql/queries';
+import { ADD_POST, UPDATE_POST, GET_POSTS } from '@/graphql/queries';
 import { useMutation } from '@apollo/client';
 import Button from '@/components/Button/Button';
+import { useMode } from '@/context/ModeContext';
 
 interface EditorProps {
-	mode?: String;
-	postData?: any;
 	onSubmitSuccess: () => void;
 }
 
-const Editor = ({ mode, postData, onSubmitSuccess }: EditorProps) => {
+const Editor = ({ onSubmitSuccess }: EditorProps) => {
 	const { currentUserDetails } = useContext(UserContext);
+	const { mode, selectedCardData } = useMode();
 	const currentUserDetailsId = currentUserDetails && currentUserDetails.userId;
 
 	const [loading, setLoading] = useState(false);
@@ -33,17 +33,28 @@ const Editor = ({ mode, postData, onSubmitSuccess }: EditorProps) => {
 		refetchQueries: [{ query: GET_POSTS }],
 	});
 
+	const [updatePost] = useMutation(UPDATE_POST, {
+		refetchQueries: [{ query: GET_POSTS }],
+	});
+
+	console.log('selected', selectedCardData.id);
 	const handleSubmit = async () => {
 		try {
 			setLoading(true);
 
-			const { title, post, postId } = formData;
+			const { title, post } = formData;
 
 			let mutation: any;
 			let variables: any;
 
-			if (postId) {
-				console.log('submit for update');
+			if (selectedCardData) {
+				mutation = updatePost;
+				variables = {
+					postId: selectedCardData?.id,
+					post: formData.post,
+					title: formData.title,
+					updated_at: new Date().toISOString(),
+				};
 			} else {
 				mutation = createPost;
 				variables = {
@@ -57,7 +68,7 @@ const Editor = ({ mode, postData, onSubmitSuccess }: EditorProps) => {
 				variables,
 			});
 
-			if (data?.createPost?.success && editorRef.current) {
+			if (data && editorRef.current) {
 				setLoading(false);
 
 				setTimeout(() => {
@@ -148,8 +159,6 @@ const Editor = ({ mode, postData, onSubmitSuccess }: EditorProps) => {
 								formData.append('file', file);
 								formData.append('upload_preset', 'yxgn0epf');
 
-								console.log('formData', formData);
-
 								try {
 									const response = await fetch(`https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUD_NAME}/upload`, {
 										method: 'POST',
@@ -189,8 +198,6 @@ const Editor = ({ mode, postData, onSubmitSuccess }: EditorProps) => {
 								formData.append('file', file);
 								formData.append('upload_preset', 'yxgn0epf');
 
-								console.log('formData', formData);
-
 								try {
 									const response = await fetch(`https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUD_NAME}/upload`, {
 										method: 'POST',
@@ -224,8 +231,8 @@ const Editor = ({ mode, postData, onSubmitSuccess }: EditorProps) => {
 				table: Table,
 			},
 			data:
-				mode === 'view'
-					? postData.post
+				mode === 'view' || mode === 'edit'
+					? selectedCardData?.post
 					: {
 							blocks: [
 								{
@@ -236,7 +243,7 @@ const Editor = ({ mode, postData, onSubmitSuccess }: EditorProps) => {
 								},
 							],
 					  },
-
+			readOnly: mode === 'view' ? true : false,
 			tunes: ['textVariant'],
 			onChange: () => {
 				editor.save().then((outputData) => {
@@ -244,13 +251,15 @@ const Editor = ({ mode, postData, onSubmitSuccess }: EditorProps) => {
 					setIsEditorEmpty(isEmpty);
 
 					const title = outputData.blocks.length > 0 ? JSON.stringify(outputData.blocks[0]) : '';
+
 					const body = outputData.blocks.slice(1);
 					const bodyBlocks = JSON.stringify(body);
 
-					setFormData({
+					setFormData((prevState) => ({
+						...prevState,
 						title: title,
 						post: bodyBlocks,
-					});
+					}));
 				});
 			},
 			onReady: () => {
@@ -269,7 +278,8 @@ const Editor = ({ mode, postData, onSubmitSuccess }: EditorProps) => {
 				editorRef.current.destroy();
 			}
 		};
-	}, []);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [mode]);
 
 	return (
 		<>
@@ -467,9 +477,9 @@ const Editor = ({ mode, postData, onSubmitSuccess }: EditorProps) => {
 					},
 				}}
 			></Box>
-			<Box sx={{ display: 'flex', justifyContent: 'flex-end', paddingTop: '16px', borderTop: '1px solid #2C313C' }}>
+			<Box sx={{ display: mode !== 'view' ? 'flex' : 'none', justifyContent: 'flex-end', paddingTop: '16px', borderTop: '1px solid #2C313C' }}>
 				<Button
-					text={'Post'}
+					text={mode === 'edit' ? 'Update Post' : 'Post'}
 					loading={loading}
 					width='max-content'
 					padding='8px 20px'

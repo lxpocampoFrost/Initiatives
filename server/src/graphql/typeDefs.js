@@ -38,7 +38,7 @@ module.exports = gql`
 
 	type Mutation {
 		createPost(title: JSON!, post: String!, created_by: String!): PostMessage
-		updatePost(postId: ID!, post: String!, tagsId: [ID!]!): PostMessage
+		updatePost(postId: ID!, title: JSON, post: String!): PostMessage
 		deletePost(postId: ID!): Result
 		generateExplanation(postId: ID!): String
 	}

@@ -28,3 +28,27 @@ export const ADD_POST = gql`
 		}
 	}
 `;
+
+export const UPDATE_POST = gql`
+	mutation UpdatePost($postId: ID!, $title: JSON, $post: String!) {
+		updatePost(postId: $postId, title: $title, post: $post) {
+			data {
+				id
+				title
+				post
+				updated_date
+			}
+			message
+			success
+		}
+	}
+`;
+
+export const DELETE_POST = gql`
+	mutation DeletePost($postId: ID!) {
+		deletePost(postId: $postId) {
+			success
+			message
+		}
+	}
+`;
