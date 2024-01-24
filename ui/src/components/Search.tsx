@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Box, IconButton, TextField } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 const Search = () => {
   const [isTextFieldVisible, setIsTextFieldVisible] = useState(false);
@@ -15,12 +16,19 @@ const Search = () => {
     }
   }, [isTextFieldVisible]);
 
+  const theme = useTheme();
+
   return (
     <>
       <Box
         sx={{
+          [theme.breakpoints.up('md')]: {
+            marginLeft: 'auto',
+            marginTop: '0',
+          },
           display: 'flex',
-          marginLeft: 'auto',
+          marginLeft: isTextFieldVisible ? '0' : 'auto',
+          marginTop: '14px',
         }}
       >
         <TextField
@@ -30,6 +38,9 @@ const Search = () => {
           placeholder="Search"
           autoComplete="off"
           sx={{
+            [theme.breakpoints.up('md')]: {
+              width: '108px',
+            },
             display: isTextFieldVisible ? 'flex' : 'none',
             fontFamily: 'Figtree-Regular',
             fontSize: '16px',
@@ -37,7 +48,7 @@ const Search = () => {
             lineHeight: '1.5',
             border: 'none',
             borderRadius: '0',
-            width: '108px',
+            width: '100%',
             input: {
               color: '#fff',
               height: '24px',

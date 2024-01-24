@@ -44,7 +44,15 @@ const Filter = () => {
           opacity: '0.1',
         }}
       ></Box>
-      <Stack direction="row" sx={{ width: '100%' }}>
+      <Stack
+        sx={{
+          [theme.breakpoints.up('md')]: {
+            flexDirection: 'row',
+          },
+          width: '100%',
+          flexDirection: 'column',
+        }}
+      >
         <Stack direction="row" sx={{ gap: '4px', flexWrap: 'wrap' }}>
           {options.map((option, index) => (
             <Tags name={option} key={index} />
