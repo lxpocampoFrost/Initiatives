@@ -15,7 +15,6 @@ const Modal = ({ title = 'Create Post', isOpen, onClose, children }: ModalProps)
 		<Dialog
 			open={isOpen}
 			onClose={onClose}
-			maxWidth='md'
 			fullWidth
 			sx={{
 				background: '#0C0E13',
@@ -24,11 +23,13 @@ const Modal = ({ title = 'Create Post', isOpen, onClose, children }: ModalProps)
 						padding: '40px 24px',
 					},
 					padding: '8px',
-					alignItems: 'flex-start',
+					boxSizing: 'border-box',
+					height: '100%',
 				},
 				'.MuiPaper-rounded': {
 					background: '#16191F',
 					borderRadius: '12px',
+					maxHeight: '100%',
 				},
 				'.MuiDialog-paperFullWidth': {
 					margin: '0',
@@ -39,6 +40,9 @@ const Modal = ({ title = 'Create Post', isOpen, onClose, children }: ModalProps)
 		>
 			<DialogTitle
 				sx={{
+					[theme.breakpoints.up('md')]: {
+						padding: '16px 24px',
+					},
 					display: 'flex',
 					justifyContent: 'space-between',
 					color: '#ffffff',
@@ -46,7 +50,7 @@ const Modal = ({ title = 'Create Post', isOpen, onClose, children }: ModalProps)
 					fontSize: '18px',
 					fontWeight: '700',
 					lineHeight: '21.6px',
-					padding: '16px 24px',
+					// padding: '16px',
 				}}
 			>
 				{title}
@@ -82,10 +86,9 @@ const Modal = ({ title = 'Create Post', isOpen, onClose, children }: ModalProps)
 				className='modal-content'
 				sx={{
 					[theme.breakpoints.up('md')]: {
-						padding: '20px 24px',
+						padding: ' 0 24px 24px!important',
 					},
-					height: '100%',
-					padding: '16px',
+					padding: ' 0 24px 16px!important',
 					color: '#ffffff',
 					'&::-webkit-scrollbar': {
 						display: 'none',

@@ -278,8 +278,11 @@ const Editor = ({ mode, postData, onSubmitSuccess }: EditorProps) => {
 				sx={{
 					color: '#ffffff',
 					'.cdx-button': {
-						background: '#0A80B2',
+						background: '#25282e',
 						color: '#ffffff',
+						border: '1px solid #40444C',
+						boxShadow: 'none',
+						opacity: '0.3',
 					},
 					'.tc-wrap': {
 						'--color-border': '#2C313C',
@@ -449,11 +452,17 @@ const Editor = ({ mode, postData, onSubmitSuccess }: EditorProps) => {
 							left: '0',
 						},
 						'.ce-block__content': {
-							maxWidth: '364px',
+							maxWidth: '500px',
 							margin: '0 0 0 auto',
 						},
 						'.cdx-block': {
 							padding: '0',
+						},
+					},
+					'@media(max-width:480px)': {
+						'.ce-block__content': {
+							maxWidth: '360px',
+							margin: '0 0 0 auto',
 						},
 					},
 				}}
