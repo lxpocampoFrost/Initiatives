@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, CircularProgress } from '@mui/material';
 
 interface ButtonProps {
 	text: string;
@@ -7,9 +7,11 @@ interface ButtonProps {
 	padding?: string;
 	borderRadius?: string;
 	lineHeight?: string;
-	disabled?: Boolean;
+	disabled?: boolean;
+	loading?: boolean;
+	processStage: string;
 }
-const Button = ({ text = 'Post', disabled, action, width = '100%', padding = '8px 16px', borderRadius = '16px', lineHeight = '1.5' }: ButtonProps) => {
+const Button = ({ text = 'Post', disabled, processStage, loading, action, width = '100%', padding = '8px 16px', borderRadius = '16px', lineHeight = '1.5' }: ButtonProps) => {
 	return (
 		<Box
 			className={`${disabled ? 'disabled' : ''}`}
@@ -26,6 +28,7 @@ const Button = ({ text = 'Post', disabled, action, width = '100%', padding = '8p
 				boxSizing: 'border-box',
 				cursor: 'pointer',
 				textAlign: 'center',
+				position: 'relative',
 				'&:hover': {
 					backgroundColor: '#4FA9D0',
 				},
@@ -36,7 +39,18 @@ const Button = ({ text = 'Post', disabled, action, width = '100%', padding = '8p
 			}}
 			onClick={action}
 		>
-			{text}
+			{loading ? (
+				<>
+					<CircularProgress
+						size={20}
+						sx={{
+							color: '#fff',
+						}}
+					/>
+				</>
+			) : (
+				text
+			)}
 		</Box>
 	);
 };

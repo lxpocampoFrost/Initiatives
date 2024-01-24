@@ -18,7 +18,6 @@ const Editor = ({ mode, postData, onSubmitSuccess }: EditorProps) => {
 	const currentUserDetailsId = currentUserDetails && currentUserDetails.userId;
 
 	const [loading, setLoading] = useState(false);
-	const [processStage, setProcessStage] = useState(null);
 	const [isEditorEmpty, setIsEditorEmpty] = useState(true);
 	const editorRef = useRef<any>(null);
 
@@ -37,7 +36,6 @@ const Editor = ({ mode, postData, onSubmitSuccess }: EditorProps) => {
 	const handleSubmit = async () => {
 		try {
 			setLoading(true);
-			setProcessStage('Saving...');
 
 			const { title, post, postId } = formData;
 
@@ -62,9 +60,11 @@ const Editor = ({ mode, postData, onSubmitSuccess }: EditorProps) => {
 			if (data?.createPost?.success && editorRef.current) {
 				setLoading(false);
 
-				onSubmitSuccess();
-				editorRef.current.destroy();
-				initializeEditor();
+				setTimeout(() => {
+					onSubmitSuccess();
+					editorRef.current.destroy();
+					initializeEditor();
+				}, 1000);
 			}
 		} catch (error) {
 			console.error('Error creating post:', error);
@@ -386,7 +386,8 @@ const Editor = ({ mode, postData, onSubmitSuccess }: EditorProps) => {
 			></Box>
 			<Box sx={{ display: 'flex', justifyContent: 'flex-end', paddingTop: '16px', borderTop: '1px solid #2C313C' }}>
 				<Button
-					text={loading ? processStage : 'Post'}
+					text={'Post'}
+					loading={loading}
 					width='max-content'
 					padding='8px 20px'
 					borderRadius='63px'
