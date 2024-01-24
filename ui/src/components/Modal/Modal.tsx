@@ -15,7 +15,6 @@ const Modal = ({ title = 'Create Post', isOpen, onClose, children }: ModalProps)
 		<Dialog
 			open={isOpen}
 			onClose={onClose}
-			maxWidth='md'
 			fullWidth
 			sx={{
 				background: '#0C0E13',
@@ -24,10 +23,14 @@ const Modal = ({ title = 'Create Post', isOpen, onClose, children }: ModalProps)
 						padding: '40px 24px',
 					},
 					padding: '8px',
+
+					boxSizing: 'border-box',
+					height: '100%',
 				},
 				'.MuiPaper-rounded': {
 					background: '#16191F',
 					borderRadius: '12px',
+					maxHeight: '100%',
 				},
 				'.MuiDialog-paperFullWidth': {
 					margin: '0',
