@@ -36,9 +36,9 @@ const Dropdown = ({ options, type }: any) => {
         onClick={handleClick}
         sx={{
           [theme.breakpoints.up('md')]: {
-            width: 'max-content',
+            minWidth: 'max-content',
           },
-          width: '100%',
+          minWidth: '50%',
           backgroundColor: 'transparent',
           boxShadow: 'unset',
         }}

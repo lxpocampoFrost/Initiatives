@@ -19,14 +19,23 @@ const Filter = () => {
         },
         padding: '16px 24px',
         flexDirection: 'column',
+        alignItems: 'flex-start',
         boxSizing: 'border-box',
-        width: '100%',
         borderTop: '1px solid rgba(38, 45, 58, 0.30)',
         borderRadius: '0',
         backgroundColor: '#11141B;',
       }}
     >
-      <Stack direction="row" spacing={1} sx={{ minWidth: 'max-content' }}>
+      <Stack
+        direction="row"
+        spacing={1}
+        sx={{
+          [theme.breakpoints.up('md')]: {
+            minWidth: 'max-content',
+          },
+          minWidth: '100%',
+        }}
+      >
         <Dropdown options={sortItem} type="Sort by" />
         <Dropdown options={postedItem} type="Posted by" />
       </Stack>
