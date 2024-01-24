@@ -17,8 +17,15 @@ interface PostItemProps {
 }
 
 const PostItem = ({ data, handleClick }: PostItemProps) => {
-	const { title, post, created_by, created_date, tags } = data;
 	const theme = useTheme();
+
+	const { title, post, created_by, explanation, created_date, tags } = data;
+	let titleObj = JSON.parse(title);
+	let postObj = JSON.parse(post);
+	let parsedTitle = titleObj.data.text;
+	let parsedBody = postObj[0].data.text;
+
+	console.log('body', parsedBody);
 
 	return (
 		<>
@@ -79,7 +86,7 @@ const PostItem = ({ data, handleClick }: PostItemProps) => {
 							lineHeight: '1.5',
 						}}
 					>
-						{title}
+						{parsedTitle}
 					</Box>
 					<Box
 						sx={{
@@ -90,9 +97,9 @@ const PostItem = ({ data, handleClick }: PostItemProps) => {
 							fontSize: '14px',
 							lineHeight: '1.5',
 						}}
-					>
-						{post}
-					</Box>
+						dangerouslySetInnerHTML={{ __html: parsedBody }}
+					></Box>
+					<Box dangerouslySetInnerHTML={{ __html: explanation }}></Box>
 				</Box>
 
 				<Stack

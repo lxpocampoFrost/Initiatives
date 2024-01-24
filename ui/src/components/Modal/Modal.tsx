@@ -24,6 +24,7 @@ const Modal = ({ title = 'Create Post', isOpen, onClose, children }: ModalProps)
 						padding: '40px 24px',
 					},
 					padding: '8px',
+					alignItems: 'flex-start',
 				},
 				'.MuiPaper-rounded': {
 					background: '#16191F',
@@ -83,6 +84,7 @@ const Modal = ({ title = 'Create Post', isOpen, onClose, children }: ModalProps)
 					[theme.breakpoints.up('md')]: {
 						padding: '20px 24px',
 					},
+					height: '100%',
 					padding: '16px',
 					color: '#ffffff',
 					'&::-webkit-scrollbar': {

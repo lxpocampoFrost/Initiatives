@@ -1,11 +1,75 @@
 //@ts-nocheck
-import { useEffect, useRef, useState } from 'react';
-import { Box } from '@mui/material';
+import { useEffect, useRef, useState, useContext } from 'react';
+import UserContext from '@/context/UserContext';
 
-import Button from '../Button/Button';
-const Editor = () => {
+import { Box } from '@mui/material';
+import { ADD_POST, GET_POSTS } from '@/graphql/queries';
+import { useMutation } from '@apollo/client';
+import Button from '@/components/Button/Button';
+
+interface EditorProps {
+	mode?: String;
+	postData?: any;
+	onSubmitSuccess: () => void;
+}
+
+const Editor = ({ mode, postData, onSubmitSuccess }: EditorProps) => {
+	const { currentUserDetails } = useContext(UserContext);
+	const currentUserDetailsId = currentUserDetails && currentUserDetails.userId;
+
+	const [loading, setLoading] = useState(false);
+	const [processStage, setProcessStage] = useState(null);
 	const [isEditorEmpty, setIsEditorEmpty] = useState(true);
-	const editorRef = useRef(null);
+	const editorRef = useRef<any>(null);
+
+	const [formData, setFormData] = useState({
+		postId: '',
+		title: '',
+		post: '',
+		created_by: '',
+		updated_at: '',
+	});
+
+	const [createPost] = useMutation(ADD_POST, {
+		refetchQueries: [{ query: GET_POSTS }],
+	});
+
+	const handleSubmit = async () => {
+		try {
+			setLoading(true);
+			setProcessStage('Saving...');
+
+			const { title, post, postId } = formData;
+
+			let mutation: any;
+			let variables: any;
+
+			if (postId) {
+				console.log('submit for update');
+			} else {
+				mutation = createPost;
+				variables = {
+					title,
+					post,
+					createdBy: currentUserDetailsId,
+				};
+			}
+
+			const { data } = await mutation({
+				variables,
+			});
+
+			if (data?.createPost?.success && editorRef.current) {
+				setLoading(false);
+
+				onSubmitSuccess();
+				editorRef.current.destroy();
+				initializeEditor();
+			}
+		} catch (error) {
+			console.error('Error creating post:', error);
+		}
+	};
 
 	const initializeEditor = async () => {
 		const EditorJS = (await import('@editorjs/editorjs')).default;
@@ -85,23 +149,34 @@ const Editor = () => {
 				marker: Marker,
 				table: Table,
 			},
-			data: {
-				blocks: [
-					{
-						type: 'paragraph',
-						data: {
-							text: '',
-						},
-					},
-				],
-			},
+			data:
+				mode === 'view'
+					? postData.post
+					: {
+							blocks: [
+								{
+									type: 'paragraph',
+									data: {
+										text: '',
+									},
+								},
+							],
+					  },
 
 			tunes: ['textVariant'],
 			onChange: () => {
 				editor.save().then((outputData) => {
-					console.log('blocks', outputData.blocks.length);
 					const isEmpty = outputData.blocks.length === 0;
 					setIsEditorEmpty(isEmpty);
+
+					const title = outputData.blocks.length > 0 ? JSON.stringify(outputData.blocks[0]) : '';
+					const body = outputData.blocks.slice(1);
+					const bodyBlocks = JSON.stringify(body);
+
+					setFormData({
+						title: title,
+						post: bodyBlocks,
+					});
 				});
 			},
 			onReady: () => {
@@ -311,13 +386,13 @@ const Editor = () => {
 			></Box>
 			<Box sx={{ display: 'flex', justifyContent: 'flex-end', paddingTop: '16px', borderTop: '1px solid #2C313C' }}>
 				<Button
-					text='Post'
+					text={loading ? processStage : 'Post'}
 					width='max-content'
 					padding='8px 20px'
 					borderRadius='63px'
 					lineHeight='19.2px'
-					disabled={isEditorEmpty}
-					action={() => console.log('create post')}
+					disabled={isEditorEmpty || loading}
+					action={() => handleSubmit()}
 				/>
 			</Box>
 		</>

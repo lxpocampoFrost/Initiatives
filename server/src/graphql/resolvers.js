@@ -9,7 +9,7 @@ const openai = new OpenAI({
 });
 
 const assign_tags = `
-	Select a maximum of three tags based on this criteria and return your answer as string. Ex: 1,3
+	Select a maximum of three tags based on this criteria. Example: 1,3
 
 	1 - HTML: Select this if the title emphasizes HTML-specific topics, web page structure, or provides HTML tutorials.
 	2 - CSS: Select this if the title focuses on CSS styling, design techniques, or web design aspects.
@@ -35,21 +35,20 @@ const getAnalyzedData = async (title, text) => {
 			messages: [
 				{
 					role: 'system',
-					content: 'You are a helpful assistant designed to output JSON.',
+					content: 'You are a helpful assistant.',
 				},
 				{
 					role: 'user',
-					content: `Extract the data from ${text} then summarize and explain. Keep it simple and short. Provide external links or references. Return your output in html format with proper line breaks`,
+					content: `Extract the data from ${text} then summarize and explain in maximum of two paragraphs. Provide external links for reference in list. Return the output in raw HTML format without any introductions.`,
 				},
 			],
 			temperature: 0,
-			max_tokens: 800,
+			max_tokens: 1000,
 		});
 
 		summary = completion.choices[0].message.content;
 
 		gpt_response.summary = summary;
-
 		if (summary !== '') {
 			completion = await openai.chat.completions.create({
 				model: 'gpt-4',
@@ -70,6 +69,7 @@ const getAnalyzedData = async (title, text) => {
 
 		let tagResponse = completion.choices[0].message.content;
 
+		console.log('tags', tagResponse);
 		gpt_response.tags = tagResponse.split(',');
 
 		const endTime = Date.now();
