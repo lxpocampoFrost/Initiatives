@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Button from '@mui/material/Button';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 import { Stack } from '@mui/material/';
+import { useTheme } from '@mui/material/styles';
 
-const Dropdown = () => {
+const Dropdown = ({ options, type }: any) => {
+  useEffect(() => {
+    setSelectedValue(options[1]);
+  }, []);
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedValue, setSelectedValue] = useState('');
 
@@ -22,7 +26,7 @@ const Dropdown = () => {
     handleClose();
   };
 
-  const options = ['Sort by', 'Latest', 'Oldest'];
+  const theme = useTheme();
 
   return (
     <>
@@ -31,6 +35,10 @@ const Dropdown = () => {
         aria-label="contained button group"
         onClick={handleClick}
         sx={{
+          [theme.breakpoints.up('md')]: {
+            minWidth: 'max-content',
+          },
+          minWidth: '50%',
           backgroundColor: 'transparent',
           boxShadow: 'unset',
         }}
@@ -50,7 +58,7 @@ const Dropdown = () => {
             '&:hover': { backgroundColor: 'transparent' },
           }}
         >
-          {selectedValue || 'Sort by'}
+          {selectedValue || type}
           <img
             src="./assets/dropdown-arrow.svg"
             alt="Search Icon"
@@ -94,24 +102,27 @@ const Dropdown = () => {
             lineHeight: '1.5',
           }}
         >
-          {options.map((option, index) => (
-            <Typography
-              key={index}
-              onClick={() => (index !== 0 ? handleMenuItemClick(option) : null)}
-              sx={{
-                fontFamily: 'inherit',
-                fontSize: index !== 0 ? '16px' : '12px',
-                color: '#fff',
-                cursor: index !== 0 ? 'pointer' : 'default',
-                opacity: index !== 0 && selectedValue === option ? 1 : 0.3,
-                '&:hover': {
-                  opacity: index !== 0 ? '1' : '0.3',
-                },
-              }}
-            >
-              {option}
-            </Typography>
-          ))}
+          {options &&
+            options.map((option: string, index: number) => (
+              <Typography
+                key={index}
+                onClick={() =>
+                  index !== 0 ? handleMenuItemClick(option) : null
+                }
+                sx={{
+                  fontFamily: 'inherit',
+                  fontSize: index !== 0 ? '16px' : '12px',
+                  color: '#fff',
+                  cursor: index !== 0 ? 'pointer' : 'default',
+                  opacity: index !== 0 && selectedValue === option ? 1 : 0.3,
+                  '&:hover': {
+                    opacity: index !== 0 ? '1' : '0.3',
+                  },
+                }}
+              >
+                {option}
+              </Typography>
+            ))}
         </Stack>
       </Popover>
     </>
