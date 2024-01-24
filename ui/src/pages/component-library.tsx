@@ -1,6 +1,7 @@
 import Box from '@mui/material/Box';
 import Tags from '@/components/Tags';
 import styled from '@emotion/styled';
+import Editor from '@/components/Editor/Editor';
 import { Button } from '@mui/material';
 import { useState } from 'react';
 import Modal from '@/components/Modal/Modal';
@@ -9,6 +10,8 @@ import UserDetails from '@/components/UserDetails';
 import Search from '@/components/Search';
 import Dropdown from '@/components/Dropdown/Dropdown';
 import PaginationControl from '@/components/PostList/Pagination';
+import Filter from '@/components/Filter/Filter';
+
 
 const TagWrapper = styled.div`
   display: flex;
@@ -50,6 +53,9 @@ const postItems = [
 export default function ComponentLibrary() {
   const [modalOpen, setModalOpen] = useState(false);
   const [page, setPage] = useState(1);
+  const sortItem = ['Sort by', 'Latest', 'Oldest'];
+  const postedItem = ['Posted by', 'Everyone', 'Me', 'Jm', 'Marie'];
+
 
   return (
     <Box
@@ -67,7 +73,8 @@ export default function ComponentLibrary() {
         <Tags name="Backend" />
       </TagWrapper>
       <Box marginTop={4}>
-        <Dropdown />
+        <Dropdown options={sortItem} type="Sort by" />
+        <Dropdown options={postedItem} type="Posted by" />
       </Box>
       <PostItem data={postItemData} />
       <UserDetails />
@@ -80,9 +87,8 @@ export default function ComponentLibrary() {
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
       >
-        Modal Content here
+        <Editor />
       </Modal>
-
       <PaginationControl 
         totalPages={10}
         currentPage={page}
@@ -90,6 +96,9 @@ export default function ComponentLibrary() {
             setPage(value);
         }}
       />
+
+      <Filter />
+
     </Box>
   );
 }
