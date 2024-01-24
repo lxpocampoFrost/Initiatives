@@ -141,10 +141,84 @@ const Editor = ({ mode, postData, onSubmitSuccess }: EditorProps) => {
 				},
 				image: {
 					class: ImageTool,
+					config: {
+						uploader: {
+							async uploadByFile(file) {
+								const formData = new FormData();
+								formData.append('file', file);
+								formData.append('upload_preset', 'yxgn0epf');
+
+								console.log('formData', formData);
+
+								try {
+									const response = await fetch(`https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUD_NAME}/upload`, {
+										method: 'POST',
+										body: formData,
+									});
+
+									const result = await response.json();
+
+									if (result.secure_url) {
+										const formattedResult = {
+											success: 1,
+											file: {
+												url: result.secure_url,
+											},
+										};
+										return formattedResult;
+									} else {
+										console.log({
+											success: 0,
+											error: result.error.message,
+										});
+									}
+								} catch (error) {
+									console.error('Error:', error);
+								}
+							},
+						},
+					},
 				},
 				delimiter: Delimiter,
 				AttachesTool: {
 					class: AttachesTool,
+					config: {
+						uploader: {
+							async uploadByFile(file) {
+								const formData = new FormData();
+								formData.append('file', file);
+								formData.append('upload_preset', 'yxgn0epf');
+
+								console.log('formData', formData);
+
+								try {
+									const response = await fetch(`https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUD_NAME}/upload`, {
+										method: 'POST',
+										body: formData,
+									});
+
+									const result = await response.json();
+
+									if (result.secure_url) {
+										const formattedResult = {
+											success: 1,
+											file: {
+												url: result.secure_url,
+											},
+										};
+										return formattedResult;
+									} else {
+										console.log({
+											success: 0,
+											error: result.error.message,
+										});
+									}
+								} catch (error) {
+									console.error('Error:', error);
+								}
+							},
+						},
+					},
 				},
 				marker: Marker,
 				table: Table,
