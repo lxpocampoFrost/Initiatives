@@ -6,16 +6,22 @@ import Modal from '@/components/Modal/Modal';
 import Editor from '@/components/Editor/Editor';
 import UserDetails from '@/components/UserDetails';
 
-import { GET_POSTS } from '@/graphql/queries';
 import UserContext from '@/context/UserContext';
 import { Box, Grid } from '@mui/material';
 import PostItem from '@/components/PostList/PostItem';
 import { useMode } from '@/context/ModeContext';
 import { getBindnameForUserId, getColorForUserId } from '@/utils/helpers';
 
+import { useMutation } from '@apollo/client';
+import { DELETE_POST, GET_POSTS } from '@/graphql/queries';
+
 export default function Home() {
 	const { mode, setMode, selectedCardData, setSelectedCardData } = useMode();
 	const [modalOpen, setModalOpen] = useState(false);
+
+	const [deletePost] = useMutation(DELETE_POST, {
+		refetchQueries: [{ query: GET_POSTS }],
+	});
 
 	const handlePostClick = () => {
 		setModalOpen(true);
@@ -41,8 +47,15 @@ export default function Home() {
 		setMode('edit');
 	};
 
-	const handleDelete = () => {
-		console.log('delete');
+	const handleDelete = async () => {
+		const { data } = await deletePost({
+			variables: { postId: selectedCardData?.id },
+		});
+
+		if (data.deletePost) {
+			setModalOpen(false);
+			setSelectedCardData(null);
+		}
 	};
 
 	const handleCloseModal = () => {

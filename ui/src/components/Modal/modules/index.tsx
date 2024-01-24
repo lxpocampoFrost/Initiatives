@@ -232,6 +232,7 @@ export const EditDialog = ({ onClose, onDelete }: EditDialogProps) => {
 					color: '#ffffff',
 					lineHeight: '1.5',
 					opacity: '0.5',
+					cursor: 'pointer',
 				}}
 			>
 				Delete Post

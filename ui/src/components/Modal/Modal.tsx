@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { CreateDialog, EditDialog, ViewDialog } from './modules';
 import { useMode } from '@/context/ModeContext';
+
 interface ModalProps {
 	isOpen: boolean;
 	onClose: () => void;
