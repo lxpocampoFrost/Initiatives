@@ -41,6 +41,9 @@ const Modal = ({ title = 'Create Post', isOpen, onClose, children }: ModalProps)
 		>
 			<DialogTitle
 				sx={{
+					[theme.breakpoints.up('md')]: {
+						padding: '16px 24px',
+					},
 					display: 'flex',
 					justifyContent: 'space-between',
 					color: '#ffffff',
@@ -48,7 +51,7 @@ const Modal = ({ title = 'Create Post', isOpen, onClose, children }: ModalProps)
 					fontSize: '18px',
 					fontWeight: '700',
 					lineHeight: '21.6px',
-					padding: '16px 24px',
+					// padding: '16px',
 				}}
 			>
 				{title}
@@ -83,10 +86,7 @@ const Modal = ({ title = 'Create Post', isOpen, onClose, children }: ModalProps)
 			<DialogContent
 				className='modal-content'
 				sx={{
-					[theme.breakpoints.up('md')]: {
-						padding: '20px 24px',
-					},
-					padding: '16px',
+					padding: '20px 24px',
 					color: '#ffffff',
 					'&::-webkit-scrollbar': {
 						display: 'none',
