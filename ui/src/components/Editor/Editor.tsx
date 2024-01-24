@@ -37,7 +37,6 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
 		refetchQueries: [{ query: GET_POSTS }],
 	});
 
-	console.log('selected', selectedCardData.id);
 	const handleSubmit = async () => {
 		try {
 			setLoading(true);
@@ -68,14 +67,14 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
 				variables,
 			});
 
-			if (data && editorRef.current) {
+			if ((data.updatePost || data.createPost) && editorRef.current) {
 				setLoading(false);
 
 				setTimeout(() => {
 					onSubmitSuccess();
 					editorRef.current.destroy();
 					initializeEditor();
-				}, 1000);
+				}, 2000);
 			}
 		} catch (error) {
 			console.error('Error creating post:', error);

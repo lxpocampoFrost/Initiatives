@@ -22,7 +22,7 @@ const assign_tags = `
 	9 - Library: Select this if the title relates to any library / package that can be used in development. 
 `;
 
-const getAnalyzedData = async (title, text) => {
+const getAnalyzedData = async (text) => {
 	let summary = '';
 	let startTime = Date.now();
 	let gpt_response = {
@@ -69,7 +69,6 @@ const getAnalyzedData = async (title, text) => {
 
 		let tagResponse = completion.choices[0].message.content;
 
-		console.log('tags', tagResponse);
 		gpt_response.tags = tagResponse.split(',');
 
 		const endTime = Date.now();
@@ -130,10 +129,7 @@ const resolvers = {
 					throw new Error('All fields are required.');
 				}
 
-				const titleObj = JSON.parse(title);
-				const parsedTitle = titleObj.data.text;
-
-				gpt_response = await getAnalyzedData(parsedTitle, post);
+				gpt_response = await getAnalyzedData(post);
 
 				const postData = {
 					title,
@@ -163,9 +159,13 @@ const resolvers = {
 					throw new Error('Post not found');
 				}
 
+				gpt_response = await getAnalyzedData(post);
+
 				const updatedPostData = {
 					title: title || existingPost.title,
 					post: post || existingPost.post,
+					tagsId: gpt_response.tags,
+					explanation: gpt_response.summary,
 					updated_date: new Date().toISOString(),
 				};
 
