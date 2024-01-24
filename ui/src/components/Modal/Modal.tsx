@@ -86,7 +86,7 @@ const Modal = ({ title = 'Create Post', isOpen, onClose, children }: ModalProps)
 			<DialogContent
 				className='modal-content'
 				sx={{
-					padding: '20px 24px',
+					padding: ' 0 24px 24px!important',
 					color: '#ffffff',
 					'&::-webkit-scrollbar': {
 						display: 'none',
