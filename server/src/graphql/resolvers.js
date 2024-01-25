@@ -1,6 +1,5 @@
 const { getAllTags } = require('../controllers/tags.controller');
 const { getAllPosts, getPostById, createPost, updatePost, deletePost } = require('../controllers/post.controller');
-
 const { OpenAI } = require('openai');
 const axios = require('axios');
 
@@ -9,7 +8,7 @@ const openai = new OpenAI({
 });
 
 const assign_tags = `
-	Select a maximum of three tags based on this criteria. Example: 1,3
+	Select a maximum of three tags based on this criteria. Example: 1,3. If the summary doesn't have a sense return 0.
 
 	1 - HTML: Select this if the title emphasizes HTML-specific topics, web page structure, or provides HTML tutorials.
 	2 - CSS: Select this if the title focuses on CSS styling, design techniques, or web design aspects.
@@ -29,6 +28,10 @@ const getAnalyzedData = async (text) => {
 		summary: '',
 		tags: [],
 	};
+
+	const parsed = JSON.parse(text);
+	const content = parsed.map((obj) => obj.data.text).join(' ');
+
 	try {
 		let completion = await openai.chat.completions.create({
 			model: 'gpt-4',
@@ -39,7 +42,7 @@ const getAnalyzedData = async (text) => {
 				},
 				{
 					role: 'user',
-					content: `Extract the data from ${text} then summarize and explain in maximum of two paragraphs. Provide external links for reference in list. Return the output in raw HTML format without any introductions.`,
+					content: `Tone: 50% spartan. No introductions. If the data from ${content} is just random strings and doesn't have a sense, answer "Invalid" only. If the data from ${content} is not invalid summarize and explain in maximum of two paragraphs with max of three sentences. Provide external links for reference in list. Return the output in raw HTML format without any introductions`,
 				},
 			],
 			temperature: 0,
@@ -59,7 +62,7 @@ const getAnalyzedData = async (text) => {
 					},
 					{
 						role: 'user',
-						content: `Base from the summary, assign tags using this ${assign_tags}.`,
+						content: `Assign tags using this ${assign_tags}.`,
 					},
 				],
 				temperature: 0,
@@ -131,6 +134,10 @@ const resolvers = {
 
 				gpt_response = await getAnalyzedData(post);
 
+				if (gpt_response && gpt_response.summary == 'Invalid') {
+					throw new Error('Invalid content provided');
+				}
+
 				const postData = {
 					title,
 					post,
@@ -147,8 +154,11 @@ const resolvers = {
 
 				return { data: createdPost, success: true, message: 'Post created successfully' };
 			} catch (error) {
-				console.error('Error:', error);
-				throw new Error('Failed to create post.');
+				return {
+					data: null,
+					success: false,
+					message: error.message,
+				};
 			}
 		},
 		updatePost: async (_, { postId, post, title }) => {
@@ -160,6 +170,10 @@ const resolvers = {
 				}
 
 				gpt_response = await getAnalyzedData(post);
+
+				if (gpt_response && gpt_response.summary == 'Invalid') {
+					throw new Error('Invalid content provided');
+				}
 
 				const updatedPostData = {
 					title: title || existingPost.title,
@@ -175,7 +189,11 @@ const resolvers = {
 
 				return { data: updatedPost, success: true, message: 'Post updated successfully' };
 			} catch (error) {
-				console.error('Error:', error);
+				return {
+					data: null,
+					success: false,
+					message: error.message,
+				};
 			}
 		},
 		deletePost: async (_, { postId }) => {

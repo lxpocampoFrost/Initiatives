@@ -45,6 +45,9 @@ const Modal = ({ isOpen, onClose, onEdit, onDelete, children }: ModalProps) => {
 					margin: '0',
 					maxWidth: mode === 'view' ? '980px' : '744px',
 					width: '100%',
+					'&::-webkit-scrollbar': {
+						display: 'none',
+					},
 				},
 			}}
 		>
@@ -60,6 +63,7 @@ const Modal = ({ isOpen, onClose, onEdit, onDelete, children }: ModalProps) => {
 					fontSize: '18px',
 					fontWeight: '700',
 					lineHeight: '21.6px',
+					borderBottom: mode !== 'create' ? '1px solid #23272F' : '',
 				}}
 			>
 				{mode === 'create' && (
@@ -86,19 +90,18 @@ const Modal = ({ isOpen, onClose, onEdit, onDelete, children }: ModalProps) => {
 				className='modal-content'
 				sx={{
 					[theme.breakpoints.up('md')]: {
-						padding: ' 0 24px 24px!important',
+						padding: ' 24px 24px 24px!important',
 					},
-					padding: ' 0 24px 16px!important',
+					padding: '0 24px 16px!important',
 					color: '#ffffff',
-					'&::-webkit-scrollbar': {
-						display: 'none',
-					},
+					overflow: 'unset',
 					display: mode === 'view' ? 'flex' : 'block',
 					gap: '40px',
 					'@media screen and (max-width:767px)': {
 						flexDirection: 'column',
 						gap: '0',
 					},
+					background: mode !== 'create' ? '#0C0E13' : '',
 				}}
 			>
 				{children}

@@ -67,14 +67,20 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
 				variables,
 			});
 
-			if ((data.updatePost || data.createPost) && editorRef.current) {
+			if (data.createPost.success === false && editorRef.current) {
 				setLoading(false);
+				setTimeout(() => {
+					editorRef.current.clear();
+				}, 1000);
+			}
 
+			if ((data.createPost.success === true || data.updatePost.success === true) && editorRef.current) {
+				setLoading(false);
 				setTimeout(() => {
 					onSubmitSuccess();
 					editorRef.current.destroy();
 					initializeEditor();
-				}, 2000);
+				}, 1000);
 			}
 		} catch (error) {
 			console.error('Error creating post:', error);
@@ -261,6 +267,8 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
 						title: title,
 						post: bodyBlocks,
 					}));
+
+					console.log('formdata', outputData);
 				});
 			},
 			onReady: () => {
@@ -287,9 +295,13 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
 			<Box
 				id='editor-js'
 				sx={{
-					color: '#ffffff',
+					color: mode === 'view' ? '#E5E7EB!important' : '#ffffff',
+
 					'.codex-editor__redactor': {
 						paddingBottom: mode === 'view' ? '40px!important' : '100px',
+						'.ce-block:first-of-type h1': {
+							paddingTop: '0',
+						},
 					},
 					'.cdx-button': {
 						background: '#25282e',
@@ -448,6 +460,9 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
 						fontFamily: 'Figtree-Bold,sans-serif',
 						maxWidth: '632px',
 						margin: '0 0 0 auto',
+						a: {
+							color: '#ffffff',
+						},
 					},
 					'.ce-code__textarea': {
 						borderRadius: '8px',
