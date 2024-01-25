@@ -17,7 +17,7 @@ const UserDetails = ({ action }: UserDetailsProp) => {
 	return (
 		<Box
 			sx={{
-				[theme.breakpoints.up('md')]: {
+				[theme.breakpoints.up('lg')]: {
 					maxWidth: '360px',
 					width: '100%',
 					borderRadius: '12px',

@@ -13,7 +13,9 @@ interface ModeContextProps {
 	mode: string;
 	setMode: React.Dispatch<React.SetStateAction<string>>;
 	selectedCardData: SelectedCardDataProps | null;
-	setSelectedCardData: React.Dispatch<React.SetStateAction<any>>;
+	setSelectedCardData: React.Dispatch<React.SetStateAction<SelectedCardDataProps | null>>;
+	modalOpen: boolean;
+	setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ModeContext = createContext<ModeContextProps | undefined>(undefined);
@@ -25,8 +27,9 @@ interface ModeProviderProps {
 export const ModeProvider: React.FC<ModeProviderProps> = ({ children }) => {
 	const [mode, setMode] = useState('view');
 	const [selectedCardData, setSelectedCardData] = useState<SelectedCardDataProps | null>(null);
+	const [modalOpen, setModalOpen] = useState(false);
 
-	return <ModeContext.Provider value={{ mode, setMode, selectedCardData, setSelectedCardData }}>{children}</ModeContext.Provider>;
+	return <ModeContext.Provider value={{ mode, setMode, selectedCardData, modalOpen, setModalOpen, setSelectedCardData }}>{children}</ModeContext.Provider>;
 };
 
 export const useMode = (): ModeContextProps => {
