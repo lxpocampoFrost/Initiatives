@@ -10,6 +10,7 @@ import UserDetails from '@/components/UserDetails';
 import Search from '@/components/Search';
 import Dropdown from '@/components/Dropdown/Dropdown';
 import Filter from '@/components/Filter/Filter';
+import TooltipButton from '@/components/TooltipButton';
 
 const TagWrapper = styled.div`
   display: flex;
@@ -48,6 +49,8 @@ export default function ComponentLibrary() {
         <Dropdown options={sortItem} type="Sort by" />
         <Dropdown options={postedItem} type="Posted by" />
       </Box>
+      <TooltipButton />
+
       <PostItem data={postItemData} />
       <UserDetails />
       <Box>
