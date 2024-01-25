@@ -124,6 +124,7 @@ const PostItem = ({ data, handleClick }: PostItemProps) => {
 				<Stack
 					direction='row'
 					spacing='4px'
+					marginTop='auto'
 				>
 					{tags &&
 						tags.map((tag: string, index: number) => (
