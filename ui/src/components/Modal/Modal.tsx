@@ -90,7 +90,7 @@ const Modal = ({ isOpen, onClose, onEdit, onDelete, children }: ModalProps) => {
 				className='modal-content'
 				sx={{
 					[theme.breakpoints.up('md')]: {
-						padding: ' 24px 24px 24px!important',
+						padding: mode === 'create' ? ' 0 24px 24px!important' : ' 24px 24px 24px!important',
 					},
 					padding: '0 24px 16px!important',
 					color: '#ffffff',
