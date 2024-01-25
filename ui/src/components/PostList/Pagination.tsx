@@ -23,21 +23,37 @@ const PaginationControl = ({ totalPages, currentPage, handlePageChange }:PostLis
     const paginationArrowsText = `${prevArrowText}, ${nextArrowText}`;
 
     const PaginationCustomWrap = styled.div`
+    @media screen and (max-width:470px) {
+        .MuiPagination-ul > li {
+            width: auto;
+        }
+        
+        .MuiPagination-ul > li:first-of-type {
+            order: 2;
+            flex-basis: 70%;
+        }
+
+        .MuiPagination-ul > li:last-of-type {
+            order: 2;
+            flex-basis: 30%;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .MuiPagination-ul {
+            justify-content: center;
+        }
+    }
+
         @media screen and (max-width:460px) {
-            .MuiPagination-ul > li {
-                width: auto;
-            }
-            
             .MuiPagination-ul > li:first-of-type {
                 order: 2;
-                flex-basis: 50%;
+                flex-basis: 60%;
             }
 
             .MuiPagination-ul > li:last-of-type {
                 order: 2;
-                flex-basis: 50%;
-                display: flex;
-                justify-content: flex-end;
+                flex-basis: 40%;
             }
 
             .MuiPagination-ul {
@@ -71,6 +87,9 @@ const PaginationControl = ({ totalPages, currentPage, handlePageChange }:PostLis
                     ' .MuiPaginationItem-page, .MuiPaginationItem-ellipsis': {
                         opacity: '0.2',
                         color: '#FFF',
+                        fontSize: '16px',
+                        fontFamily: 'Figtree-SemiBold, sans-serif',
+                        lineHeight: '1.5',
                     },
                     '.Mui-selected, .MuiPaginationItem-previousNext': {
                         color: '#FFF',
@@ -79,20 +98,20 @@ const PaginationControl = ({ totalPages, currentPage, handlePageChange }:PostLis
                     '.Mui-selected': {
                         opacity: 1,
                     },
+                    '.Mui-disabled': {
+                        opacity: 0.4,
+                    },
                     '.MuiButtonBase-root.MuiPaginationItem-root': { 
-                        fontFamily: 'Figtree-SemiBold, sans-serif'
+                        fontFamily: 'Figtree-SemiBold, sans-serif',
                     },
                     [paginationArrows]: {
                         content: 'url("./assets/pagination-arrow.svg")',
                         display: 'block',
-                        width: '20px',
-                        height: '20px',
+                        width: '24px',
+                        height: '24px',
                     },
                     [prevArrow]: {
-                        transform:' rotate(-180deg) translateY(-1px)',
-                    },
-                    [nextArrow]: {
-                        transform: 'translateY(-1px)',
+                        transform:' rotate(-180deg)',
                     },
                     [paginationArrowsText]: {
                         display: 'block',
@@ -101,10 +120,14 @@ const PaginationControl = ({ totalPages, currentPage, handlePageChange }:PostLis
                     [prevArrowText]: {
                         content: '"Previous"',
                         fontFamily: 'Figtree-SemiBold, sans-serif',
+                        fontSize: '16px',
+                        lineHeight: '1.5',
                     },
                     [nextArrowText]: {
                         content: '"Next"',
                         fontFamily: 'Figtree-SemiBold, sans-serif',
+                        fontSize: '16px',
+                        lineHeight: '1.5',
                     },
             }}>
                 <Pagination 
