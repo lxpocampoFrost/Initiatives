@@ -79,6 +79,9 @@ const PaginationControl = ({ totalPages, currentPage, handlePageChange }:PostLis
                     '.Mui-selected': {
                         opacity: 1,
                     },
+                    '.MuiButtonBase-root.MuiPaginationItem-root': { 
+                        fontFamily: 'Figtree-SemiBold, sans-serif'
+                    },
                     [paginationArrows]: {
                         content: 'url("./assets/pagination-arrow.svg")',
                         display: 'block',
@@ -97,9 +100,11 @@ const PaginationControl = ({ totalPages, currentPage, handlePageChange }:PostLis
                     },
                     [prevArrowText]: {
                         content: '"Previous"',
+                        fontFamily: 'Figtree-SemiBold, sans-serif',
                     },
                     [nextArrowText]: {
                         content: '"Next"',
+                        fontFamily: 'Figtree-SemiBold, sans-serif',
                     },
             }}>
                 <Pagination 
