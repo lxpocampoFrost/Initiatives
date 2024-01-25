@@ -23,27 +23,27 @@ const PaginationControl = ({ totalPages, currentPage, handlePageChange }:PostLis
     const paginationArrowsText = `${prevArrowText}, ${nextArrowText}`;
 
     const PaginationCustomWrap = styled.div`
-    @media screen and (max-width:470px) {
-        .MuiPagination-ul > li {
-            width: auto;
-        }
-        
-        .MuiPagination-ul > li:first-of-type {
-            order: 2;
-            flex-basis: 70%;
-        }
+        @media screen and (max-width:470px) {
+            .MuiPagination-ul > li {
+                width: auto;
+            }
+            
+            .MuiPagination-ul > li:first-of-type {
+                order: 2;
+                flex-basis: 70%;
+            }
 
-        .MuiPagination-ul > li:last-of-type {
-            order: 2;
-            flex-basis: 30%;
-            display: flex;
-            justify-content: flex-end;
-        }
+            .MuiPagination-ul > li:last-of-type {
+                order: 2;
+                flex-basis: 30%;
+                display: flex;
+                justify-content: flex-end;
+            }
 
-        .MuiPagination-ul {
-            justify-content: center;
+            .MuiPagination-ul {
+                justify-content: center;
+            }
         }
-    }
 
         @media screen and (max-width:460px) {
             .MuiPagination-ul > li:first-of-type {
@@ -90,6 +90,8 @@ const PaginationControl = ({ totalPages, currentPage, handlePageChange }:PostLis
                         fontSize: '16px',
                         fontFamily: 'Figtree-SemiBold, sans-serif',
                         lineHeight: '1.5',
+                        padding: '0px 12px',
+                        margin: '0',
                     },
                     '.Mui-selected, .MuiPaginationItem-previousNext': {
                         color: '#FFF',
