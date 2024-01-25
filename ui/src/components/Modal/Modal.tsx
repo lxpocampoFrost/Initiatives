@@ -1,16 +1,26 @@
 import React from 'react';
-import { Dialog, DialogContent, DialogTitle, IconButton } from '@mui/material';
+import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import { CreateDialog, EditDialog, ViewDialog } from './modules';
+import { useMode } from '@/context/ModeContext';
 
 interface ModalProps {
-	title: string;
 	isOpen: boolean;
 	onClose: () => void;
 	children: React.ReactNode;
+
+	onEdit: () => void;
+	onDelete: () => void;
 }
 
-const Modal = ({ title = 'Create Post', isOpen, onClose, children }: ModalProps) => {
+const Modal = ({ isOpen, onClose, onEdit, onDelete, children }: ModalProps) => {
+	const { mode, setMode, selectedCardData } = useMode();
 	const theme = useTheme();
+
+	const handleBack = () => {
+		setMode('view');
+	};
+
 	return (
 		<Dialog
 			open={isOpen}
@@ -23,7 +33,6 @@ const Modal = ({ title = 'Create Post', isOpen, onClose, children }: ModalProps)
 						padding: '40px 24px',
 					},
 					padding: '8px',
-
 					boxSizing: 'border-box',
 					height: '100%',
 				},
@@ -34,8 +43,11 @@ const Modal = ({ title = 'Create Post', isOpen, onClose, children }: ModalProps)
 				},
 				'.MuiDialog-paperFullWidth': {
 					margin: '0',
-					maxWidth: '792px',
+					maxWidth: mode === 'view' ? '980px' : '744px',
 					width: '100%',
+					'&::-webkit-scrollbar': {
+						display: 'none',
+					},
 				},
 			}}
 		>
@@ -51,49 +63,45 @@ const Modal = ({ title = 'Create Post', isOpen, onClose, children }: ModalProps)
 					fontSize: '18px',
 					fontWeight: '700',
 					lineHeight: '21.6px',
-					// padding: '16px',
+					borderBottom: mode !== 'create' ? '1px solid #23272F' : '',
 				}}
 			>
-				{title}
-				<IconButton
-					edge='end'
-					color='inherit'
-					onClick={onClose}
-					aria-label='close'
-					sx={{
-						width: '24px',
-						height: '24px',
-						padding: '0',
-						marginRight: '0',
-					}}
-				>
-					<svg
-						xmlns='http://www.w3.org/2000/svg'
-						width='24'
-						height='24'
-						viewBox='0 0 24 24'
-						fill='none'
-					>
-						<g opacity='0.2'>
-							<path
-								d='M13.46 12L19 17.54V19H17.54L12 13.46L6.46 19H5V17.54L10.54 12L5 6.46V5H6.46L12 10.54L17.54 5H19V6.46L13.46 12Z'
-								fill='white'
-							/>
-						</g>
-					</svg>
-				</IconButton>
+				{mode === 'create' && (
+					<CreateDialog
+						title='Create Post'
+						onClose={onClose}
+					/>
+				)}
+				{mode === 'view' && (
+					<ViewDialog
+						data={selectedCardData}
+						onView={onClose}
+						onEdit={onEdit}
+					/>
+				)}
+				{mode === 'edit' && (
+					<EditDialog
+						onClose={handleBack}
+						onDelete={onDelete}
+					/>
+				)}
 			</DialogTitle>
 			<DialogContent
 				className='modal-content'
 				sx={{
 					[theme.breakpoints.up('md')]: {
-						padding: ' 0 24px 24px!important',
+						padding: mode === 'create' ? ' 0 24px 24px!important' : ' 24px 24px 24px!important',
 					},
-					padding: ' 0 24px 16px!important',
+					padding: '0 24px 16px!important',
 					color: '#ffffff',
-					'&::-webkit-scrollbar': {
-						display: 'none',
+					overflow: 'unset',
+					display: mode === 'view' ? 'flex' : 'block',
+					gap: '40px',
+					'@media screen and (max-width:767px)': {
+						flexDirection: 'column',
+						gap: '0',
 					},
+					background: mode !== 'create' ? '#0C0E13' : '',
 				}}
 			>
 				{children}

@@ -1,7 +1,8 @@
-import { TokenProvider } from '@/context/AuthContext';
 import { Auth0Provider } from '@auth0/auth0-react';
 import type { AppProps } from 'next/app';
-
+import { TokenProvider } from '@/context/AuthContext';
+import { ModeProvider } from '@/context/ModeContext';
+import '../styles/globals.css';
 export default function App({ Component, pageProps }: AppProps) {
 	return (
 		<Auth0Provider
@@ -12,7 +13,9 @@ export default function App({ Component, pageProps }: AppProps) {
 			}}
 		>
 			<TokenProvider>
-				<Component {...pageProps} />
+				<ModeProvider>
+					<Component {...pageProps} />
+				</ModeProvider>
 			</TokenProvider>
 		</Auth0Provider>
 	);
