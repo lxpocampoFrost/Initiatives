@@ -22,6 +22,7 @@ const UserDetails = ({ action }: UserDetailsProp) => {
 					width: '100%',
 					borderRadius: '12px',
 					height: '100%',
+					minWidth: '360px',
 				},
 				boxSizing: 'border-box',
 				display: 'flex',

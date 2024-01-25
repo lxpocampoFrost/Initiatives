@@ -68,6 +68,9 @@ const PostSection = () => {
 							marginTop: '8px',
 							width: '100%',
 							maxWidth: '1040px',
+							'@media screen and (max-width:1440px)': {
+								maxWidth: '100%',
+							},
 							'@media screen and (max-width:899px)': {
 								marginTop: '0',
 								padding: '8px',
@@ -81,16 +84,19 @@ const PostSection = () => {
 								return (
 									<Grid
 										item
-										sm={4}
-										lg={2}
+										xl={3}
 										key={index}
 										sx={{
 											width: '100%',
-											'@media screen and (min-width:1100px)': {
-												maxWidth: 'unset!important',
+											'@media screen and (min-width:1536px)': {
+												flexBasis: '32.33%',
+												maxWidth: 'unset',
 											},
-											'@media screen and (max-width:1200px)': {
-												maxWidth: '49.5%!important',
+											'@media screen and (max-width:1535px)': {
+												flexBasis: '49.5%',
+											},
+											'@media screen and (max-width:1245px)': {
+												flexBasis: '49.4%',
 											},
 											'@media screen and (max-width:1024px)': {
 												flexBasis: 'unset',

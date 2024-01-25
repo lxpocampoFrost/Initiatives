@@ -39,12 +39,13 @@ const PostItem = ({ data, handleClick }: PostItemProps) => {
 			<Box
 				onClick={handleClick}
 				sx={{
-					[theme.breakpoints.up('lg')]: {
-						maxWidth: '341px',
-						minWidth: '341px',
+					'@media screen and (min-width:1440px)': {
+						// maxWidth: '341px',
 						width: '100%',
+						minWidth: '100%',
 						minHeight: '350px',
 					},
+
 					'@media screen and (max-width:1024px)': {
 						maxWidth: '100%',
 						minWidth: 'unset',
