@@ -11,12 +11,14 @@ import { Box, Grid } from '@mui/material';
 import PostItem from '@/components/PostList/PostItem';
 import { useMode } from '@/context/ModeContext';
 import { getBindnameForUserId, getColorForUserId } from '@/utils/helpers';
+import { useTheme } from '@mui/material/styles';
 
 import { useMutation } from '@apollo/client';
 import { DELETE_POST, GET_POSTS } from '@/graphql/queries';
 import DeleteModal from '@/components/Modal/DeleteModal';
 
 export default function Home() {
+	const theme = useTheme();
 	const { mode, setMode, selectedCardData, setSelectedCardData } = useMode();
 	const [modalOpen, setModalOpen] = useState(false);
 	const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -132,7 +134,14 @@ export default function Home() {
 
 				{selectedCardData && mode !== 'edit' && (
 					<>
-						<Box>
+						<Box
+							sx={{
+								[theme.breakpoints.up('md')]: {
+									width: '320px',
+								},
+								width: '100%',
+							}}
+						>
 							<Box sx={{ fontFamily: 'Figtree-Bold, sans-serif', fontSize: '14px', fontWeight: '700', color: '#CCD0D9', lineHeight: '1.5' }}>Summary</Box>
 							<Box
 								dangerouslySetInnerHTML={{ __html: selectedCardData ? selectedCardData.explanation : '' }}
@@ -155,6 +164,19 @@ export default function Home() {
 									},
 								}}
 							/>
+							<Box
+								sx={{
+									marginTop: '16px',
+									color: '#CCD0D9',
+									opacity: '0.3',
+									fontSize: '12px',
+									fontFamily: 'Figtree-Bold, sans-serif',
+									fontWeight: '700',
+									lineHeight: '1.5',
+								}}
+							>
+								Generated GPT
+							</Box>
 						</Box>
 					</>
 				)}

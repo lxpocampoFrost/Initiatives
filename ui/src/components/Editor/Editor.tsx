@@ -14,7 +14,7 @@ interface EditorProps {
 
 const Editor = ({ onSubmitSuccess }: EditorProps) => {
 	const { currentUserDetails } = useContext(UserContext);
-	const { mode, selectedCardData } = useMode();
+	const { mode, setMode, selectedCardData } = useMode();
 	const currentUserDetailsId = currentUserDetails && currentUserDetails.userId;
 
 	const [loading, setLoading] = useState(false);
@@ -286,6 +286,9 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
 				id='editor-js'
 				sx={{
 					color: '#ffffff',
+					'.codex-editor__redactor': {
+						paddingBottom: mode === 'view' ? '40px!important' : '100px',
+					},
 					'.cdx-button': {
 						background: '#25282e',
 						color: '#ffffff',
@@ -441,14 +444,17 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
 					},
 					'.ce-block__content': {
 						fontFamily: 'Figtree-Bold,sans-serif',
-						maxWidth: '630px',
-						margin: '0 auto',
+						maxWidth: '632px',
+						margin: '0 0 0 auto',
 					},
 					'.ce-code__textarea': {
 						borderRadius: '8px',
 						background: 'rgba(255, 255, 255, 0.08)',
 						color: '#ffffff',
 						border: 'none',
+					},
+					'.ce-toolbar__content': {
+						maxWidth: '598px',
 					},
 
 					'@media (max-width: 650px)': {
@@ -476,7 +482,23 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
 					},
 				}}
 			></Box>
-			<Box sx={{ display: mode !== 'view' ? 'flex' : 'none', justifyContent: 'flex-end', paddingTop: '16px', borderTop: '1px solid #2C313C' }}>
+			<Box sx={{ display: mode !== 'view' || mode === 'edit' ? 'flex' : 'none', alignItems: 'center', gap: '10px', justifyContent: 'flex-end', paddingTop: '16px', borderTop: '1px solid #2C313C' }}>
+				{mode === 'edit' && (
+					<Box
+						sx={{
+							cursor: 'pointer',
+							fontFamily: 'Figtree-Medium',
+							fontWeight: '500',
+							fontSize: '16px',
+							color: '#ffffff',
+							opacity: '0.3',
+							lineHeight: '19.2px',
+						}}
+						onClick={() => setMode('view')}
+					>
+						Cancel
+					</Box>
+				)}
 				<Button
 					text={mode === 'edit' ? 'Update Post' : 'Post'}
 					loading={loading}

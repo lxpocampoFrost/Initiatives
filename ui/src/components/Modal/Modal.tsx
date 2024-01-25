@@ -43,7 +43,7 @@ const Modal = ({ isOpen, onClose, onEdit, onDelete, children }: ModalProps) => {
 				},
 				'.MuiDialog-paperFullWidth': {
 					margin: '0',
-					maxWidth: '792px',
+					maxWidth: mode === 'view' ? '980px' : '744px',
 					width: '100%',
 				},
 			}}
@@ -92,6 +92,12 @@ const Modal = ({ isOpen, onClose, onEdit, onDelete, children }: ModalProps) => {
 					color: '#ffffff',
 					'&::-webkit-scrollbar': {
 						display: 'none',
+					},
+					display: mode === 'view' ? 'flex' : 'block',
+					gap: '40px',
+					'@media screen and (max-width:767px)': {
+						flexDirection: 'column',
+						gap: '0',
 					},
 				}}
 			>
