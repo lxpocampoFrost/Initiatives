@@ -3,15 +3,17 @@ import { GET_POSTS } from '@/graphql/queries';
 import { getBindnameForUserId, getColorForUserId } from '@/utils/helpers';
 import { useQuery } from '@apollo/client';
 import { Box, Grid } from '@mui/material';
-import React, { useContext, useMemo } from 'react';
+import React, { useContext, useState, useMemo } from 'react';
 import PostItem from './PostItem';
 import Filter from '../Filter/Filter';
+import PaginationControl from '@/components/PostList/Pagination';
 import { useMode } from '@/context/ModeContext';
 
 const PostSection = () => {
 	const { data, hailstormLoading } = useContext(UserContext);
 	const { loading, error, data: postData } = useQuery(GET_POSTS);
 	const { setMode, setSelectedCardData, setModalOpen } = useMode();
+	const [page, setPage] = useState(1);
 
 	const processedPosts = useMemo(() => {
 		if (!loading && !hailstormLoading && postData) {
@@ -65,7 +67,6 @@ const PostSection = () => {
 								key={index}
 								sx={{
 									width: '100%',
-									// maxWidth: 'unset!important',
 									'@media screen and (min-width:1100px)': {
 										maxWidth: 'unset!important',
 									},
@@ -90,6 +91,20 @@ const PostSection = () => {
 						);
 					})}
 			</Grid>
+			<Box
+				sx={{
+					padding: '0 24px 24px',
+					marginTop: '8px',
+				}}
+			>
+				<PaginationControl
+					totalPages={10}
+					currentPage={page}
+					handlePageChange={(event, value) => {
+						setPage(value);
+					}}
+				/>
+			</Box>
 		</Box>
 	);
 };
