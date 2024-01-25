@@ -210,8 +210,10 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
 											success: 1,
 											file: {
 												url: result.secure_url,
+												title: result.original_filename,
 											},
 										};
+
 										return formattedResult;
 									} else {
 										console.log({
@@ -343,7 +345,7 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
 						boxShadow: 'none',
 						background: '#2C313C!important',
 					},
-					'.ce-block--selected .ce-block__content, .cdx-settings-button:hover': {
+					'.ce-block--selected .ce-block__content, .cdx-settings-button:hover , .cdx-attaches--with-file, .cdx-attaches--with-file .cdx-attaches__download-button': {
 						background: 'transparent',
 					},
 					'.ce-paragraph[data-placeholder]:empty:before': {
@@ -352,7 +354,7 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
 						lineHeight: '1.5',
 						fontWeight: '700',
 					},
-					'.tc-add-row:hover, .tc-add-row:hover:before, .tc-add-column:hover, .tc-popover': {
+					'.tc-add-row:hover, .tc-add-row:hover:before, .tc-add-column:hover, .tc-popover , .cdx-attaches--with-file .cdx-attaches__download-button:hover': {
 						background: '#2C313C',
 					},
 					'.ce-inline-toolbar, .tc-popover__item-icon': {
