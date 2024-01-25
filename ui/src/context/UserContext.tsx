@@ -8,13 +8,16 @@ interface UserData {
 	lastName: string;
 	bindname: string;
 	email: string;
-	picture: string;
+	position?: string;
+	picture?: string;
 }
 
 interface UserContextData {
 	currentUserDetails: UserData | null;
 	data: any;
 	hailstormLoading: boolean;
+	currentDevTeam: string[];
+	setCurrentDevTeam: any;
 }
 
 interface UserProviderProps {
@@ -42,6 +45,8 @@ export const UserProvider = ({ children }: UserProviderProps) => {
 
 	const [currentUserDetails, setCurrentUserDetails] = useState<null>(null);
 
+	const [currentDevTeam, setCurrentDevTeam] = useState([]);
+
 	useEffect(() => {
 		if (!currentUserDetails && !hailstormLoading && data) {
 			if (data.hailstormData && user) {
@@ -51,6 +56,25 @@ export const UserProvider = ({ children }: UserProviderProps) => {
 					picture: user.picture,
 				});
 			}
+		}
+
+		if (data && data.hailstormData.length > 0 && currentUserDetails) {
+			const positions = ['developer', 'technical lead'];
+			const devTeam = data.hailstormData.filter((user: UserData) => user.position && positions.some((position) => user.position?.toLowerCase().includes(position)));
+
+			const teamMembers = devTeam.map((user: { userId: string; firstName: string; lastName: string }) => ({
+				index: user.userId,
+				name: `${user.firstName} ${user.lastName}`,
+			}));
+
+			const currentUser = `${currentUserDetails.firstName} ${currentUserDetails.lastName}`;
+
+			const indexToRemove = teamMembers.findIndex((member: { name: string }) => member.name === currentUser);
+			if (indexToRemove !== -1) {
+				teamMembers.splice(indexToRemove, 1);
+			}
+
+			setCurrentDevTeam(teamMembers);
 		}
 	}, [currentUserDetails, hailstormLoading, data, user]);
 
@@ -64,6 +88,8 @@ export const UserProvider = ({ children }: UserProviderProps) => {
 				currentUserDetails,
 				data,
 				hailstormLoading,
+				currentDevTeam,
+				setCurrentDevTeam,
 			}}
 		>
 			{children}

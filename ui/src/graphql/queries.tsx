@@ -1,9 +1,17 @@
 import { gql } from '@apollo/client';
 
-export const GET_POSTS = gql`
+export const GET_TAGS = gql`
 	query {
-		getAllPosts {
+		tags {
 			id
+			tag
+		}
+	}
+`;
+
+export const GET_POSTS = gql`
+	query ($tags: [String], $orderBy: String, $createdBy: [String]) {
+		getAllPosts(tags: $tags, orderBy: $orderBy, createdBy: $createdBy) {
 			title
 			post
 			tags

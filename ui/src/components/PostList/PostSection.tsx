@@ -11,9 +11,24 @@ import { useMode } from '@/context/ModeContext';
 
 const PostSection = () => {
 	const { data, hailstormLoading } = useContext(UserContext);
-	const { loading, error, data: postData } = useQuery(GET_POSTS);
-	const { setMode, setSelectedCardData, setModalOpen } = useMode();
+
+	const { setMode, selectedTags, selectedSortBy, selectedPostedBy, setSelectedCardData, setModalOpen } = useMode();
 	const [page, setPage] = useState(1);
+
+	console.log('selectd', selectedTags);
+
+	const {
+		loading,
+		error,
+		data: postData,
+	} = useQuery(GET_POSTS, {
+		variables: {
+			tags: selectedTags.includes('All') ? [] : selectedTags,
+			orderBy: selectedSortBy ? selectedSortBy : {},
+			...(selectedPostedBy !== '100' ? { createdBy: selectedPostedBy } : ''),
+			// createdBy: selectedPostedBy ? selectedPostedBy : '',
+		},
+	});
 
 	const processedPosts = useMemo(() => {
 		if (!loading && !hailstormLoading && postData) {

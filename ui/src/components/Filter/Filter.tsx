@@ -3,12 +3,67 @@ import Tags from '../Tags';
 import Dropdown from '../Dropdown/Dropdown';
 import { Stack, Box } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import { useMode } from '@/context/ModeContext';
+import { GET_TAGS } from '@/graphql/queries';
+import { useQuery } from '@apollo/client';
+import UserContext from '@/context/UserContext';
+import { useContext } from 'react';
 
 const Filter = () => {
-	const options = ['all', 'frontend', 'backend', 'components'];
-	const sortItem = ['Sort by', 'Latest', 'Oldest'];
-	const postedItem = ['Posted by', 'Everyone', 'Me', 'JM', 'Marie'];
 	const theme = useTheme();
+
+	const { currentDevTeam, currentUserDetails } = useContext(UserContext);
+
+	const sortItem = [
+		{
+			index: '0',
+			name: 'Sort by',
+		},
+		{
+			index: '1',
+			name: 'Latest',
+		},
+		{
+			index: '2',
+			name: 'Oldest',
+		},
+	];
+
+	const postedItem = [
+		{
+			index: '0',
+			name: 'Posted by',
+		},
+		{
+			index: '100',
+			name: 'Everyone',
+		},
+		{
+			index: currentUserDetails?.userId,
+			name: 'Me',
+		},
+	];
+
+	const { selectedTags, setSelectedTags } = useMode();
+
+	const { loading, error, data } = useQuery(GET_TAGS);
+
+	const updatedPostedItem = [...postedItem, ...currentDevTeam];
+
+	console.log('dev', updatedPostedItem);
+
+	const handleTagToggle = (tag: string) => {
+		if (tag === 'All') {
+			setSelectedTags(['All']);
+		} else {
+			if (selectedTags.includes(tag)) {
+				setSelectedTags(selectedTags.filter((selectedTag) => selectedTag !== tag));
+			} else {
+				const updatedTags = selectedTags.includes('All') ? [tag] : [...selectedTags, tag];
+				setSelectedTags(updatedTags);
+			}
+		}
+	};
 	return (
 		<Stack
 			sx={{
@@ -45,7 +100,7 @@ const Filter = () => {
 					type='Sort by'
 				/>
 				<Dropdown
-					options={postedItem}
+					options={updatedPostedItem}
 					type='Posted by'
 				/>
 			</Stack>
@@ -76,12 +131,15 @@ const Filter = () => {
 					direction='row'
 					sx={{ gap: '4px', flexWrap: 'wrap' }}
 				>
-					{options.map((option, index) => (
-						<Tags
-							name={option}
-							key={index}
-						/>
-					))}
+					{data &&
+						[...[{ tag: 'All', id: 0 }], ...data.tags].map((option: { tag: string; id: number }, index: number) => (
+							<Tags
+								name={option.tag}
+								key={index}
+								click={() => handleTagToggle(option.tag)}
+								active={selectedTags.includes(option.tag)}
+							/>
+						))}
 				</Stack>
 				<Search />
 			</Stack>
