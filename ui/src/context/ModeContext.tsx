@@ -35,7 +35,7 @@ export const ModeProvider: React.FC<ModeProviderProps> = ({ children }) => {
 	const [selectedCardData, setSelectedCardData] = useState<SelectedCardDataProps | null>(null);
 	const [modalOpen, setModalOpen] = useState(false);
 	const [selectedTags, setSelectedTags] = useState<string[]>(['All']);
-	const [selectedSortBy, setSelectedSortBy] = useState('asc');
+	const [selectedSortBy, setSelectedSortBy] = useState('desc');
 	const [selectedPostedBy, setSelectedPostedBy] = useState('');
 
 	return <ModeContext.Provider value={{ mode, setMode, selectedCardData, modalOpen, setModalOpen, selectedTags, setSelectedTags, selectedSortBy, setSelectedSortBy, selectedPostedBy, setSelectedPostedBy, setSelectedCardData }}>{children}</ModeContext.Provider>;

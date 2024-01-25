@@ -10,20 +10,23 @@ export const GET_TAGS = gql`
 `;
 
 export const GET_POSTS = gql`
-	query ($tags: [String], $orderBy: String, $createdBy: [String]) {
-		getAllPosts(tags: $tags, orderBy: $orderBy, createdBy: $createdBy) {
+	query ($orderBy: String, $tags: [String], $createdBy: [String], $title: String, $page: Int, $pageSize: Int) {
+		getAllPosts(orderBy: $orderBy, tags: $tags, createdBy: $createdBy, title: $title, page: $page, pageSize: $pageSize) {
+			id
 			title
 			post
 			tags
-			explanation
-			created_date
 			created_by
+			created_date
+			updated_date
+			deleted
+			explanation
 		}
 	}
 `;
 
 export const ADD_POST = gql`
-	mutation CreatePost($title: JSON!, $post: String!, $createdBy: String!) {
+	mutation CreatePost($title: String!, $post: String!, $createdBy: String!) {
 		createPost(title: $title, post: $post, created_by: $createdBy) {
 			data {
 				id
