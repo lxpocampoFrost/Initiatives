@@ -1,11 +1,19 @@
 const { pool } = require('../config/database');
 const poolQuery = require('util').promisify(pool.query).bind(pool);
 
-const getAllPosts = async (orderBy = 'desc', tags = [], createdBy = null, page = 1, pageSize = 9) => {
+const getAllPosts = async (orderBy = 'asc', tags = [], createdBy = null, title = null, page = 1, pageSize = 9) => {
 	try {
 		let createdByFilter = '';
 		if (createdBy) {
 			createdByFilter = `AND p.created_by = ?`;
+		}
+
+		let titleFilter = '';
+		let titleParams = [];
+
+		if (title) {
+			titleFilter = `AND JSON_UNQUOTE(JSON_EXTRACT(p.title, '$.data.text')) LIKE ?`;
+			titleParams.push(`%${title}%`);
 		}
 
 		let tagFilter = '';
@@ -35,6 +43,7 @@ const getAllPosts = async (orderBy = 'desc', tags = [], createdBy = null, page =
 				WHERE
 					p.deleted = false
 					${createdByFilter}
+					${titleFilter}
 				GROUP BY
 					p.id
 					${tagFilter}
@@ -44,7 +53,9 @@ const getAllPosts = async (orderBy = 'desc', tags = [], createdBy = null, page =
 		`;
 
 		const offset = (page - 1) * pageSize;
-		const params = createdBy ? [createdBy, ...tags, offset, pageSize] : [...tags, offset, pageSize];
+
+		const params = createdBy ? [createdBy, ...titleParams, ...tags, offset, pageSize] : [...titleParams, ...tags, offset, pageSize];
+
 		const results = await poolQuery(query, params);
 
 		const formattedResults = results.map((row) => {

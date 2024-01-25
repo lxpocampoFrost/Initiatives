@@ -92,9 +92,9 @@ const resolvers = {
 				throw new Error('Failed to fetch tags', error);
 			}
 		},
-		getAllPosts: async (_, { orderBy, tags, createdBy, page = 1, pageSize = 9 }) => {
+		getAllPosts: async (_, { orderBy, tags, createdBy, title, page = 1, pageSize = 9 }) => {
 			try {
-				const posts = await getAllPosts(orderBy, tags, createdBy, page, pageSize);
+				const posts = await getAllPosts(orderBy, tags, createdBy, title, page, pageSize);
 				return posts;
 			} catch (error) {
 				throw new Error('Failed to fetch posts', error);
