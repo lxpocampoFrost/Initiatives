@@ -89,7 +89,7 @@ const PostSection = () => {
 										sx={{
 											width: '100%',
 											'@media screen and (min-width:1536px)': {
-												flexBasis: '32.33%',
+												flexBasis: '32.8%',
 												maxWidth: 'unset',
 											},
 											'@media screen and (max-width:1535px)': {
