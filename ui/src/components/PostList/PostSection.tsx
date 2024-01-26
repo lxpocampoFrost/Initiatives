@@ -64,20 +64,34 @@ const PostSection = () => {
 				<>
 					<Grid
 						container
+						display='grid'
 						sx={{
 							marginTop: '8px',
 							width: '100%',
 							maxWidth: '1040px',
+							gridTemplateColumns: '33.33% 33.33% 1fr',
+							'> .MuiGrid-root.MuiGrid-item': {
+								flexBasis: 'auto',
+								maxWidth: '341px',
+							},
 							'@media screen and (max-width:1440px)': {
 								maxWidth: '100%',
+								gridTemplateColumns: '50% 1fr',
+								'> .MuiGrid-root.MuiGrid-item': {
+									flexBasis: 'auto',
+									maxWidth: '100%',
+								},
 							},
-							'@media screen and (max-width:899px)': {
+							'@media screen and (max-width:768px)': {
 								marginTop: '0',
 								padding: '8px',
+								gridTemplateColumns: '100%',
+								'> .MuiGrid-root.MuiGrid-item': {
+									maxWidth: '100%',
+								},
 							},
 						}}
-						rowGap='8px'
-						columnGap='8px'
+						gap="8px"
 					>
 						{processedPosts &&
 							processedPosts.map((data: any, index: number) => {
@@ -86,25 +100,6 @@ const PostSection = () => {
 										item
 										xl={3}
 										key={index}
-										sx={{
-											width: '100%',
-											'@media screen and (min-width:1536px)': {
-												flexBasis: '32.8%',
-												maxWidth: 'unset',
-											},
-											'@media screen and (max-width:1535px)': {
-												flexBasis: '49.5%',
-											},
-											'@media screen and (max-width:1245px)': {
-												flexBasis: '49.4%',
-											},
-											'@media screen and (max-width:1024px)': {
-												flexBasis: 'unset',
-											},
-											'@media screen and (max-width:814px)': {
-												maxWidth: '100%!important',
-											},
-										}}
 										rowGap='8px'
 										columnGap='8px'
 									>

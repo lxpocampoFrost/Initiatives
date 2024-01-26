@@ -40,15 +40,8 @@ const PostItem = ({ data, handleClick }: PostItemProps) => {
 				onClick={handleClick}
 				sx={{
 					'@media screen and (min-width:1440px)': {
-						// maxWidth: '341px',
 						width: '100%',
-						minWidth: '100%',
 						minHeight: '350px',
-					},
-
-					'@media screen and (max-width:1024px)': {
-						maxWidth: '100%',
-						minWidth: 'unset',
 					},
 					boxSizing: 'border-box',
 					maxWidth: '100%',
