@@ -457,7 +457,7 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
 						paddingRight: '8px',
 					},
 					'.ce-block__content': {
-						fontFamily: 'Figtree-Bold,sans-serif',
+						fontFamily: 'Figtree-Regular,sans-serif',
 						maxWidth: '632px',
 						margin: '0 0 0 auto',
 						a: {

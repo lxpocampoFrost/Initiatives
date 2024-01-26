@@ -33,6 +33,6 @@ body::-webkit-scrollbar {
 
 @media screen and (min-width: 900px) {
 	body {
-		padding: 40px 0;
+		padding: 40px;
 	}
 }

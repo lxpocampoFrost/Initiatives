@@ -1,21 +1,32 @@
 import { gql } from '@apollo/client';
 
-export const GET_POSTS = gql`
+export const GET_TAGS = gql`
 	query {
-		getAllPosts {
+		tags {
+			id
+			tag
+		}
+	}
+`;
+
+export const GET_POSTS = gql`
+	query ($orderBy: String, $tags: [String], $createdBy: [String], $title: String, $page: Int, $pageSize: Int) {
+		getAllPosts(orderBy: $orderBy, tags: $tags, createdBy: $createdBy, title: $title, page: $page, pageSize: $pageSize) {
 			id
 			title
 			post
 			tags
-			explanation
-			created_date
 			created_by
+			created_date
+			updated_date
+			deleted
+			explanation
 		}
 	}
 `;
 
 export const ADD_POST = gql`
-	mutation CreatePost($title: JSON!, $post: String!, $createdBy: String!) {
+	mutation CreatePost($title: String!, $post: String!, $createdBy: String!) {
 		createPost(title: $title, post: $post, created_by: $createdBy) {
 			data {
 				id

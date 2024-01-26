@@ -13,7 +13,17 @@ interface ModeContextProps {
 	mode: string;
 	setMode: React.Dispatch<React.SetStateAction<string>>;
 	selectedCardData: SelectedCardDataProps | null;
-	setSelectedCardData: React.Dispatch<React.SetStateAction<any>>;
+	setSelectedCardData: React.Dispatch<React.SetStateAction<SelectedCardDataProps | null>>;
+	modalOpen: boolean;
+	setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+	selectedTags: string[];
+	setSelectedTags: React.Dispatch<React.SetStateAction<string[]>>;
+	selectedSortBy: string;
+	setSelectedSortBy: React.Dispatch<React.SetStateAction<string>>;
+	selectedPostedBy: string;
+	setSelectedPostedBy: React.Dispatch<React.SetStateAction<string>>;
+	searchQuery: string;
+	setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const ModeContext = createContext<ModeContextProps | undefined>(undefined);
@@ -25,8 +35,14 @@ interface ModeProviderProps {
 export const ModeProvider: React.FC<ModeProviderProps> = ({ children }) => {
 	const [mode, setMode] = useState('view');
 	const [selectedCardData, setSelectedCardData] = useState<SelectedCardDataProps | null>(null);
+	const [modalOpen, setModalOpen] = useState(false);
+	const [selectedTags, setSelectedTags] = useState<string[]>(['All']);
+	const [selectedSortBy, setSelectedSortBy] = useState('desc');
+	const [selectedPostedBy, setSelectedPostedBy] = useState('');
 
-	return <ModeContext.Provider value={{ mode, setMode, selectedCardData, setSelectedCardData }}>{children}</ModeContext.Provider>;
+	const [searchQuery, setSearchQuery] = useState('');
+
+	return <ModeContext.Provider value={{ mode, setMode, selectedCardData, modalOpen, setModalOpen, selectedTags, setSelectedTags, selectedSortBy, setSelectedSortBy, selectedPostedBy, setSelectedPostedBy, setSelectedCardData, searchQuery, setSearchQuery }}>{children}</ModeContext.Provider>;
 };
 
 export const useMode = (): ModeContextProps => {

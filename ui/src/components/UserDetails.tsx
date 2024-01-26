@@ -17,11 +17,12 @@ const UserDetails = ({ action }: UserDetailsProp) => {
 	return (
 		<Box
 			sx={{
-				[theme.breakpoints.up('md')]: {
+				[theme.breakpoints.up('lg')]: {
 					maxWidth: '360px',
 					width: '100%',
 					borderRadius: '12px',
 					height: '100%',
+					minWidth: '360px',
 				},
 				boxSizing: 'border-box',
 				display: 'flex',

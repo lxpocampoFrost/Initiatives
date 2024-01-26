@@ -1,5 +1,4 @@
 import { useContext, useMemo, useState } from 'react';
-import Link from 'next/link';
 import { useQuery } from '@apollo/client';
 
 import Modal from '@/components/Modal/Modal';
@@ -16,11 +15,12 @@ import { useTheme } from '@mui/material/styles';
 import { useMutation } from '@apollo/client';
 import { DELETE_POST, GET_POSTS } from '@/graphql/queries';
 import DeleteModal from '@/components/Modal/DeleteModal';
+import PostSection from '@/components/PostList/PostSection';
 
 export default function Home() {
 	const theme = useTheme();
-	const { mode, setMode, selectedCardData, setSelectedCardData } = useMode();
-	const [modalOpen, setModalOpen] = useState(false);
+	const { mode, setMode, modalOpen, setModalOpen, selectedCardData, setSelectedCardData } = useMode();
+
 	const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
 
 	const [deletePost] = useMutation(DELETE_POST, {
@@ -31,20 +31,6 @@ export default function Home() {
 		setModalOpen(true);
 		setMode('create');
 		setSelectedCardData(null);
-	};
-
-	const handleViewClick = (data: any) => {
-		const formattedData = {
-			...data,
-			post: {
-				blocks: [JSON.parse(data.title), ...JSON.parse(data.post)],
-				explanation: data.explanation,
-			},
-		};
-
-		setSelectedCardData(formattedData);
-		setMode('view');
-		setModalOpen(true);
 	};
 
 	const handleEditClick = () => {
@@ -70,20 +56,6 @@ export default function Home() {
 		handleCloseModal();
 	};
 
-	const { data, hailstormLoading } = useContext(UserContext);
-	const { loading, error, data: postData } = useQuery(GET_POSTS);
-
-	const processedPosts = useMemo(() => {
-		if (!loading && !hailstormLoading && postData) {
-			return postData.getAllPosts.map((post: any) => ({
-				...post,
-				created_by: getBindnameForUserId(data, post.created_by),
-				color: getColorForUserId(post.created_by),
-			}));
-		}
-		return [];
-	}, [loading, hailstormLoading, postData]);
-
 	return (
 		<>
 			<Box
@@ -91,37 +63,16 @@ export default function Home() {
 					display: 'flex',
 					justifyContent: 'center',
 					gap: '8px',
+					'@media screen and (max-width:1199px)': {
+						flexDirection: 'column',
+					},
+					'@media screen and (max-width:899px)': {
+						gap: '0',
+					},
 				}}
 			>
 				<UserDetails action={() => handlePostClick()} />
-				<Grid
-					container
-					sx={{
-						marginTop: '0',
-						width: '100%',
-						maxWidth: '1040px',
-					}}
-					rowGap='8px'
-					columnGap='8px'
-				>
-					{processedPosts &&
-						processedPosts.map((data: any, index: number) => {
-							return (
-								<Grid
-									item
-									xs={12}
-									sm={6}
-									lg={4}
-									key={index}
-								>
-									<PostItem
-										data={data}
-										handleClick={() => handleViewClick(data)}
-									/>
-								</Grid>
-							);
-						})}
-				</Grid>
+				<PostSection />
 			</Box>
 
 			<Modal

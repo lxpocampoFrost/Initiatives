@@ -94,7 +94,6 @@ export default function ComponentLibrary() {
 			</Box>
 			<Button onClick={() => setModalOpen(true)}>Add post</Button>
 			<Modal
-				title='Create Post'
 				isOpen={modalOpen}
 				onClose={() => setModalOpen(false)}
 			>
