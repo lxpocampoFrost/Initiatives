@@ -69,7 +69,7 @@ const PostSection = () => {
 							marginTop: '8px',
 							width: '100%',
 							maxWidth: '1040px',
-							gridTemplateColumns: '33.33% 33.33% 1fr',
+							gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
 							'> .MuiGrid-root.MuiGrid-item': {
 								flexBasis: 'auto',
 								maxWidth: '341px',
