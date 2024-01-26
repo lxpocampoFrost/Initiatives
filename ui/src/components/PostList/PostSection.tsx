@@ -58,7 +58,20 @@ const PostSection = () => {
 	}, [searchQuery, selectedTags, selectedSortBy, selectedPostedBy]);
 
 	return (
-		<Box>
+		<Box
+			display='flex'
+			flexDirection='column'
+			sx={{
+				height: 'calc(100dvh - 80px)',
+				'@media screen and (min-width:1492px)': {
+					minWidth: '1040px',	
+					maxWidth: '1040px',
+				},
+				'@media screen and (max-width:1492px)': {
+					width: '100%',	
+				},
+			}}
+		>
 			<Filter />
 			{processedPosts && processedPosts.length > 0 ? (
 				<>
@@ -113,8 +126,8 @@ const PostSection = () => {
 					</Grid>
 					<Box
 						sx={{
-							padding: '0 24px 24px',
-							marginTop: '8px',
+							padding: '8px 24px 24px',
+							marginTop: 'auto',
 						}}
 					>
 						<PaginationControl
