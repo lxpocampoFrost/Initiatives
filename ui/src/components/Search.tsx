@@ -32,6 +32,7 @@ const Search = () => {
 					[theme.breakpoints.up('md')]: {
 						marginLeft: 'auto',
 						marginTop: '0',
+						paddingLeft: '8px',
 					},
 					display: 'flex',
 					marginLeft: isTextFieldVisible ? '0' : 'auto',

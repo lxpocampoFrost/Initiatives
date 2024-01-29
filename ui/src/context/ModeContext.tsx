@@ -4,6 +4,7 @@ interface SelectedCardDataProps {
 	id: string;
 	color: string;
 	created_by: string;
+	created_at: string;
 	explanation: string;
 	post: string;
 	tags: string[];

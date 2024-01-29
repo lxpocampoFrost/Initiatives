@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState, useContext } from 'react';
 import UserContext from '@/context/UserContext';
 
-import { Box } from '@mui/material';
+import { Box, Snackbar } from '@mui/material';
 import { ADD_POST, UPDATE_POST, GET_POSTS } from '@/graphql/queries';
 import { useMutation } from '@apollo/client';
 import Button from '@/components/Button/Button';
@@ -28,6 +28,8 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
 		created_by: '',
 		updated_at: '',
 	});
+
+	const [actionNotif, setActionNotif] = useState(false);
 
 	const [createPost] = useMutation(ADD_POST);
 	const [updatePost] = useMutation(UPDATE_POST);
@@ -64,14 +66,15 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
 				refetchQueries: [{ query: GET_POSTS }],
 			});
 
-			if ((data.data.createPost && data.data.createPost.success === false) || (data.data.updatePost && data.data.updatePost.success === false)) {
+			if ((data.createPost && data.createPost.success === false) || (data.updatePost && data.updatePost.success === false)) {
+				setActionNotif(true);
 				setLoading(false);
 				setTimeout(() => {
 					editorRef.current.clear();
 				}, 1000);
 			}
 
-			if ((data.data.createPost && data.data.createPost.success === true) || (data.data.updatePost && data.data.updatePost.success === true)) {
+			if (data.createPost && data.createPost.success === true) {
 				setLoading(false);
 				setSubmitting(false);
 
@@ -82,9 +85,11 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
 				}, 1000);
 			}
 
-			setLoading(false);
-			editorRef.current.destroy();
-			initializeEditor();
+			if (data.updatePost && data.updatePost.success === true) {
+				setLoading(false);
+				setSubmitting(false);
+				onSubmitSuccess();
+			}
 		} catch (error) {
 			console.error('Error creating post:', error);
 		}
@@ -299,6 +304,9 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
 				id='editor-js'
 				sx={{
 					color: mode === 'view' ? '#E5E7EB!important' : '#ffffff',
+					'.codex-editor ::selection': {
+						backgroundColor: '#2c313c',
+					},
 					'.codex-editor--narrow .codex-editor__redactor': {
 						marginRight: '0',
 					},
@@ -378,7 +386,7 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
 					'.tc-add-row:hover, .tc-add-row:hover:before, .tc-add-column:hover, .tc-popover , .cdx-attaches--with-file .cdx-attaches__download-button:hover': {
 						background: '#2C313C',
 					},
-					'.ce-inline-toolbar, .tc-popover__item-icon': {
+					'.tc-popover__item-icon': {
 						background: 'transparent',
 					},
 					'.ce-popover--opened, .ce-conversion-toolbar': {
@@ -459,6 +467,9 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
 					'.ce-toolbar': {
 						left: '24px',
 					},
+					'.ce-inline-toolbar': {
+						background: '#0C0E13',
+					},
 					'.ce-toolbar__settings-btn': {
 						marginLeft: '4px',
 					},
@@ -536,6 +547,12 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
 					action={() => handleSubmit()}
 				/>
 			</Box>
+			<Snackbar
+				open={actionNotif}
+				autoHideDuration={1200}
+				onClose={() => setActionNotif(false)}
+				message='Error. Please try again'
+			/>
 		</>
 	);
 };

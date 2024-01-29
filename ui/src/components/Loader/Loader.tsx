@@ -13,7 +13,7 @@ const Loader = () => {
 						marginTop: '12px',
 					}}
 				>
-					Loading data ...
+					Loading...
 				</Box>
 			</Box>
 		</Box>

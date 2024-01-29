@@ -13,7 +13,7 @@ import Loader from '../Loader/Loader';
 
 const PostSection = () => {
 	const { data, hailstormLoading } = useContext(UserContext);
-	const { setMode, searchQuery, selectedTags, selectedSortBy, selectedPostedBy, setSelectedCardData, setModalOpen } = useMode();
+	const { setMode, mode, searchQuery, selectedTags, selectedCardData, selectedSortBy, selectedPostedBy, setSelectedCardData, setModalOpen } = useMode();
 	const [page, setPage] = useState(1);
 
 	const {
@@ -67,87 +67,103 @@ const PostSection = () => {
 		setModalOpen(true);
 	};
 
-	return (
-		<>
-			<Box>
-				<Filter />
+	useEffect(() => {
+		refetch();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [postData, mode]);
 
-				{processedPosts && processedPosts.length > 0 ? (
-					<>
-						<Grid
-							container
-							sx={{
-								marginTop: '8px',
-								width: '100%',
-								maxWidth: '1040px',
-								'@media screen and (max-width:1440px)': {
-									maxWidth: '100%',
-								},
-								'@media screen and (max-width:899px)': {
-									marginTop: '0',
-									padding: '8px',
-								},
-							}}
-							rowGap='8px'
-							columnGap='8px'
-						>
-							{processedPosts &&
-								processedPosts.map((data: any, index: number) => {
-									return (
-										<Grid
-											item
-											xl={3}
-											key={index}
-											sx={{
-												width: '100%',
-												'@media screen and (min-width:1536px)': {
-													flexBasis: '32.8%',
-													maxWidth: 'unset',
-												},
-												'@media screen and (max-width:1535px)': {
-													flexBasis: '49.5%',
-												},
-												'@media screen and (max-width:1245px)': {
-													flexBasis: '49.4%',
-												},
-												'@media screen and (max-width:1024px)': {
-													flexBasis: 'unset',
-												},
-												'@media screen and (max-width:814px)': {
-													maxWidth: '100%!important',
-												},
-											}}
-											rowGap='8px'
-											columnGap='8px'
-										>
-											<PostItem
-												data={data}
-												handleClick={() => handleViewClick(data)}
-											/>
-										</Grid>
-									);
-								})}
-						</Grid>
-						<Box
-							sx={{
-								padding: '0 24px 24px',
-								marginTop: '8px',
-							}}
-						>
-							<PaginationControl
-								totalPages={totalPages}
-								currentPage={page}
-								handlePageChange={(event, value) => {
-									setPage(value);
+	return (
+		<Box
+			display='flex'
+			flexDirection='column'
+			sx={{
+				height: 'calc(100dvh - 80px)',
+				'@media screen and (min-width:1492px)': {
+					minWidth: '1040px',
+					maxWidth: '1040px',
+				},
+				'@media screen and (max-width:1492px)': {
+					width: '100%',
+				},
+			}}
+		>
+			<Filter />
+			{processedPosts ? (
+				<>
+					{processedPosts && processedPosts.length > 0 ? (
+						<>
+							<Grid
+								container
+								display='grid'
+								sx={{
+									marginTop: '8px',
+									width: '100%',
+									maxWidth: '1040px',
+									gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
+									'> .MuiGrid-root.MuiGrid-item': {
+										flexBasis: 'auto',
+										maxWidth: '341px',
+									},
+									'@media screen and (max-width:1440px)': {
+										maxWidth: '100%',
+										gridTemplateColumns: '50% 1fr',
+										'> .MuiGrid-root.MuiGrid-item': {
+											flexBasis: 'auto',
+											maxWidth: '100%',
+										},
+									},
+									'@media screen and (max-width:768px)': {
+										marginTop: '0',
+										padding: '8px',
+										gridTemplateColumns: '100%',
+										'> .MuiGrid-root.MuiGrid-item': {
+											maxWidth: '100%',
+										},
+									},
 								}}
-							/>
-						</Box>
-					</>
-				) : (
-					<FilterEmpty />
-				)}
-			</Box>
-		</>
+								gap='8px'
+							>
+								{processedPosts &&
+									processedPosts.map((data: any, index: number) => {
+										return (
+											<Grid
+												item
+												xl={3}
+												key={index}
+												rowGap='8px'
+												columnGap='8px'
+											>
+												<PostItem
+													data={data}
+													handleClick={() => handleViewClick(data)}
+												/>
+											</Grid>
+										);
+									})}
+							</Grid>
+							<Box
+								sx={{
+									padding: '8px 24px 24px',
+									marginTop: 'auto',
+								}}
+							>
+								<PaginationControl
+									totalPages={10}
+									currentPage={page}
+									handlePageChange={(event, value) => {
+										setPage(value);
+									}}
+								/>
+							</Box>
+						</>
+					) : (
+						<FilterEmpty />
+					)}
+				</>
+			) : (
+				<Loader />
+			)}
+		</Box>
 	);
 };
 
