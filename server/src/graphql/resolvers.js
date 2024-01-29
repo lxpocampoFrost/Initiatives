@@ -61,8 +61,6 @@ const getAnalyzedData = async (text) => {
 		});
 
 		summary = completion.choices[0].message.content;
-		
-		console.log(summary)
 
 		gpt_response.summary = summary;
 		if (summary !== '') {
