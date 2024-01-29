@@ -15,7 +15,7 @@ import Loader from '@/components/Loader/Loader';
 
 export default function Home() {
 	const theme = useTheme();
-	const { mode, postTracker, setMode, modalOpen, setModalOpen, selectedCardData, setSelectedCardData, page, setPage } = useMode();
+	const { mode, setMode, postTracker, modalOpen, setModalOpen, selectedCardData, setSelectedCardData, page, setPage } = useMode();
 
 	const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
 	const [isDataLoading, setIsDataLoading] = useState(true);

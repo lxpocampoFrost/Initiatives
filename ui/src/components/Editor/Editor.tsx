@@ -266,7 +266,7 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
 					const isEmpty = outputData.blocks.length === 0;
 					setIsEditorEmpty(isEmpty);
 
-					const title = outputData.blocks.length > 0 ? JSON.stringify(outputData.blocks[0]) : '';
+					const title = outputData.blocks.length > 0 ? JSON.stringify(outputData.blocks[0].trim()) : '';
 
 					const body = outputData.blocks.slice(1);
 					const bodyBlocks = JSON.stringify(body);
