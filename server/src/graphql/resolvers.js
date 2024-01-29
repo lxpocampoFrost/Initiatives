@@ -34,14 +34,14 @@ const getAnalyzedData = async (text) => {
 	const parsed = JSON.parse(text);
 	const content = parsed.map((obj) => obj.data.text).join(' ');
 
-	let temp = `
-		Tone: 50% spartan. No introductions. 
-		If the data from ${content} is just random strings and doesn't have a sense, answer "Invalid" only. 
-		If the data from ${content} is not invalid summarize and explain in maximum of two paragraphs with max of three sentences. 
-		Provide external links for reference in list. Return the output in raw HTML format without any introductions'.
+	let roleInstructions = `
+		As a Technical Design Analyst you highlight key points and summarize data provided to you. 
+		Anything unrelated to tech and design work you return 'invalid' only without explanations.
 	`
-
-	
+	let prompt = `
+		Tone: 50% spartan. No introductions. Check this data: ${content} and summarize and
+		explain in two paragraphs with max of 2 sentences each. Return the output in raw HTML format.
+	`
 
 	try {
 		let completion = await openai.chat.completions.create({
@@ -49,11 +49,11 @@ const getAnalyzedData = async (text) => {
 			messages: [
 				{
 					role: 'system',
-					content: 'You are a notetaker, who gets straight to the point.',
+					content: roleInstructions
 				},
 				{
 					role: 'user',
-					content: `Tone: 50% spartan. No introductions. If the data from ${content} is just random strings and doesn't have a sense, answer "Invalid" only. If the data from ${content} is not invalid summarize and explain in maximum of two paragraphs with max of three sentences. Provide external links for reference in list. Return the output in raw HTML format without any introductions`,
+					content: prompt,
 				},
 			],
 			temperature: 0,
@@ -61,6 +61,8 @@ const getAnalyzedData = async (text) => {
 		});
 
 		summary = completion.choices[0].message.content;
+		
+		console.log(summary)
 
 		gpt_response.summary = summary;
 		if (summary !== '') {
@@ -144,6 +146,8 @@ const resolvers = {
 				}
 
 				gpt_response = await getAnalyzedData(post);
+
+				console.log('isInvalid: ', gpt_response.summary.invalid);
 
 				if (gpt_response && gpt_response.summary == 'Invalid') {
 					throw new Error('Invalid content provided');
