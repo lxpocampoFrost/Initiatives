@@ -24,6 +24,8 @@ interface ModeContextProps {
 	setSelectedPostedBy: React.Dispatch<React.SetStateAction<string>>;
 	searchQuery: string;
 	setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
+	submitting: boolean;
+	setSubmitting: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ModeContext = createContext<ModeContextProps | undefined>(undefined);
@@ -41,8 +43,13 @@ export const ModeProvider: React.FC<ModeProviderProps> = ({ children }) => {
 	const [selectedPostedBy, setSelectedPostedBy] = useState('');
 
 	const [searchQuery, setSearchQuery] = useState('');
+	const [submitting, setSubmitting] = useState(false);
 
-	return <ModeContext.Provider value={{ mode, setMode, selectedCardData, modalOpen, setModalOpen, selectedTags, setSelectedTags, selectedSortBy, setSelectedSortBy, selectedPostedBy, setSelectedPostedBy, setSelectedCardData, searchQuery, setSearchQuery }}>{children}</ModeContext.Provider>;
+	return (
+		<ModeContext.Provider value={{ mode, setMode, selectedCardData, modalOpen, setModalOpen, selectedTags, setSelectedTags, selectedSortBy, setSelectedSortBy, selectedPostedBy, setSelectedPostedBy, setSelectedCardData, searchQuery, setSearchQuery, submitting, setSubmitting }}>
+			{children}
+		</ModeContext.Provider>
+	);
 };
 
 export const useMode = (): ModeContextProps => {

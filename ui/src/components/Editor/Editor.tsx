@@ -14,7 +14,7 @@ interface EditorProps {
 
 const Editor = ({ onSubmitSuccess }: EditorProps) => {
 	const { currentUserDetails } = useContext(UserContext);
-	const { mode, setMode, selectedCardData } = useMode();
+	const { mode, setMode, selectedCardData, submitting, setSubmitting } = useMode();
 	const currentUserDetailsId = currentUserDetails && currentUserDetails.userId;
 
 	const [loading, setLoading] = useState(false);
@@ -29,17 +29,13 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
 		updated_at: '',
 	});
 
-	const [createPost] = useMutation(ADD_POST, {
-		refetchQueries: [{ query: GET_POSTS }],
-	});
-
-	const [updatePost] = useMutation(UPDATE_POST, {
-		refetchQueries: [{ query: GET_POSTS }],
-	});
+	const [createPost] = useMutation(ADD_POST);
+	const [updatePost] = useMutation(UPDATE_POST);
 
 	const handleSubmit = async () => {
 		try {
 			setLoading(true);
+			setSubmitting(true);
 
 			const { title, post } = formData;
 
@@ -65,23 +61,30 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
 
 			const { data } = await mutation({
 				variables,
+				refetchQueries: [{ query: GET_POSTS }],
 			});
 
-			if (data.createPost.success === false && editorRef.current) {
+			if ((data.data.createPost && data.data.createPost.success === false) || (data.data.updatePost && data.data.updatePost.success === false)) {
 				setLoading(false);
 				setTimeout(() => {
 					editorRef.current.clear();
 				}, 1000);
 			}
 
-			if ((data.createPost.success === true || data.updatePost.success === true) && editorRef.current) {
+			if ((data.data.createPost && data.data.createPost.success === true) || (data.data.updatePost && data.data.updatePost.success === true)) {
 				setLoading(false);
+				setSubmitting(false);
+
 				setTimeout(() => {
 					onSubmitSuccess();
 					editorRef.current.destroy();
 					initializeEditor();
 				}, 1000);
 			}
+
+			setLoading(false);
+			editorRef.current.destroy();
+			initializeEditor();
 		} catch (error) {
 			console.error('Error creating post:', error);
 		}
@@ -296,11 +299,17 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
 				id='editor-js'
 				sx={{
 					color: mode === 'view' ? '#E5E7EB!important' : '#ffffff',
-
+					'.codex-editor--narrow .codex-editor__redactor': {
+						marginRight: '0',
+					},
 					'.codex-editor__redactor': {
+						minWidth: '564px',
 						paddingBottom: mode === 'view' ? '40px!important' : '100px',
 						'.ce-block:first-of-type h1': {
 							paddingTop: '0',
+						},
+						'@media screen and (max-width:768px)': {
+							minWidth: 'unset',
 						},
 					},
 					'.cdx-button': {

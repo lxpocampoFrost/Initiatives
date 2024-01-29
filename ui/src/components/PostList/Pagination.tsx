@@ -4,7 +4,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 
 interface PostListData {
-	totalPages: number;
+	totalPages: number | undefined;
 	currentPage: number;
 	handlePageChange: (event: React.ChangeEvent<unknown>, value: number) => void;
 }

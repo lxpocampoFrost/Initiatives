@@ -14,7 +14,7 @@ interface ModalProps {
 }
 
 const Modal = ({ isOpen, onClose, onEdit, onDelete, children }: ModalProps) => {
-	const { mode, setMode, selectedCardData } = useMode();
+	const { mode, setMode, selectedCardData, submitting } = useMode();
 	const theme = useTheme();
 
 	const handleBack = () => {
@@ -28,6 +28,9 @@ const Modal = ({ isOpen, onClose, onEdit, onDelete, children }: ModalProps) => {
 			fullWidth
 			sx={{
 				background: '#0C0E13',
+				body: {
+					pointerEvents: submitting ? 'none' : 'auto',
+				},
 				'.MuiDialog-container': {
 					[theme.breakpoints.up('md')]: {
 						padding: '40px 24px',

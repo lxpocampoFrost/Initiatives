@@ -2,6 +2,7 @@ const { gql } = require('apollo-server-express');
 
 module.exports = gql`
 	scalar JSON
+	scalar Int
 
 	type Post {
 		id: ID
@@ -13,6 +14,11 @@ module.exports = gql`
 		updated_date: String!
 		deleted: Boolean!
 		explanation: String
+	}
+
+	type PostPagination {
+		posts: [Post]!
+		count: Int!
 	}
 
 	type Tag {
@@ -30,7 +36,7 @@ module.exports = gql`
 	}
 
 	type Query {
-		getAllPosts(orderBy: String, tags: [String], createdBy: [String], title: String, page: Int, pageSize: Int): [Post]
+		getAllPosts(orderBy: String, tags: [String], createdBy: [String], title: String, page: Int, pageSize: Int): PostPagination
 		getPostById(id: ID!): Post
 		tags: [Tag]
 		hailstormData: [User]

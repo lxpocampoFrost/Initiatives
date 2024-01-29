@@ -2,8 +2,8 @@ import styled from '@emotion/styled';
 
 interface TagData {
 	name: string;
-	click: () => void;
-	active: boolean;
+	click?: () => void;
+	active?: boolean;
 }
 
 const TagContainer = styled.div`

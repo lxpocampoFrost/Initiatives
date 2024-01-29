@@ -50,8 +50,6 @@ const Filter = () => {
 
 	const updatedPostedItem = [...postedItem, ...currentDevTeam];
 
-	console.log('dev', updatedPostedItem);
-
 	const handleTagToggle = (tag: string) => {
 		if (tag === 'All') {
 			setSelectedTags(['All']);

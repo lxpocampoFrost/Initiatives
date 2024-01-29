@@ -1,7 +1,7 @@
 import Tags from '../Tags';
 import { Box, Stack } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
 import styled from '@emotion/styled';
+import { useMode } from '@/context/ModeContext';
 
 interface PostItemData {
 	title: string;
@@ -26,7 +26,7 @@ const PostBody = styled(Box)`
 `;
 
 const PostItem = ({ data, handleClick }: PostItemProps) => {
-	const theme = useTheme();
+	const { searchQuery } = useMode();
 
 	const { title, post, created_by, color, explanation, created_date, tags } = data;
 	let titleObj = JSON.parse(title);
@@ -40,7 +40,6 @@ const PostItem = ({ data, handleClick }: PostItemProps) => {
 				onClick={handleClick}
 				sx={{
 					'@media screen and (min-width:1440px)': {
-						// maxWidth: '341px',
 						width: '100%',
 						minWidth: '100%',
 						minHeight: '350px',

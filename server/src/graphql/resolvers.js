@@ -97,8 +97,11 @@ const resolvers = {
 		},
 		getAllPosts: async (_, { orderBy, tags, createdBy, title, page = 1, pageSize = 9 }) => {
 			try {
-				const posts = await getAllPosts(orderBy, tags, createdBy, title, page, pageSize);
-				return posts;
+				const { posts, count } = await getAllPosts(orderBy, tags, createdBy, title, page, pageSize);
+				return {
+					posts,
+					count,
+				};
 			} catch (error) {
 				throw new Error('Failed to fetch posts', error);
 			}

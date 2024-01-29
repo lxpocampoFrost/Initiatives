@@ -11,6 +11,7 @@ const Dropdown = ({ options, type }: any) => {
 	useEffect(() => {
 		setSelectedValue(options[1].name);
 		setSelectedPostedBy(options[1].index);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [selectedValue, setSelectedValue] = useState('');
@@ -34,7 +35,7 @@ const Dropdown = ({ options, type }: any) => {
 			setSelectedPostedBy(index);
 		}
 	};
-	console.log('selected', selectedPostedBy);
+
 	const theme = useTheme();
 
 	return (
