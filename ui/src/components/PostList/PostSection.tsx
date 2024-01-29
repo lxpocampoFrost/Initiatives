@@ -13,8 +13,7 @@ import Loader from '../Loader/Loader';
 
 const PostSection = () => {
 	const { data, hailstormLoading } = useContext(UserContext);
-	const { setMode, mode, searchQuery, selectedTags, selectedCardData, selectedSortBy, selectedPostedBy, setSelectedCardData, setModalOpen } = useMode();
-	const [page, setPage] = useState(1);
+	const { setMode, mode, searchQuery, selectedTags, selectedSortBy, selectedPostedBy, setSelectedCardData, setModalOpen, page, setPage } = useMode();
 
 	const {
 		loading,
@@ -148,7 +147,7 @@ const PostSection = () => {
 								}}
 							>
 								<PaginationControl
-									totalPages={10}
+									totalPages={totalPages}
 									currentPage={page}
 									handlePageChange={(event, value) => {
 										setPage(value);

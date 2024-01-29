@@ -15,7 +15,7 @@ const Dropdown = ({ options, type }: any) => {
 	}, []);
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [selectedValue, setSelectedValue] = useState('');
-	const { setSelectedSortBy, selectedPostedBy, setSelectedPostedBy } = useMode();
+	const { setSelectedSortBy, selectedPostedBy, setSelectedPostedBy, setPage } = useMode();
 
 	const handleClick = (event: any) => {
 		setAnchorEl(event.currentTarget);
@@ -33,6 +33,7 @@ const Dropdown = ({ options, type }: any) => {
 			value === 'Latest' ? setSelectedSortBy('desc') : setSelectedSortBy('asc');
 		} else if (type === 'Posted by') {
 			setSelectedPostedBy(index);
+			setPage(1);
 		}
 	};
 
