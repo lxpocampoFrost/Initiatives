@@ -6,7 +6,10 @@ import { useMode } from '@/context/ModeContext';
 interface PostItemData {
 	title: string;
 	post: string;
-	created_by: string;
+	created_by: {
+		bindName: string;
+		userId: string;
+	};
 	explanation: string;
 	created_date: string;
 	tags: string[];
@@ -73,7 +76,7 @@ const PostItem = ({ data, handleClick }: PostItemProps) => {
 							color: color,
 						}}
 					>
-						{created_by}
+						{created_by.bindName}
 					</Box>
 					<Box
 						sx={{

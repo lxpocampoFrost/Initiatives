@@ -43,7 +43,10 @@ const PostSection = () => {
 		if (!loading && !hailstormLoading && postData) {
 			return postData.getAllPosts.posts.map((post: any) => ({
 				...post,
-				created_by: getBindnameForUserId(data, post.created_by),
+				created_by: {
+					bindName: getBindnameForUserId(data, post.created_by),
+					emaik: post.created_by,
+				},
 				color: getColorForUserId(post.created_by),
 			}));
 		}

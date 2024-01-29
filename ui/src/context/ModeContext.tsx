@@ -3,7 +3,10 @@ import { createContext, useState, useContext, ReactNode } from 'react';
 interface SelectedCardDataProps {
 	id: string;
 	color: string;
-	created_by: string;
+	created_by: {
+		bindName: string;
+		userId: string;
+	};
 	created_at: string;
 	explanation: string;
 	post: string;

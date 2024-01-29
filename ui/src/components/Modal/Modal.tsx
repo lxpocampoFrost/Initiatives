@@ -81,6 +81,7 @@ const Modal = ({ isOpen, onClose, onEdit, onDelete, children }: ModalProps) => {
 				)}
 				{mode === 'edit' && (
 					<EditDialog
+						data={selectedCardData}
 						onClose={handleBack}
 						onDelete={onDelete}
 					/>

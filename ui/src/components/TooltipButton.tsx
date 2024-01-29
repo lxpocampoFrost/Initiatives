@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Button, Paper, Popper, ClickAwayListener, Box } from '@mui/material';
 import { useMode } from '@/context/ModeContext';
 
-const TooltipButton = ({ onDelete }: any) => {
+const TooltipButton = ({ onDelete, onShow }: any) => {
 	const [open, setOpen] = useState(false);
 	const anchorRef = useRef<HTMLAnchorElement | null>(null);
 	const { setMode } = useMode();
@@ -44,7 +44,7 @@ const TooltipButton = ({ onDelete }: any) => {
 		},
 	];
 	return (
-		<Box sx={{ marginLeft: 'auto', position: 'relative' }}>
+		<Box sx={{ marginLeft: 'auto', position: 'relative', display: onShow ? 'block' : 'none' }}>
 			<Box
 				ref={anchorRef}
 				onClick={handleToggle}
