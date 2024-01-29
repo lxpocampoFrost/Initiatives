@@ -147,8 +147,6 @@ const resolvers = {
 
 				gpt_response = await getAnalyzedData(post);
 
-				console.log('isInvalid: ', gpt_response.summary.invalid);
-
 				if (gpt_response && gpt_response.summary == 'Invalid') {
 					throw new Error('Invalid content provided');
 				}
