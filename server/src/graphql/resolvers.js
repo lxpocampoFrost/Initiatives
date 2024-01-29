@@ -34,7 +34,7 @@ const getAnalyzedData = async (text) => {
 	const parsed = JSON.parse(text);
 	const content = parsed.map((obj) => obj.data.text).join(' ');
 
-	let roleInstructions = `
+	let role_instructions = `
 		As a Technical Design Analyst you highlight key points and summarize data provided to you. 
 		Anything unrelated to tech and design work you return 'invalid' only without explanations.
 	`
@@ -49,7 +49,7 @@ const getAnalyzedData = async (text) => {
 			messages: [
 				{
 					role: 'system',
-					content: roleInstructions
+					content: role_instructions
 				},
 				{
 					role: 'user',
