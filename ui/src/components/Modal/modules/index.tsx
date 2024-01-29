@@ -218,7 +218,7 @@ export const EditDialog = ({ data, onClose, onDelete }: EditDialogProps) => {
 			<Box
 				onClick={onDelete}
 				sx={{
-					display: currentUserDetails?.bindname === data.created_by.bindName ? 'flex' : 'none',
+					display: currentUserDetails?.bindname === data?.created_by.bindName ? 'flex' : 'none',
 					alignItems: 'center',
 					gap: '8px',
 					fontFamily: 'Figtree-Medium,sans-serif',

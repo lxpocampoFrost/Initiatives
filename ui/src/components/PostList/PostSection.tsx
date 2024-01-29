@@ -13,7 +13,7 @@ import Loader from '../Loader/Loader';
 
 const PostSection = () => {
 	const { data, hailstormLoading } = useContext(UserContext);
-	const { setMode, mode, searchQuery, selectedTags, selectedSortBy, selectedPostedBy, setSelectedCardData, setModalOpen, page, setPage } = useMode();
+	const { setMode, postTracker, setPostTracker, mode, searchQuery, selectedTags, selectedSortBy, selectedPostedBy, setSelectedCardData, setModalOpen, page, setPage, setTotalPosts } = useMode();
 
 	const {
 		loading,
@@ -35,6 +35,11 @@ const PostSection = () => {
 	if (!loading && !hailstormLoading && postData) {
 		const totalPost = postData.getAllPosts.count;
 		const pageSize = 9;
+
+		const currentPosts = postData.getAllPosts.posts.length;
+
+		// track the number of post in current page
+		setPostTracker(currentPosts);
 
 		totalPages = calculatePages(totalPost, pageSize);
 	}
@@ -71,8 +76,12 @@ const PostSection = () => {
 
 	useEffect(() => {
 		refetch();
+
+		if (postData && postData.getAllPosts.posts.length === 0) {
+			console.log('test', postData);
+		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [postData, mode]);
+	}, [postData, mode, page]);
 
 	return (
 		<Box

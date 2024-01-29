@@ -43,7 +43,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
 	const { user } = useAuth0();
 	const { loading: hailstormLoading, data } = useQuery(GET_HAILSTORM);
 
-	const [currentUserDetails, setCurrentUserDetails] = useState<null>(null);
+	const [currentUserDetails, setCurrentUserDetails] = useState<UserData | null>(null);
 
 	const [currentDevTeam, setCurrentDevTeam] = useState([]);
 

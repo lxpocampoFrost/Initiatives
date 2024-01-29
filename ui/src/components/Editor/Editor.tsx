@@ -14,7 +14,7 @@ interface EditorProps {
 
 const Editor = ({ onSubmitSuccess }: EditorProps) => {
 	const { currentUserDetails } = useContext(UserContext);
-	const { mode, setMode, selectedCardData, submitting, setSubmitting } = useMode();
+	const { mode, setPage, setMode, selectedCardData, submitting, setSubmitting } = useMode();
 	const currentUserDetailsId = currentUserDetails && currentUserDetails.userId;
 
 	const [loading, setLoading] = useState(false);
@@ -82,6 +82,7 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
 					onSubmitSuccess();
 					editorRef.current.destroy();
 					initializeEditor();
+					setPage(1);
 				}, 1000);
 			}
 

@@ -15,7 +15,7 @@ import Loader from '@/components/Loader/Loader';
 
 export default function Home() {
 	const theme = useTheme();
-	const { mode, setMode, modalOpen, setModalOpen, selectedCardData, setSelectedCardData } = useMode();
+	const { mode, postTracker, setMode, modalOpen, setModalOpen, selectedCardData, setSelectedCardData, page, setPage } = useMode();
 
 	const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
 	const [isDataLoading, setIsDataLoading] = useState(true);
@@ -39,7 +39,9 @@ export default function Home() {
 				cache.modify({
 					fields: {
 						getAllPosts(existingPosts = []) {
-							return existingPosts.posts.filter((post: { id: string | undefined }) => selectedCardData?.id !== post.id);
+							const postsArray = existingPosts.posts || [];
+
+							return postsArray.filter((post: { id: string | undefined }) => selectedCardData?.id !== post.id);
 						},
 					},
 				});
@@ -47,6 +49,9 @@ export default function Home() {
 		});
 
 		if (data.deletePost) {
+			if (page > 1 && postTracker === 1) {
+				setPage(page - 1);
+			}
 			setModalOpen(false);
 			setDeleteModalOpen(false);
 			setSelectedCardData(null);
