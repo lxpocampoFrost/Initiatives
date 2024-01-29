@@ -11,8 +11,8 @@ import Search from '@/components/Search';
 import Dropdown from '@/components/Dropdown/Dropdown';
 import PaginationControl from '@/components/PostList/Pagination';
 import Filter from '@/components/Filter/Filter';
+import DeleteModal from '@/components/Modal/DeleteModal';
 import TooltipButton from '@/components/TooltipButton';
-
 
 const TagWrapper = styled.div`
   display: flex;
@@ -28,35 +28,40 @@ const postItemData = {
 };
 
 const postItems = [
-    {
-        title: 'Help with Java Functions',
-        post: "Sample Body",
-        created_by: 'John Doe',
-        created_date: 'July 7,2023',
-        tags: ['Html', 'CSS'],
-    },
-    {
-        title: 'Help with Java Functions',
-        post: "Sample Body",
-        created_by: 'John Doe',
-        created_date: 'July 7,2023',
-        tags: ['Html', 'CSS'],
-    },
-    {
-        title: 'Help with Java Functions',
-        post: "Sample Body",
-        created_by: 'John Doe',
-        created_date: 'July 7,2023',
-        tags: ['Html', 'CSS'],
-    }
-]
+  {
+    title: 'Help with Java Functions',
+    post: 'Sample Body',
+    created_by: 'John Doe',
+    created_date: 'July 7,2023',
+    tags: ['Html', 'CSS'],
+  },
+  {
+    title: 'Help with Java Functions',
+    post: 'Sample Body',
+    created_by: 'John Doe',
+    created_date: 'July 7,2023',
+    tags: ['Html', 'CSS'],
+  },
+  {
+    title: 'Help with Java Functions',
+    post: 'Sample Body',
+    created_by: 'John Doe',
+    created_date: 'July 7,2023',
+    tags: ['Html', 'CSS'],
+  },
+];
 
 export default function ComponentLibrary() {
   const [modalOpen, setModalOpen] = useState(false);
   const [page, setPage] = useState(1);
   const sortItem = ['Sort by', 'Latest', 'Oldest'];
   const postedItem = ['Posted by', 'Everyone', 'Me', 'Jm', 'Marie'];
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
 
+  const handleDeleteClick = () => {
+    console.log('Deleting...');
+    setDeleteModalOpen(false);
+  };
 
   return (
     <Box
@@ -78,30 +83,30 @@ export default function ComponentLibrary() {
         <Dropdown options={postedItem} type="Posted by" />
       </Box>
       <TooltipButton />
-
-      <PostItem data={postItemData} />
+      {/* <PostItem data={postItemData} /> */}
       <UserDetails />
       <Box>
         <Search />
       </Box>
       <Button onClick={() => setModalOpen(true)}>Add post</Button>
-      <Modal
-        title="Create Post"
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-      >
+      <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)}>
         <Editor />
       </Modal>
-      <PaginationControl 
+      <PaginationControl
         totalPages={10}
         currentPage={page}
         handlePageChange={(event, value) => {
-            setPage(value);
+          setPage(value);
         }}
       />
 
       <Filter />
-
+      <Button onClick={() => setDeleteModalOpen(true)}>Delete post</Button>
+      <DeleteModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setDeleteModalOpen(false)}
+        onDelete={handleDeleteClick}
+      />
     </Box>
   );
 }

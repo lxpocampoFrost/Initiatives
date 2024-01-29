@@ -1,9 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
 import { Button, Paper, Popper, ClickAwayListener, Box } from '@mui/material';
+import { useMode } from '@/context/ModeContext';
 
-const TooltipButton = () => {
+const TooltipButton = ({ onDelete }: any) => {
   const [open, setOpen] = useState(false);
   const anchorRef = useRef<HTMLElement>(null);
+  const { setMode } = useMode();
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -29,14 +31,14 @@ const TooltipButton = () => {
       type: 'Edit Post',
       icon: './assets/edit-icon.svg',
       onClick: () => {
-        console.log('edit');
+        setMode('edit');
       },
     },
     {
       type: 'Delete Post',
       icon: './assets/delete-icon.svg',
       onClick: () => {
-        console.log('delete');
+        onDelete();
       },
     },
   ];

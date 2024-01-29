@@ -1,11 +1,91 @@
 //@ts-nocheck
-import { useEffect, useRef, useState } from 'react';
-import { Box } from '@mui/material';
+import { useEffect, useRef, useState, useContext } from 'react';
+import UserContext from '@/context/UserContext';
 
-import Button from '../Button/Button';
-const Editor = () => {
+import { Box } from '@mui/material';
+import { ADD_POST, UPDATE_POST, GET_POSTS } from '@/graphql/queries';
+import { useMutation } from '@apollo/client';
+import Button from '@/components/Button/Button';
+import { useMode } from '@/context/ModeContext';
+
+interface EditorProps {
+	onSubmitSuccess: () => void;
+}
+
+const Editor = ({ onSubmitSuccess }: EditorProps) => {
+	const { currentUserDetails } = useContext(UserContext);
+	const { mode, setMode, selectedCardData } = useMode();
+	const currentUserDetailsId = currentUserDetails && currentUserDetails.userId;
+
+	const [loading, setLoading] = useState(false);
 	const [isEditorEmpty, setIsEditorEmpty] = useState(true);
-	const editorRef = useRef(null);
+	const editorRef = useRef<any>(null);
+
+	const [formData, setFormData] = useState({
+		postId: '',
+		title: '',
+		post: '',
+		created_by: '',
+		updated_at: '',
+	});
+
+	const [createPost] = useMutation(ADD_POST, {
+		refetchQueries: [{ query: GET_POSTS }],
+	});
+
+	const [updatePost] = useMutation(UPDATE_POST, {
+		refetchQueries: [{ query: GET_POSTS }],
+	});
+
+	const handleSubmit = async () => {
+		try {
+			setLoading(true);
+
+			const { title, post } = formData;
+
+			let mutation: any;
+			let variables: any;
+
+			if (selectedCardData) {
+				mutation = updatePost;
+				variables = {
+					postId: selectedCardData?.id,
+					post: formData.post,
+					title: formData.title,
+					updated_at: new Date().toISOString(),
+				};
+			} else {
+				mutation = createPost;
+				variables = {
+					title,
+					post,
+					createdBy: currentUserDetailsId,
+				};
+			}
+
+			const { data } = await mutation({
+				variables,
+			});
+
+			if (data.createPost.success === false && editorRef.current) {
+				setLoading(false);
+				setTimeout(() => {
+					editorRef.current.clear();
+				}, 1000);
+			}
+
+			if ((data.createPost.success === true || data.updatePost.success === true) && editorRef.current) {
+				setLoading(false);
+				setTimeout(() => {
+					onSubmitSuccess();
+					editorRef.current.destroy();
+					initializeEditor();
+				}, 1000);
+			}
+		} catch (error) {
+			console.error('Error creating post:', error);
+		}
+	};
 
 	const initializeEditor = async () => {
 		const EditorJS = (await import('@editorjs/editorjs')).default;
@@ -77,31 +157,118 @@ const Editor = () => {
 				},
 				image: {
 					class: ImageTool,
+					config: {
+						uploader: {
+							async uploadByFile(file) {
+								const formData = new FormData();
+								formData.append('file', file);
+								formData.append('upload_preset', 'yxgn0epf');
+
+								try {
+									const response = await fetch(`https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUD_NAME}/upload`, {
+										method: 'POST',
+										body: formData,
+									});
+
+									const result = await response.json();
+
+									if (result.secure_url) {
+										const formattedResult = {
+											success: 1,
+											file: {
+												url: result.secure_url,
+											},
+										};
+										return formattedResult;
+									} else {
+										console.log({
+											success: 0,
+											error: result.error.message,
+										});
+									}
+								} catch (error) {
+									console.error('Error:', error);
+								}
+							},
+						},
+					},
 				},
 				delimiter: Delimiter,
 				AttachesTool: {
 					class: AttachesTool,
+					config: {
+						uploader: {
+							async uploadByFile(file) {
+								const formData = new FormData();
+								formData.append('file', file);
+								formData.append('upload_preset', 'yxgn0epf');
+
+								try {
+									const response = await fetch(`https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUD_NAME}/upload`, {
+										method: 'POST',
+										body: formData,
+									});
+
+									const result = await response.json();
+
+									if (result.secure_url) {
+										const formattedResult = {
+											success: 1,
+											file: {
+												url: result.secure_url,
+												title: result.original_filename,
+											},
+										};
+
+										return formattedResult;
+									} else {
+										console.log({
+											success: 0,
+											error: result.error.message,
+										});
+									}
+								} catch (error) {
+									console.error('Error:', error);
+								}
+							},
+						},
+					},
 				},
 				marker: Marker,
 				table: Table,
 			},
-			data: {
-				blocks: [
-					{
-						type: 'paragraph',
-						data: {
-							text: '',
-						},
-					},
-				],
-			},
-
+			data:
+				mode === 'view' || mode === 'edit'
+					? selectedCardData?.post
+					: {
+							blocks: [
+								{
+									type: 'paragraph',
+									data: {
+										text: '',
+									},
+								},
+							],
+					  },
+			readOnly: mode === 'view' ? true : false,
 			tunes: ['textVariant'],
 			onChange: () => {
 				editor.save().then((outputData) => {
-					console.log('blocks', outputData.blocks.length);
 					const isEmpty = outputData.blocks.length === 0;
 					setIsEditorEmpty(isEmpty);
+
+					const title = outputData.blocks.length > 0 ? JSON.stringify(outputData.blocks[0]) : '';
+
+					const body = outputData.blocks.slice(1);
+					const bodyBlocks = JSON.stringify(body);
+
+					setFormData((prevState) => ({
+						...prevState,
+						title: title,
+						post: bodyBlocks,
+					}));
+
+					console.log('formdata', outputData);
 				});
 			},
 			onReady: () => {
@@ -120,14 +287,22 @@ const Editor = () => {
 				editorRef.current.destroy();
 			}
 		};
-	}, []);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [mode]);
 
 	return (
 		<>
 			<Box
 				id='editor-js'
 				sx={{
-					color: '#ffffff',
+					color: mode === 'view' ? '#E5E7EB!important' : '#ffffff',
+
+					'.codex-editor__redactor': {
+						paddingBottom: mode === 'view' ? '40px!important' : '100px',
+						'.ce-block:first-of-type h1': {
+							paddingTop: '0',
+						},
+					},
 					'.cdx-button': {
 						background: '#25282e',
 						color: '#ffffff',
@@ -182,7 +357,7 @@ const Editor = () => {
 						boxShadow: 'none',
 						background: '#2C313C!important',
 					},
-					'.ce-block--selected .ce-block__content, .cdx-settings-button:hover': {
+					'.ce-block--selected .ce-block__content, .cdx-settings-button:hover , .cdx-attaches--with-file, .cdx-attaches--with-file .cdx-attaches__download-button': {
 						background: 'transparent',
 					},
 					'.ce-paragraph[data-placeholder]:empty:before': {
@@ -191,7 +366,7 @@ const Editor = () => {
 						lineHeight: '1.5',
 						fontWeight: '700',
 					},
-					'.tc-add-row:hover, .tc-add-row:hover:before, .tc-add-column:hover, .tc-popover': {
+					'.tc-add-row:hover, .tc-add-row:hover:before, .tc-add-column:hover, .tc-popover , .cdx-attaches--with-file .cdx-attaches__download-button:hover': {
 						background: '#2C313C',
 					},
 					'.ce-inline-toolbar, .tc-popover__item-icon': {
@@ -282,15 +457,21 @@ const Editor = () => {
 						paddingRight: '8px',
 					},
 					'.ce-block__content': {
-						fontFamily: 'Figtree-Bold,sans-serif',
-						maxWidth: '630px',
-						margin: '0 auto',
+						fontFamily: 'Figtree-Regular,sans-serif',
+						maxWidth: '632px',
+						margin: '0 0 0 auto',
+						a: {
+							color: '#ffffff',
+						},
 					},
 					'.ce-code__textarea': {
 						borderRadius: '8px',
 						background: 'rgba(255, 255, 255, 0.08)',
 						color: '#ffffff',
 						border: 'none',
+					},
+					'.ce-toolbar__content': {
+						maxWidth: '598px',
 					},
 
 					'@media (max-width: 650px)': {
@@ -318,15 +499,32 @@ const Editor = () => {
 					},
 				}}
 			></Box>
-			<Box sx={{ display: 'flex', justifyContent: 'flex-end', paddingTop: '16px', borderTop: '1px solid #2C313C' }}>
+			<Box sx={{ display: mode !== 'view' || mode === 'edit' ? 'flex' : 'none', alignItems: 'center', gap: '10px', justifyContent: 'flex-end', paddingTop: '16px', borderTop: '1px solid #2C313C' }}>
+				{mode === 'edit' && (
+					<Box
+						sx={{
+							cursor: 'pointer',
+							fontFamily: 'Figtree-Medium',
+							fontWeight: '500',
+							fontSize: '16px',
+							color: '#ffffff',
+							opacity: '0.3',
+							lineHeight: '19.2px',
+						}}
+						onClick={() => setMode('view')}
+					>
+						Cancel
+					</Box>
+				)}
 				<Button
-					text='Post'
+					text={mode === 'edit' ? 'Update Post' : 'Post'}
+					loading={loading}
 					width='max-content'
 					padding='8px 20px'
 					borderRadius='63px'
 					lineHeight='19.2px'
-					disabled={isEditorEmpty}
-					action={() => console.log('create post')}
+					disabled={isEditorEmpty || loading}
+					action={() => handleSubmit()}
 				/>
 			</Box>
 		</>

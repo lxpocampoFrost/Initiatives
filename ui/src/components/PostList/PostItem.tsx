@@ -1,35 +1,52 @@
 import Tags from '../Tags';
 import { Box, Stack } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import styled from '@emotion/styled';
 
-// title,post type, created_by set to any : for dummy data purpose only.
 interface PostItemData {
-	title: any;
-	post: any;
-	created_by: any;
+	title: string;
+	post: string;
+	created_by: string;
+	explanation: string;
 	created_date: string;
 	tags: string[];
+	color: string;
 }
 
 interface PostItemProps {
 	data: PostItemData;
-	handleClick?: () => void;
+	handleClick: () => void;
 }
 
+const PostBody = styled(Box)`
+	display: -webkit-box;
+	-webkit-line-clamp: 9; /* Adjust the number of lines as needed */
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+`;
+
 const PostItem = ({ data, handleClick }: PostItemProps) => {
-	const { title, post, created_by, created_date, tags } = data;
 	const theme = useTheme();
+
+	const { title, post, created_by, color, explanation, created_date, tags } = data;
+	let titleObj = JSON.parse(title);
+	let postObj = JSON.parse(post);
+	let parsedTitle = titleObj.data.text;
+	let parsedBody = postObj[0].data.text;
 
 	return (
 		<>
 			<Box
 				onClick={handleClick}
 				sx={{
-					[theme.breakpoints.up('md')]: {
-						maxWidth: '341px',
+					'@media screen and (min-width:1440px)': {
 						width: '100%',
+						minHeight: '350px',
 					},
+					boxSizing: 'border-box',
 					maxWidth: '100%',
+					height: '100%',
+					minHeight: '287px',
 					padding: '24px 16px 24px 24px',
 					display: 'flex',
 					flexDirection: 'column',
@@ -53,7 +70,7 @@ const PostItem = ({ data, handleClick }: PostItemProps) => {
 							fontSize: '14px',
 							fontWeight: '600',
 							lineHeight: '16.8px',
-							// color:'' : to be changed dynamically
+							color: color,
 						}}
 					>
 						{created_by}
@@ -79,9 +96,9 @@ const PostItem = ({ data, handleClick }: PostItemProps) => {
 							lineHeight: '1.5',
 						}}
 					>
-						{title}
+						{parsedTitle}
 					</Box>
-					<Box
+					<PostBody
 						sx={{
 							opacity: '0.8',
 							mt: '10px',
@@ -89,15 +106,18 @@ const PostItem = ({ data, handleClick }: PostItemProps) => {
 							fontWeight: '400',
 							fontSize: '14px',
 							lineHeight: '1.5',
+							a: {
+								color: '#ffffff',
+							},
 						}}
-					>
-						{post}
-					</Box>
+						dangerouslySetInnerHTML={{ __html: parsedBody }}
+					/>
 				</Box>
 
 				<Stack
 					direction='row'
 					spacing='4px'
+					marginTop='auto'
 				>
 					{tags &&
 						tags.map((tag: string, index: number) => (

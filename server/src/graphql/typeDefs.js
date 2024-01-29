@@ -5,7 +5,7 @@ module.exports = gql`
 
 	type Post {
 		id: ID
-		title: JSON!
+		title: String!
 		post: String!
 		tags: [String!]!
 		created_by: String!
@@ -30,15 +30,15 @@ module.exports = gql`
 	}
 
 	type Query {
-		getAllPosts(orderBy: String, tags: [String], createdBy: [String], page: Int, pageSize: Int): [Post]
+		getAllPosts(orderBy: String, tags: [String], createdBy: [String], title: String, page: Int, pageSize: Int): [Post]
 		getPostById(id: ID!): Post
 		tags: [Tag]
 		hailstormData: [User]
 	}
 
 	type Mutation {
-		createPost(title: JSON!, post: String!, created_by: String!): PostMessage
-		updatePost(postId: ID!, post: String!, tagsId: [ID!]!): PostMessage
+		createPost(title: String!, post: String!, created_by: String!): PostMessage
+		updatePost(postId: ID!, title: JSON, post: String!): PostMessage
 		deletePost(postId: ID!): Result
 		generateExplanation(postId: ID!): String
 	}
