@@ -11,10 +11,11 @@ const Dropdown = ({ options, type }: any) => {
 	useEffect(() => {
 		setSelectedValue(options[1].name);
 		setSelectedPostedBy(options[1].index);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [selectedValue, setSelectedValue] = useState('');
-	const { setSelectedSortBy, selectedPostedBy, setSelectedPostedBy } = useMode();
+	const { setSelectedSortBy, selectedPostedBy, setSelectedPostedBy, setPage } = useMode();
 
 	const handleClick = (event: any) => {
 		setAnchorEl(event.currentTarget);
@@ -32,9 +33,10 @@ const Dropdown = ({ options, type }: any) => {
 			value === 'Latest' ? setSelectedSortBy('desc') : setSelectedSortBy('asc');
 		} else if (type === 'Posted by') {
 			setSelectedPostedBy(index);
+			setPage(1);
 		}
 	};
-	console.log('selected', selectedPostedBy);
+
 	const theme = useTheme();
 
 	return (

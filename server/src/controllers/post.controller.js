@@ -1,7 +1,7 @@
 const { pool } = require('../config/database');
 const poolQuery = require('util').promisify(pool.query).bind(pool);
 
-const getAllPosts = async (orderBy = 'asc', tags = [], createdBy = null, title = null, page = 1, pageSize = 9) => {
+const getAllPosts = async (orderBy = 'desc', tags = [], createdBy = null, title = null, page = 1, pageSize = 9) => {
 	try {
 		let createdByFilter = '';
 		if (createdBy) {
@@ -52,6 +52,22 @@ const getAllPosts = async (orderBy = 'asc', tags = [], createdBy = null, title =
 				LIMIT ?, ?;
 		`;
 
+		const countQuery = `
+    SELECT COUNT(DISTINCT p.id) AS postCount
+    FROM
+        posts p
+        WHERE
+            p.deleted = false
+            ${createdByFilter}
+            ${titleFilter}
+           ${tags.length > 0 ? `AND EXISTS (SELECT 1 FROM posts_tags pt JOIN tags t ON pt.tag_id = t.id WHERE pt.post_id = p.id AND t.tag IN (?))` : ''};
+`;
+
+		const countParams = createdBy ? [createdBy, ...titleParams, ...tags] : [...titleParams, ...tags];
+
+		const countResults = await poolQuery(countQuery, countParams);
+		const postCount = countResults[0].postCount;
+
 		const offset = (page - 1) * pageSize;
 
 		const params = createdBy ? [createdBy, ...titleParams, ...tags, offset, pageSize] : [...titleParams, ...tags, offset, pageSize];
@@ -77,7 +93,10 @@ const getAllPosts = async (orderBy = 'asc', tags = [], createdBy = null, title =
 			};
 		});
 
-		return formattedResults;
+		return {
+			posts: formattedResults,
+			count: postCount,
+		};
 	} catch (error) {
 		throw error;
 	}

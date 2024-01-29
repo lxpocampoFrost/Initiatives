@@ -12,15 +12,16 @@ export const GET_TAGS = gql`
 export const GET_POSTS = gql`
 	query ($orderBy: String, $tags: [String], $createdBy: [String], $title: String, $page: Int, $pageSize: Int) {
 		getAllPosts(orderBy: $orderBy, tags: $tags, createdBy: $createdBy, title: $title, page: $page, pageSize: $pageSize) {
-			id
-			title
-			post
-			tags
-			created_by
-			created_date
-			updated_date
-			deleted
-			explanation
+			posts {
+				id
+				title
+				post
+				tags
+				created_by
+				created_date
+				explanation
+			}
+			count
 		}
 	}
 `;
