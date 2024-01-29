@@ -74,7 +74,7 @@ const Filter = () => {
 					borderRadius: '0!important',
 				},
 
-				padding: '16px 24px',
+				padding: '16px 16px 16px 24px',
 				flexDirection: 'column',
 				alignItems: 'flex-start',
 				boxSizing: 'border-box',
