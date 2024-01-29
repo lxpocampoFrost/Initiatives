@@ -34,6 +34,8 @@ interface ModeContextProps {
 	setPage: React.Dispatch<React.SetStateAction<number>>;
 	postTracker: number;
 	setPostTracker: React.Dispatch<React.SetStateAction<number>>;
+	render: boolean;
+	setRender: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ModeContext = createContext<ModeContextProps | undefined>(undefined);
@@ -54,6 +56,7 @@ export const ModeProvider: React.FC<ModeProviderProps> = ({ children }) => {
 	const [submitting, setSubmitting] = useState(false);
 	const [page, setPage] = useState(1);
 	const [postTracker, setPostTracker] = useState(0);
+	const [render, setRender] = useState(false);
 
 	return (
 		<ModeContext.Provider
@@ -78,6 +81,8 @@ export const ModeProvider: React.FC<ModeProviderProps> = ({ children }) => {
 				setPage,
 				postTracker,
 				setPostTracker,
+				render,
+				setRender,
 			}}
 		>
 			{children}

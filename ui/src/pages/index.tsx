@@ -15,7 +15,7 @@ import Loader from '@/components/Loader/Loader';
 
 export default function Home() {
 	const theme = useTheme();
-	const { mode, setMode, postTracker, modalOpen, setModalOpen, selectedCardData, setSelectedCardData, page, setPage } = useMode();
+	const { mode, setRender, setMode, postTracker, modalOpen, setModalOpen, selectedCardData, setSelectedCardData, page, setPage } = useMode();
 
 	const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
 	const [isDataLoading, setIsDataLoading] = useState(true);
@@ -34,27 +34,20 @@ export default function Home() {
 	const handleDelete = async () => {
 		const { data } = await deletePost({
 			variables: { postId: selectedCardData?.id },
-			refetchQueries: [{ query: GET_POSTS }],
-			update: (cache) => {
-				cache.modify({
-					fields: {
-						getAllPosts(existingPosts = []) {
-							const postsArray = existingPosts.posts || [];
-
-							return postsArray.filter((post: { id: string | undefined }) => selectedCardData?.id !== post.id);
-						},
-					},
-				});
-			},
 		});
 
-		if (data.deletePost) {
-			if (page > 1 && postTracker === 1) {
-				setPage(page - 1);
+		try {
+			if (data.deletePost && data.deletePost.success === true) {
+				if (page > 1 && postTracker === 1) {
+					setPage(page - 1);
+				}
+				setModalOpen(false);
+				setDeleteModalOpen(false);
+				setSelectedCardData(null);
+				setRender((prevRender) => !prevRender);
 			}
-			setModalOpen(false);
-			setDeleteModalOpen(false);
-			setSelectedCardData(null);
+		} catch (error) {
+			console.error('Error', error);
 		}
 	};
 

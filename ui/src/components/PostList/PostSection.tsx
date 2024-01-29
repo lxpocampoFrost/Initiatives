@@ -13,7 +13,7 @@ import Loader from '../Loader/Loader';
 
 const PostSection = () => {
 	const { data, hailstormLoading } = useContext(UserContext);
-	const { setMode, setPostTracker, mode, searchQuery, selectedTags, selectedSortBy, selectedPostedBy, setSelectedCardData, setModalOpen, page, setPage } = useMode();
+	const { setMode, render, setPostTracker, mode, searchQuery, selectedTags, selectedSortBy, selectedPostedBy, setSelectedCardData, setModalOpen, page, setPage } = useMode();
 
 	const {
 		loading,
@@ -45,7 +45,7 @@ const PostSection = () => {
 				...post,
 				created_by: {
 					bindName: getBindnameForUserId(data, post.created_by),
-					emaik: post.created_by,
+					email: post.created_by,
 				},
 				color: getColorForUserId(post.created_by),
 			}));
@@ -76,7 +76,7 @@ const PostSection = () => {
 			setPostTracker(postData.getAllPosts.posts.length);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [postData, mode, page]);
+	}, [postData, mode, page, render]);
 
 	return (
 		<Box
