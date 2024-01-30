@@ -84,13 +84,18 @@ export default function ComponentLibrary() {
       </Box>
       <TooltipButton />
       {/* <PostItem data={postItemData} /> */}
-      <UserDetails />
+      <UserDetails action={() => console.log('actions')} />
       <Box>
         <Search />
       </Box>
       <Button onClick={() => setModalOpen(true)}>Add post</Button>
-      <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)}>
-        <Editor />
+      <Modal
+        isOpen={modalOpen}
+        onClose={() => console.log('close popup')}
+        onEdit={() => console.log('edit')}
+        onDelete={() => console.log('open delete popup')}
+      >
+        <Editor onSubmitSuccess={() => console.log('success')} />
       </Modal>
       <PaginationControl
         totalPages={10}
