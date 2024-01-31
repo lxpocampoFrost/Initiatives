@@ -4,9 +4,9 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 
 interface PostListData {
-	totalPages: number | undefined;
-	currentPage: number;
-	handlePageChange: (event: React.ChangeEvent<unknown>, value: number) => void;
+	totalPages?: number | undefined;
+	currentPage?: number;
+	handlePageChange?: (event: React.ChangeEvent<unknown>, value: number) => void;
 }
 
 const PaginationControl = ({ totalPages, currentPage, handlePageChange }: PostListData) => {
@@ -22,48 +22,58 @@ const PaginationControl = ({ totalPages, currentPage, handlePageChange }: PostLi
 	const paginationArrows = `${prevArrow}, ${nextArrow}`;
 	const paginationArrowsText = `${prevArrowText}, ${nextArrowText}`;
 
-	const PaginationCustomWrap = styled.div`
+	const PaginationCustomWrap = styled.div<PostListData>`
 		@media screen and (max-width: 470px) {
 			.MuiPagination-ul > li {
 				width: auto;
 			}
 
-			.MuiPagination-ul > li:first-of-type {
-				order: 2;
-				flex-basis: 70%;
-			}
-
-			.MuiPagination-ul > li:last-of-type {
-				order: 2;
-				flex-basis: 30%;
-				display: flex;
-				justify-content: flex-end;
-			}
-
 			.MuiPagination-ul {
 				justify-content: center;
 			}
-		}
-
-		@media screen and (max-width: 460px) {
-			.MuiPagination-ul > li:first-of-type {
-				order: 2;
-				flex-basis: 60%;
+			.MuiPaginationItem-previousNext {
+				margin: 0;
+				padding: 0;
 			}
 
-			.MuiPagination-ul > li:last-of-type {
-				order: 2;
-				flex-basis: 40%;
-			}
+			${(props) => {
+				if (props.totalPages && props.totalPages > 3) {
+					return `
+						.MuiPagination-ul > li:first-of-type {
+							order: 2;
+							flex-basis: 70%;
+						}
 
-			.MuiPagination-ul {
-				justify-content: center;
-			}
+						.MuiPagination-ul > li:last-of-type {
+							order: 2;
+							flex-basis: 30%;
+							display: flex;
+							justify-content: flex-end;
+						}
+
+						@media screen and (max-width: 460px) {
+							.MuiPagination-ul > li:first-of-type {
+							order: 2;
+							flex-basis: 60%;
+							}
+
+							.MuiPagination-ul > li:last-of-type {
+							order: 2;
+							flex-basis: 40%;
+							}
+
+							.MuiPagination-ul {
+							justify-content: center;
+							}
+						}
+						`;
+				}
+			}}
 		}
 	`;
 
 	return (
-		<PaginationCustomWrap>
+		<PaginationCustomWrap totalPages={totalPages}>
 			<Box
 				width='100%'
 				margin='24px auto 0'
