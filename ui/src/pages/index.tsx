@@ -10,7 +10,7 @@ import DeleteModal from '@/components/Modal/DeleteModal';
 import PostSection from '@/components/PostList/PostSection';
 
 import { useMode } from '@/context/ModeContext';
-import { DELETE_POST, GET_POSTS } from '@/graphql/queries';
+import { DELETE_POST } from '@/graphql/queries';
 import Loader from '@/components/Loader/Loader';
 
 export default function Home() {
