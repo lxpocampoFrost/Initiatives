@@ -8,17 +8,19 @@ const openai = new OpenAI({
 });
 
 const assign_tags = `
-	Select a maximum of three tags based on this criteria. Example: 1,3. If the summary doesn't have a sense return 0.
+	Please analyze the given text and assign up to three tags from the list below. If the text is too short or unrelated to any tags, return 0.
 
-	1 - HTML: Select this if the title emphasizes HTML-specific topics, web page structure, or provides HTML tutorials.
-	2 - CSS: Select this if the title focuses on CSS styling, design techniques, or web design aspects.
-	3 - JS: Select this if the title centered around JavaScript development, frontend interaction, or React development if 'React' is not explicitly mentioned.
-	4 - React: Select this if the title is React-specific content.
-	5 - Webflow: Select this if the title is related to the Webflow platform.
-    6 - Frontend: Select this if the title applies to more general frontend development topics.
-	7 - Backend: Select this if the title centered around backend development.
-	8 - Onboarding: Select this if the title relates to onboarding processes and documentations
-	9 - Library: Select this if the title relates to any library / package that can be used in development. 
+	1 - HTML: For HTML-specific topics, web page structure, or HTML tutorials.
+	2 - CSS: For CSS styling, design techniques, or web design aspects.
+	3 - JS: For JavaScript development, frontend interaction, or React development (if React is not explicitly mentioned).
+	4 - React: For React-specific content.
+	5 - Webflow: For content related to the Webflow platform.
+    6 - Frontend: For general frontend development topics.
+	7 - Backend: For backend development topics.
+	8 - Onboarding: For onboarding processes and documentations.
+	9 - Library: For any library/package used in development.
+
+	Example: If the text is about HTML and CSS, return '1,2'.
 `;
 
 const getAnalyzedData = async (text) => {
@@ -32,17 +34,26 @@ const getAnalyzedData = async (text) => {
 	const parsed = JSON.parse(text);
 	const content = parsed.map((obj) => obj.data.text).join(' ');
 
+	let role_instructions = `
+		As a Technical Design Analyst you highlight key points and summarize data provided to you. 
+		Anything unrelated to tech and design work you return 'invalid' only without explanations.
+	`
+	let prompt = `
+		Tone: 50% spartan. No introductions. Check this data: ${content} and summarize and
+		explain in two paragraphs with max of 2 sentences each. Return the output in raw HTML format.
+	`
+
 	try {
 		let completion = await openai.chat.completions.create({
 			model: 'gpt-4',
 			messages: [
 				{
 					role: 'system',
-					content: 'You are a helpful assistant.',
+					content: role_instructions
 				},
 				{
 					role: 'user',
-					content: `Tone: 50% spartan. No introductions. If the data from ${content} is just random strings and doesn't have a sense, answer "Invalid" only. If the data from ${content} is not invalid summarize and explain in maximum of two paragraphs with max of three sentences. Provide external links for reference in list. Return the output in raw HTML format without any introductions`,
+					content: prompt,
 				},
 			],
 			temperature: 0,

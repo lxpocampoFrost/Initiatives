@@ -41,7 +41,7 @@ const PostItem = ({ data, handleClick }: PostItemProps) => {
 		<>
 			<Box
 				onClick={handleClick}
-				sx={{
+					sx={{
 					'@media screen and (min-width:1440px)': {
 						width: '100%',
 						minHeight: '350px',
