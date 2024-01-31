@@ -1,7 +1,8 @@
-import Tags from '../Tags';
 import { Box, Stack } from '@mui/material';
 import styled from '@emotion/styled';
 import { useMode } from '@/context/ModeContext';
+
+import Tags from '@/components/Tags';
 
 interface PostItemData {
 	title: string;
@@ -41,7 +42,7 @@ const PostItem = ({ data, handleClick }: PostItemProps) => {
 		<>
 			<Box
 				onClick={handleClick}
-					sx={{
+				sx={{
 					'@media screen and (min-width:1440px)': {
 						width: '100%',
 						minHeight: '350px',
