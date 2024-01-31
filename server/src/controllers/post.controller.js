@@ -16,86 +16,82 @@ const getAllPosts = async (orderBy = 'desc', tags = [], createdBy = null, title 
 			titleParams.push(`%${title}%`);
 		}
 
-		let tagFilter = '';
-		let tagParams = [];
+		let tagsFilter = '';
+		let tagsParams = [];
 
 		if (tags.length > 0) {
-			tagFilter = `HAVING ${tags
-				.map((tag, index) => {
-					tagParams.push(tag);
-					return `FIND_IN_SET(?, tags.tag_list) > 0`;
-				})
-				.join(' OR ')}`;
+			tagsFilter = `AND p.id IN (
+				SELECT post_id
+				FROM posts_tags pt
+				JOIN tags t ON pt.tag_id = t.id
+				WHERE t.tag IN (${tags.map((tag) => `'${tag}'`).join(',')})
+    	)`;
 		}
 
 		const query = `
-				SELECT
-					p.*,
-					tags.tag_list
-				FROM
-					posts p
-					LEFT JOIN (
-						SELECT post_id, GROUP_CONCAT(tag) AS tag_list
-						FROM posts_tags
-						JOIN tags ON posts_tags.tag_id = tags.id
-						GROUP BY post_id
-					) tags ON p.id = tags.post_id
-				WHERE
-					p.deleted = false
-					${createdByFilter}
-					${titleFilter}
-				GROUP BY
-					p.id
-					${tagFilter}
-				ORDER BY
-					created_date ${orderBy.toUpperCase()}
-				LIMIT ?, ?;
-		`;
-
-		const countQuery = `
-    SELECT COUNT(DISTINCT p.id) AS postCount
-    FROM
-        posts p
-        WHERE
-            p.deleted = false
-            ${createdByFilter}
-            ${titleFilter}
-           ${tags.length > 0 ? `AND EXISTS (SELECT 1 FROM posts_tags pt JOIN tags t ON pt.tag_id = t.id WHERE pt.post_id = p.id AND t.tag IN (?))` : ''};
-`;
-
-		const countParams = createdBy ? [createdBy, ...titleParams, ...tags] : [...titleParams, ...tags];
-
-		const countResults = await poolQuery(countQuery, countParams);
-		const postCount = countResults[0].postCount;
+            SELECT
+                p.*,
+                tags.tag_list
+            FROM
+                posts p
+                LEFT JOIN (
+                    SELECT post_id, GROUP_CONCAT(tag) AS tag_list
+                    FROM posts_tags
+                    JOIN tags ON posts_tags.tag_id = tags.id
+                    GROUP BY post_id
+                ) tags ON p.id = tags.post_id
+            WHERE
+                p.deleted = false
+                ${createdByFilter}
+                ${titleFilter}
+                ${tagsFilter}
+            GROUP BY
+                p.id
+            ORDER BY
+                created_date ${orderBy.toUpperCase()}
+            LIMIT ?, ?;
+        `;
 
 		const offset = (page - 1) * pageSize;
 
-		const params = createdBy ? [createdBy, ...titleParams, ...tags, offset, pageSize] : [...titleParams, ...tags, offset, pageSize];
+		const params = createdBy ? [createdBy, ...titleParams, offset, pageSize] : [...titleParams, offset, pageSize];
 
 		const results = await poolQuery(query, params);
 
+		const countQuery = `
+            SELECT COUNT(DISTINCT p.id) AS post_count
+            FROM posts p
+            LEFT JOIN (
+                SELECT post_id
+                FROM posts_tags
+                JOIN tags ON posts_tags.tag_id = tags.id
+            ) tags ON p.id = tags.post_id
+            WHERE
+                p.deleted = false
+                ${createdByFilter}
+                ${titleFilter}
+                ${tagsFilter};
+        `;
+
+		const countParams = createdBy ? [createdBy, ...titleParams, ...tagsParams] : [...titleParams, ...tagsParams];
+
+		const countResult = await poolQuery(countQuery, countParams);
+		const postCount = countResult[0].post_count || 0;
+
 		const formattedResults = results.map((row) => {
 			const tagsArray = row.tag_list ? row.tag_list.split(',') : [];
-
-			const mediaFilesArray = row.media_files
-				? JSON.parse(row.media_files).map((mediaFile) => ({
-						media_url: mediaFile.media_url || null,
-						media_type: mediaFile.media_type || null,
-						post_id: mediaFile.post_id || null,
-				  }))
-				: [];
 
 			return {
 				...row,
 				tags: tagsArray,
 				created_date: formatDate(row.created_date),
-				media_files: mediaFilesArray,
 			};
 		});
 
 		return {
 			posts: formattedResults,
 			count: postCount,
+			currentPage: page,
 		};
 	} catch (error) {
 		throw error;

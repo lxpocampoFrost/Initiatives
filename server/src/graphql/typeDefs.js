@@ -19,6 +19,7 @@ module.exports = gql`
 	type PostPagination {
 		posts: [Post]!
 		count: Int!
+		currentPage: Int!
 	}
 
 	type Tag {
