@@ -34,9 +34,7 @@ const PostItem = ({ data, handleClick }: PostItemProps) => {
 
 	const { title, post, created_by, color, explanation, created_date, tags } = data;
 	let titleObj = JSON.parse(title);
-	let postObj = JSON.parse(post);
 	let parsedTitle = titleObj.data.text;
-	let parsedBody = postObj[0].data.text;
 
 	return (
 		<>
@@ -114,7 +112,7 @@ const PostItem = ({ data, handleClick }: PostItemProps) => {
 								color: '#ffffff',
 							},
 						}}
-						dangerouslySetInnerHTML={{ __html: parsedBody }}
+						dangerouslySetInnerHTML={{ __html: explanation }}
 					/>
 				</Box>
 
