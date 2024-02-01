@@ -39,7 +39,7 @@ async function startServer() {
 	// Middleware
 	app.use(express.json(), express.urlencoded({ extended: true }));
 
-	app.use(verifyJwt);
+	// app.use(verifyJwt);
 	app.use(errorHandler);
 
 	app.get('/', (req, res) => {
