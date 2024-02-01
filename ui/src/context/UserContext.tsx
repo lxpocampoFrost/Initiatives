@@ -1,6 +1,7 @@
 import { createContext, useState, useContext, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { gql, useQuery } from '@apollo/client';
+import { useSession } from 'next-auth/react';
 
 interface UserData {
 	userId: string;
@@ -40,7 +41,7 @@ const GET_HAILSTORM = gql`
 `;
 
 export const UserProvider = ({ children }: UserProviderProps) => {
-	const { user } = useAuth0();
+	const { data: sessionData } = useSession();
 	const { loading: hailstormLoading, data } = useQuery(GET_HAILSTORM);
 
 	const [currentUserDetails, setCurrentUserDetails] = useState<UserData | null>(null);
@@ -49,17 +50,17 @@ export const UserProvider = ({ children }: UserProviderProps) => {
 
 	useEffect(() => {
 		if (!currentUserDetails && !hailstormLoading && data) {
-			if (data.hailstormData && user) {
-				let hs_user: any = data.hailstormData.find((hs_user: any) => hs_user.email === user.email);
+			if (data.hailstormData && sessionData) {
+				let hs_user: any = data.hailstormData.find((hs_user: any) => hs_user.email === sessionData.user?.email);
 				setCurrentUserDetails({
 					...hs_user,
-					picture: user.picture,
+					picture: sessionData.user?.image,
 				});
 			}
 		}
 
 		if (data && data.hailstormData.length > 0 && currentUserDetails) {
-			const positions = ['developer', 'technical lead'];
+			const positions = ['developer', 'technical lead', 'chief creative'];
 			const devTeam = data.hailstormData.filter((user: UserData) => user.position && positions.some((position) => user.position?.toLowerCase().includes(position)));
 
 			const teamMembers = devTeam.map((user: { userId: string; firstName: string; lastName: string }) => ({
@@ -76,7 +77,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
 
 			setCurrentDevTeam(teamMembers);
 		}
-	}, [currentUserDetails, hailstormLoading, data, user]);
+	}, [currentUserDetails, hailstormLoading, data, sessionData]);
 
 	if (!currentUserDetails) {
 		return;
