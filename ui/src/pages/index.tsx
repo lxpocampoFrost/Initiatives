@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useMutation } from '@apollo/client';
-
 import Modal from '@/components/Modal/Modal';
 import Editor from '@/components/Editor/Editor';
 import UserDetails from '@/components/UserDetails';

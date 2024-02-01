@@ -1,87 +1,63 @@
 import { createContext, useState, useContext, useEffect } from 'react';
-import { useAuth0 } from '@auth0/auth0-react';
+import { useSession, signIn } from 'next-auth/react';
 import { ApolloProvider } from '@apollo/client';
 
 import { UserProvider } from './UserContext';
 import { NewApolloClient } from '../graphql/apolloClient';
 
 interface AuthContextData {
-  token: string | undefined;
-  isAuthenticated: boolean;
-  isLoadingUser: boolean;
+	token: string | undefined;
 }
 
 interface AuthProviderProps {
-  children: React.ReactNode;
+	children: React.ReactNode;
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 export const TokenProvider = ({ children }: AuthProviderProps) => {
-  const {
-    isAuthenticated,
-    loginWithRedirect,
-    isLoading: isLoadingUser,
-    getIdTokenClaims,
-    getAccessTokenSilently,
-  } = useAuth0();
+	const [token, setToken] = useState<string | undefined>('');
 
-  const [token, setToken] = useState<string | undefined>('');
+	const { data: session, status } = useSession();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (isAuthenticated) {
-          const idToken = await getIdTokenClaims();
-          setToken(idToken?.__raw);
-        }
-      } catch (error) {
-        console.error('Error fetching ID token:', error);
-      }
-    };
+	useEffect(() => {
+		const signInWithGoogle = async () => {
+			try {
+				await signIn('google');
+			} catch (error) {
+				console.error('Error signing in with Google:', error);
+			}
+		};
 
-    fetchData();
+		if (status === 'unauthenticated') {
+			signInWithGoogle();
+		}
+	}, [status]);
 
-    const tokenRefreshTimer = setInterval(async () => {
-      try {
-        if (isAuthenticated) {
-          await getAccessTokenSilently();
-          console.log('Access token renewed.');
-        }
-      } catch (error) {
-        console.error('Error renewing access token:', error);
-      }
-    }, 300000);
+	useEffect(() => {
+		if (session) {
+			//@ts-ignore
+			setToken(session?.accessToken);
+		}
+	}, [session]);
 
-    return () => {
-      clearInterval(tokenRefreshTimer);
-    };
-  }, [isAuthenticated, getIdTokenClaims, getAccessTokenSilently]);
+	if (!token) {
+		return;
+	}
 
-  if (!isAuthenticated && !isLoadingUser) {
-    loginWithRedirect();
-    return null;
-  }
+	const client = NewApolloClient(token ? token : undefined);
 
-  if (!token) {
-    return;
-  }
-
-  const client = NewApolloClient(token ? token : undefined);
-
-  return (
-    <AuthContext.Provider
-      value={{
-        token,
-        isAuthenticated,
-        isLoadingUser,
-      }}
-    >
-      <ApolloProvider client={client}>
-        <UserProvider>{children}</UserProvider>
-      </ApolloProvider>
-    </AuthContext.Provider>
-  );
+	return (
+		<AuthContext.Provider
+			value={{
+				token,
+			}}
+		>
+			<ApolloProvider client={client}>
+				<UserProvider>{children}</UserProvider>
+			</ApolloProvider>
+		</AuthContext.Provider>
+	);
 };
 
 export default AuthContext;
