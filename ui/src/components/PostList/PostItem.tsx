@@ -1,7 +1,8 @@
-import Tags from '../Tags';
 import { Box, Stack } from '@mui/material';
 import styled from '@emotion/styled';
 import { useMode } from '@/context/ModeContext';
+
+import Tags from '@/components/Tags';
 
 interface PostItemData {
 	title: string;
@@ -33,15 +34,13 @@ const PostItem = ({ data, handleClick }: PostItemProps) => {
 
 	const { title, post, created_by, color, explanation, created_date, tags } = data;
 	let titleObj = JSON.parse(title);
-	let postObj = JSON.parse(post);
 	let parsedTitle = titleObj.data.text;
-	let parsedBody = postObj[0].data.text;
 
 	return (
 		<>
 			<Box
 				onClick={handleClick}
-					sx={{
+				sx={{
 					'@media screen and (min-width:1440px)': {
 						width: '100%',
 						minHeight: '350px',
@@ -113,7 +112,7 @@ const PostItem = ({ data, handleClick }: PostItemProps) => {
 								color: '#ffffff',
 							},
 						}}
-						dangerouslySetInnerHTML={{ __html: parsedBody }}
+						dangerouslySetInnerHTML={{ __html: explanation }}
 					/>
 				</Box>
 

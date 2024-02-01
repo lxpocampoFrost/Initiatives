@@ -22,6 +22,7 @@ export const GET_POSTS = gql`
 				explanation
 			}
 			count
+			currentPage
 		}
 	}
 `;

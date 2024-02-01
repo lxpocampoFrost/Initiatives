@@ -1,15 +1,20 @@
-import UserContext from '@/context/UserContext';
-import { GET_POSTS } from '@/graphql/queries';
-import { calculatePages, getBindnameForUserId, getColorForUserId } from '@/utils/helpers';
+import { useContext, useMemo, useEffect } from 'react';
+
 import { useQuery } from '@apollo/client';
 import { Box, Grid } from '@mui/material';
-import React, { useContext, useState, useMemo, useEffect } from 'react';
-import PostItem from './PostItem';
-import Filter from '../Filter/Filter';
-import PaginationControl from '@/components/PostList/Pagination';
+
+import UserContext from '@/context/UserContext';
 import { useMode } from '@/context/ModeContext';
-import FilterEmpty from '../Filter/FilterEmpty';
-import Loader from '../Loader/Loader';
+
+import { GET_POSTS } from '@/graphql/queries';
+
+import { calculatePages, getBindnameForUserId, getColorForUserId } from '@/utils/helpers';
+
+import PostItem from './PostItem';
+import Filter from '@/components/Filter/Filter';
+import PaginationControl from '@/components/PostList/Pagination';
+import FilterEmpty from '@/components/Filter/FilterEmpty';
+import Loader from '@/components/Loader/Loader';
 
 const PostSection = () => {
 	const { data, hailstormLoading } = useContext(UserContext);

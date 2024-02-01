@@ -28,12 +28,11 @@ const Dropdown = ({ options, type }: any) => {
 	const handleMenuItemClick = (index: string, value: string) => {
 		handleClose();
 		setSelectedValue(value);
-
+		setPage(1);
 		if (type === 'Sort by') {
 			value === 'Latest' ? setSelectedSortBy('desc') : setSelectedSortBy('asc');
 		} else if (type === 'Posted by') {
 			setSelectedPostedBy(index);
-			setPage(1);
 		}
 	};
 
@@ -67,15 +66,24 @@ const Dropdown = ({ options, type }: any) => {
 						lineHeight: '1.5',
 						padding: '0',
 						'&:hover': { backgroundColor: 'transparent' },
+						svg: {
+							marginLeft: '4px',
+						},
 					}}
 				>
 					{selectedValue || type}
-					<img
-						src='./assets/dropdown-arrow.svg'
-						alt='Search Icon'
-						loading='lazy'
-						style={{ width: '24px', height: '24px', marginLeft: '4px' }}
-					/>
+					<svg
+						xmlns='http://www.w3.org/2000/svg'
+						width='24'
+						height='24'
+						viewBox='0 0 24 24'
+						fill='none'
+					>
+						<path
+							d='M7 10L12 15L17 10H7Z'
+							fill='white'
+						/>
+					</svg>
 				</Button>
 			</ButtonGroup>
 			<Popover

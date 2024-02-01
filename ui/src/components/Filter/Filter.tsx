@@ -1,13 +1,15 @@
-import Search from '../Search';
-import Tags from '../Tags';
-import Dropdown from '../Dropdown/Dropdown';
+import { useContext } from 'react';
+import { useQuery } from '@apollo/client';
 import { Stack, Box } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+
 import { useMode } from '@/context/ModeContext';
 import { GET_TAGS } from '@/graphql/queries';
-import { useQuery } from '@apollo/client';
 import UserContext from '@/context/UserContext';
-import { useContext } from 'react';
+
+import Search from '@/components/Search';
+import Tags from '@/components/Tags';
+import Dropdown from '@/components/Dropdown/Dropdown';
 
 const Filter = () => {
 	const theme = useTheme();
@@ -44,24 +46,28 @@ const Filter = () => {
 		},
 	];
 
-	const { selectedTags, setSelectedTags } = useMode();
+	const { selectedTags, setSelectedTags, setPage } = useMode();
 
 	const { loading, error, data } = useQuery(GET_TAGS);
 
 	const updatedPostedItem = [...postedItem, ...currentDevTeam];
 
 	const handleTagToggle = (tag: string) => {
+		setPage(1);
+
 		if (tag === 'All') {
 			setSelectedTags(['All']);
 		} else {
-			if (selectedTags.includes(tag)) {
-				setSelectedTags(selectedTags.filter((selectedTag) => selectedTag !== tag));
-			} else {
-				const updatedTags = selectedTags.includes('All') ? [tag] : [...selectedTags, tag];
-				setSelectedTags(updatedTags);
-			}
+			setSelectedTags((prevTags) => {
+				if (prevTags.includes('All')) {
+					return [tag];
+				} else {
+					return prevTags.includes(tag) ? prevTags : [...prevTags, tag];
+				}
+			});
 		}
 	};
+
 	return (
 		<Stack
 			sx={{

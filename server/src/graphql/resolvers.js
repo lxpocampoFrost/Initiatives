@@ -37,11 +37,11 @@ const getAnalyzedData = async (text) => {
 	let role_instructions = `
 		As a Technical Design Analyst you highlight key points and summarize data provided to you. 
 		Anything unrelated to tech and design work you return 'invalid' only without explanations.
-	`
+	`;
 	let prompt = `
 		Tone: 50% spartan. No introductions. Check this data: ${content} and summarize and
 		explain in two paragraphs with max of 2 sentences each. Return the output in raw HTML format.
-	`
+	`;
 
 	try {
 		let completion = await openai.chat.completions.create({
@@ -49,7 +49,7 @@ const getAnalyzedData = async (text) => {
 			messages: [
 				{
 					role: 'system',
-					content: role_instructions
+					content: role_instructions,
 				},
 				{
 					role: 'user',
@@ -108,10 +108,11 @@ const resolvers = {
 		},
 		getAllPosts: async (_, { orderBy, tags, createdBy, title, page = 1, pageSize = 9 }) => {
 			try {
-				const { posts, count } = await getAllPosts(orderBy, tags, createdBy, title, page, pageSize);
+				const { posts, count, currentPage } = await getAllPosts(orderBy, tags, createdBy, title, page, pageSize);
 				return {
 					posts,
 					count,
+					currentPage,
 				};
 			} catch (error) {
 				throw new Error('Failed to fetch posts', error);

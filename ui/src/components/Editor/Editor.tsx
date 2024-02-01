@@ -263,21 +263,19 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
 			tunes: ['textVariant'],
 			onChange: () => {
 				editor.save().then((outputData) => {
-					const isEmpty = outputData.blocks.length === 0;
-					setIsEditorEmpty(isEmpty);
-
-					const title = outputData.blocks.length > 0 ? JSON.stringify(outputData.blocks[0]).replace(/\s/g, '') : '';
+					const title = outputData.blocks.length > 0 ? JSON.stringify(outputData.blocks[0]) : '';
 
 					const body = outputData.blocks.slice(1);
 					const bodyBlocks = JSON.stringify(body);
+
+					const isEmpty = outputData.blocks.length === 1;
+					setIsEditorEmpty(isEmpty);
 
 					setFormData((prevState) => ({
 						...prevState,
 						title: title,
 						post: bodyBlocks,
 					}));
-
-					console.log('formdata', outputData);
 				});
 			},
 			onReady: () => {
@@ -520,7 +518,16 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
 					},
 				}}
 			></Box>
-			<Box sx={{ display: mode !== 'view' || mode === 'edit' ? 'flex' : 'none', alignItems: 'center', gap: '10px', justifyContent: 'flex-end', paddingTop: '16px', borderTop: '1px solid #2C313C' }}>
+			<Box
+				sx={{
+					display: mode !== 'view' || mode === 'edit' ? 'flex' : 'none',
+					alignItems: 'center',
+					gap: '10px',
+					justifyContent: 'flex-end',
+					paddingTop: '16px',
+					borderTop: '1px solid #2C313C',
+				}}
+			>
 				{mode === 'edit' && (
 					<Box
 						sx={{
