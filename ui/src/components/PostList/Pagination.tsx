@@ -52,16 +52,6 @@ const PaginationControl = ({ totalPages, currentPage, handlePageChange }: PostLi
 						}
 
 						@media screen and (max-width: 460px) {
-							.MuiPagination-ul > li:first-of-type {
-							order: 2;
-							flex-basis: 60%;
-							}
-
-							.MuiPagination-ul > li:last-of-type {
-							order: 2;
-							flex-basis: 40%;
-							}
-
 							.MuiPagination-ul {
 							justify-content: center;
 							}
