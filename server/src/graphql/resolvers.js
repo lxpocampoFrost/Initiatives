@@ -159,8 +159,6 @@ const resolvers = {
 					tagsId: gpt_response.tags,
 					explanation: gpt_response.summary,
 					created_by,
-					created_date: new Date().toISOString(),
-					deleted: false,
 				};
 
 				const postId = await createPost(postData);
