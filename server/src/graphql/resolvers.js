@@ -16,7 +16,7 @@ const assign_tags = `
 	4 - React: For React-specific content.
 	5 - Webflow: For content related to the Webflow platform.
     6 - Frontend: For general frontend development topics.
-	7 - Backend: For backend development topics.
+	7 - Backend: This includes servers, APIs, database configuration, data handling, middleware, server-side scripting, network communications, server hosting, data backup and recovery, security compliance, and server performance monitoring.
 	8 - Onboarding: For onboarding processes and documentations.
 	9 - Library: For any library/package used in development.
 
