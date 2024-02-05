@@ -7,6 +7,7 @@ import Editor from '@/components/Editor/Editor';
 import UserDetails from '@/components/UserDetails';
 import DeleteModal from '@/components/Modal/DeleteModal';
 import PostSection from '@/components/PostList/PostSection';
+import ConfirmModal from '@/components/Modal/ConfirmModal';
 
 import { useMode } from '@/context/ModeContext';
 import { DELETE_POST } from '@/graphql/queries';
@@ -17,6 +18,7 @@ export default function Home() {
 	const { mode, setRender, setMode, postTracker, modalOpen, setModalOpen, selectedCardData, setSelectedCardData, page, setPage } = useMode();
 
 	const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+	const [isConfirmModalOpen, setConfirmModalOpen] = useState(false);
 	const [isDataLoading, setIsDataLoading] = useState(true);
 	const [deletePost] = useMutation(DELETE_POST);
 
@@ -51,12 +53,25 @@ export default function Home() {
 	};
 
 	const handleCloseModal = () => {
-		setModalOpen(false);
+		if(mode == 'create') {
+			setConfirmModalOpen(true);	
+
+			if(isConfirmModalOpen) {
+				setModalOpen(false);
+				setConfirmModalOpen(false);
+			}
+		} else {
+			setModalOpen(false);
+		}
 	};
 
 	const handleEditorSubmitSuccess = () => {
 		handleCloseModal();
 	};
+
+	const handleConfirmModalClose = () => {
+		setConfirmModalOpen(false);
+	}
 
 	useEffect(() => {
 		const loadingTimeout = setTimeout(() => {
@@ -157,6 +172,11 @@ export default function Home() {
 						isOpen={isDeleteModalOpen}
 						onClose={() => setDeleteModalOpen(false)}
 						onDelete={handleDelete}
+					/>
+					<ConfirmModal 
+						isOpen={isConfirmModalOpen}
+						onDelete={handleCloseModal}
+						onContinue={handleConfirmModalClose}
 					/>
 				</>
 			)}
