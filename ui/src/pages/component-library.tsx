@@ -13,6 +13,7 @@ import PaginationControl from '@/components/PostList/Pagination';
 import Filter from '@/components/Filter/Filter';
 import DeleteModal from '@/components/Modal/DeleteModal';
 import TooltipButton from '@/components/TooltipButton';
+import ConfirmModal from '@/components/Modal/ConfirmModal';
 
 const TagWrapper = styled.div`
   display: flex;
@@ -57,6 +58,7 @@ export default function ComponentLibrary() {
   const sortItem = ['Sort by', 'Latest', 'Oldest'];
   const postedItem = ['Posted by', 'Everyone', 'Me', 'Jm', 'Marie'];
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [isConfirmModalOpen, setConfirmModalOpen] = useState(false);
 
   const handleDeleteClick = () => {
     console.log('Deleting...');
@@ -110,6 +112,13 @@ export default function ComponentLibrary() {
       <DeleteModal
         isOpen={isDeleteModalOpen}
         onClose={() => setDeleteModalOpen(false)}
+        onDelete={handleDeleteClick}
+      />
+
+      <Button onClick={() => setConfirmModalOpen(true)}>Exit post</Button>
+      <ConfirmModal 
+        isOpen={isConfirmModalOpen}
+        onContinue={() => setConfirmModalOpen(false)}
         onDelete={handleDeleteClick}
       />
     </Box>
