@@ -152,6 +152,10 @@ const resolvers = {
 				if (gpt_response && gpt_response.summary == 'Invalid') {
 					throw new Error('Invalid content provided');
 				}
+				
+				if (!gpt_response.tags || gpt_response.tags === 0) {
+					throw new Error('Invalid tagsId. Cannot proceed with post creation.');
+				}
 
 				const postData = {
 					title,
