@@ -10,9 +10,9 @@ const openai = new OpenAI({
 const assign_tags = `
 	Please analyze the given text and assign up to three tags from the list below. If the text is too short or unrelated to any tags, return 0.
 
-	1 - HTML: For HTML-specific topics, web page structure, or HTML tutorials.
-	2 - CSS: For CSS styling, design techniques, or web design aspects.
-	3 - JS: For JavaScript development, frontend interaction, or React development (if React is not explicitly mentioned).
+	1 - HTML: This includes topics such as tags, attributes, forms, input types, text formatting, links, images, tables, lists, layouts, semantics, multimedia, SVG, canvas, and accessibility.
+	2 - CSS: This includes topics such as selectors, properties, values, pseudo-classes, pseudo-elements, box model, layout types (flexbox, grid), responsive design, animations, transitions, preprocessors (Sass, Less), methodologies (BEM, SMACSS), and CSS frameworks (Bootstrap, Tailwind).
+	3 - JS: This includes topics such as variables, data types, operators, control structures, functions, objects, arrays, asynchronous JavaScript, AJAX, Promises, Fetch API, ES6+ features, error handling, testing, and debugging.
 	4 - React: This includes topics such as React components, JSX, state management, props, lifecycle methods, hooks, React Router, context API, Redux, and testing React applications.
 	5 - Webflow: This includes topics such as Webflow design, CMS, interactions and animations, responsive design, ecommerce on Webflow, SEO settings, and custom code in Webflow.
     6 - Frontend: This includes topics such as HTML, CSS, JavaScript, DOM manipulation, responsive design, performance optimization, accessibility, version control/Git, Web APIs, testing/debugging, browser developer tools, building and automation tools, web security knowledge, package managers, CSS pre-processing, command line, and frameworks/libraries like React or Angular.
