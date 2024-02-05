@@ -13,9 +13,9 @@ const assign_tags = `
 	1 - HTML: For HTML-specific topics, web page structure, or HTML tutorials.
 	2 - CSS: For CSS styling, design techniques, or web design aspects.
 	3 - JS: For JavaScript development, frontend interaction, or React development (if React is not explicitly mentioned).
-	4 - React: For React-specific content.
-	5 - Webflow: For content related to the Webflow platform.
-    6 - Frontend: For general frontend development topics.
+	4 - React: This includes topics such as React components, JSX, state management, props, lifecycle methods, hooks, React Router, context API, Redux, and testing React applications.
+	5 - Webflow: This includes topics such as Webflow design, CMS, interactions and animations, responsive design, ecommerce on Webflow, SEO settings, and custom code in Webflow.
+    6 - Frontend: This includes topics such as HTML, CSS, JavaScript, DOM manipulation, responsive design, performance optimization, accessibility, version control/Git, Web APIs, testing/debugging, browser developer tools, building and automation tools, web security knowledge, package managers, CSS pre-processing, command line, and frameworks/libraries like React or Angular.
 	7 - Backend: This includes servers, APIs, database configuration, data handling, middleware, server-side scripting, network communications, server hosting, data backup and recovery, security compliance, and server performance monitoring.
 	8 - Onboarding: For onboarding processes and documentations.
 	9 - Library: For any library/package used in development.
