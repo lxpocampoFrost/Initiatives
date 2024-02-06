@@ -89,7 +89,9 @@ const PostItem = ({ data, handleClick }: PostItemProps) => {
 						Posted {created_date}
 					</Box>
 				</Box>
-				<Box>
+				<Box
+					paddingRight='8px'
+				>
 					<Box
 						sx={{
 							fontFamily: 'Figtree-Bold, sans-serif',

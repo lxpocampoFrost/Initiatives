@@ -46,7 +46,7 @@ const Filter = () => {
 		},
 	];
 
-	const { selectedTags, setSelectedTags, setPage } = useMode();
+	const { selectedTags, setSelectedTags, setPage, toCurrentUser } = useMode();
 
 	const { loading, error, data } = useQuery(GET_TAGS);
 
@@ -105,6 +105,7 @@ const Filter = () => {
 				/>
 				<Dropdown
 					options={updatedPostedItem}
+					showCurrentUser={toCurrentUser}
 					type='Posted by'
 				/>
 			</Stack>

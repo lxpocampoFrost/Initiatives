@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Button from '@mui/material/Button';
 import Popover from '@mui/material/Popover';
@@ -6,16 +6,20 @@ import Typography from '@mui/material/Typography';
 import { Stack } from '@mui/material/';
 import { useTheme } from '@mui/material/styles';
 import { useMode } from '@/context/ModeContext';
+import UserContext from '@/context/UserContext';
 
-const Dropdown = ({ options, type }: any) => {
+const Dropdown = ({ options, type, showCurrentUser = false }: any) => {
 	useEffect(() => {
 		setSelectedValue(options[1].name);
 		setSelectedPostedBy(options[1].index);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
+
+	const { currentUserDetails } = useContext(UserContext);
+
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [selectedValue, setSelectedValue] = useState('');
-	const { setSelectedSortBy, selectedPostedBy, setSelectedPostedBy, setPage } = useMode();
+	const { setSelectedSortBy, selectedPostedBy, setSelectedPostedBy, setPage, setToCurrentUser } = useMode();
 
 	const handleClick = (event: any) => {
 		setAnchorEl(event.currentTarget);
@@ -37,6 +41,13 @@ const Dropdown = ({ options, type }: any) => {
 	};
 
 	const theme = useTheme();
+
+	useEffect(() => {
+		if(showCurrentUser) {
+			setSelectedValue('Me');
+			setToCurrentUser(false);
+		}
+	}, [showCurrentUser])
 
 	return (
 		<>
@@ -71,7 +82,7 @@ const Dropdown = ({ options, type }: any) => {
 						},
 					}}
 				>
-					{selectedValue || type}
+					{selectedValue == currentUserDetails?.userId ? 'Me' : selectedValue}
 					<svg
 						xmlns='http://www.w3.org/2000/svg'
 						width='24'
