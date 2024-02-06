@@ -140,7 +140,7 @@ import {
                 cursor: 'pointer',
                 }}
             >
-                Continue Editing
+                Continue editing
             </Box>
         </DialogActions>
       </Dialog>
