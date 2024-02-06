@@ -16,7 +16,7 @@ const UserDetails = ({ action }: UserDetailsProp) => {
   const { currentUserDetails } = useContext(UserContext);
   const theme = useTheme();
 
-  const { setSelectedPostedBy, setPage } = useMode();
+  const { setSelectedPostedBy, setPage, setToCurrentUser } = useMode();
 
   const fullName =
     currentUserDetails?.firstName + ' ' + currentUserDetails?.lastName;
@@ -25,6 +25,7 @@ const UserDetails = ({ action }: UserDetailsProp) => {
   const handleViewMyPosts = () => {
     if(currentUserDetails?.userId) {
       setSelectedPostedBy(currentUserDetails?.userId);
+      setToCurrentUser(true);
       setPage(1);
     }
   }
