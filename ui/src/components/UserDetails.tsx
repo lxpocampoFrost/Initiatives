@@ -16,7 +16,7 @@ const UserDetails = ({ action }: UserDetailsProp) => {
   const { currentUserDetails } = useContext(UserContext);
   const theme = useTheme();
 
-  const { setSelectedPostedBy, setPage, setToCurrentUser } = useMode();
+  const { setSelectedPostedBy, setPage, setToCurrentUser, setSelectedTags } = useMode();
 
   const fullName =
     currentUserDetails?.firstName + ' ' + currentUserDetails?.lastName;
@@ -26,6 +26,7 @@ const UserDetails = ({ action }: UserDetailsProp) => {
     if(currentUserDetails?.userId) {
       setSelectedPostedBy(currentUserDetails?.userId);
       setToCurrentUser(true);
+      setSelectedTags(['All']);
       setPage(1);
     }
   }
@@ -71,6 +72,7 @@ const UserDetails = ({ action }: UserDetailsProp) => {
             fontSize: '16px',
             lineHeight: '19.2px',
             opacity: '0.6',
+            cursor: 'pointer',
           }}
           onClick={handleViewMyPosts}
         >
