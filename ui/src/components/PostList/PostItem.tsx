@@ -102,14 +102,17 @@ const PostItem = ({ data, handleClick }: PostItemProps) => {
 					</Box>
 					<PostBody
 						sx={{
-							opacity: '0.8',
-							mt: '10px',
-							fontFamily: 'Figtree-Regular, sans-serif',
-							fontWeight: '400',
-							fontSize: '14px',
-							lineHeight: '1.5',
-							a: {
-								color: '#ffffff',
+							marginTop: '10px',
+							'> p': {
+								opacity: '0.8',
+								margin: '0',
+								fontFamily: 'Figtree-Regular, sans-serif',
+								fontWeight: '400',
+								fontSize: '14px',
+								lineHeight: '1.5',
+								a: {
+									color: '#ffffff',
+								},
 							},
 						}}
 						dangerouslySetInnerHTML={{ __html: explanation }}
