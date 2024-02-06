@@ -116,7 +116,7 @@ import {
             <Box
                 onClick={onDelete}
                 sx={{
-                    width: '50%',
+                    width: '46%',
                     textAlign: 'center',
                     fontFamily: 'Figtree-Medium,sans-serif',
                     fontWeight: '500',
@@ -131,7 +131,7 @@ import {
             <Box
                 onClick={onContinue}
                 sx={{
-                width: '50%',
+                width: '54%',
                 textAlign: 'left',
                 fontFamily: 'Figtree-Medium,sans-serif',
                 fontWeight: '500',
