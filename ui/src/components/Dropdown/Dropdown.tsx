@@ -9,6 +9,7 @@ import { useMode } from '@/context/ModeContext';
 
 const Dropdown = ({ options, type }: any) => {
 	useEffect(() => {
+		console.log(options);
 		setSelectedValue(options[1].name);
 		setSelectedPostedBy(options[1].index);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -26,6 +27,9 @@ const Dropdown = ({ options, type }: any) => {
 	};
 
 	const handleMenuItemClick = (index: string, value: string) => {
+		console.log(selectedPostedBy);
+		console.log('value: ', value);
+		console.log('hello....')
 		handleClose();
 		setSelectedValue(value);
 		setPage(1);

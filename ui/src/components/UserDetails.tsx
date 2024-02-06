@@ -4,6 +4,7 @@ import { Box } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
 import UserContext from '@/context/UserContext';
+import { useMode } from '@/context/ModeContext';
 
 import Button from '@/components/Button/Button';
 
@@ -15,8 +16,18 @@ const UserDetails = ({ action }: UserDetailsProp) => {
   const { currentUserDetails } = useContext(UserContext);
   const theme = useTheme();
 
+  const { setSelectedPostedBy, setPage } = useMode();
+
   const fullName =
     currentUserDetails?.firstName + ' ' + currentUserDetails?.lastName;
+
+  
+  const handleViewMyPosts = () => {
+    if(currentUserDetails?.userId) {
+      setSelectedPostedBy(currentUserDetails?.userId);
+      setPage(1);
+    }
+  }
 
   return (
     <Box
@@ -60,6 +71,7 @@ const UserDetails = ({ action }: UserDetailsProp) => {
             lineHeight: '19.2px',
             opacity: '0.6',
           }}
+          onClick={handleViewMyPosts}
         >
           View my posts
         </Box>
