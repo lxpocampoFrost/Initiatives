@@ -101,7 +101,7 @@ const PaginationControl = ({ totalPages, currentPage, handlePageChange }: PostLi
 						opacity: 1,
 					},
 					'.Mui-disabled': {
-						opacity: 0.4,
+						opacity: `0.4 !important`,
 					},
 					'.MuiButtonBase-root.MuiPaginationItem-root': {
 						fontFamily: 'Figtree-SemiBold, sans-serif',
