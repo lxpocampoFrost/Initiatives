@@ -79,13 +79,11 @@ const Filter = () => {
 				'@media screen and (max-width:1024px)': {
 					borderRadius: '0!important',
 				},
-
 				padding: '16px 16px 16px 24px',
 				flexDirection: 'column',
 				alignItems: 'flex-start',
 				boxSizing: 'border-box',
 				borderTop: '1px solid rgba(38, 45, 58, 0.30)',
-
 				backgroundColor: '#11141B;',
 			}}
 		>
@@ -97,6 +95,7 @@ const Filter = () => {
 						minWidth: 'max-content',
 					},
 					minWidth: '100%',
+					transform: 'translateY(1px)',
 				}}
 			>
 				<Dropdown
@@ -121,6 +120,7 @@ const Filter = () => {
 					margin: '12px 0',
 					backgroundColor: '#fff',
 					opacity: '0.1',
+					transform: 'translateY(1px)',
 				}}
 			></Box>
 			<Stack
