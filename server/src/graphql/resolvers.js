@@ -8,8 +8,6 @@ const openai = new OpenAI({
 });
 
 const assign_tags = `
-	Please analyze the given text and assign up to three tags from the list below. If the text is too short or unrelated to any tags, return 0.
-
 	1 - HTML: This includes topics such as tags, attributes, forms, input types, text formatting, links, images, tables, lists, layouts, semantics, multimedia, SVG, canvas, and accessibility.
 	2 - CSS: This includes topics such as selectors, properties, values, pseudo-classes, pseudo-elements, box model, layout types (flexbox, grid), responsive design, animations, transitions, preprocessors (Sass, Less), methodologies (BEM, SMACSS), and CSS frameworks (Bootstrap, Tailwind).
 	3 - JS: This includes topics such as variables, data types, operators, control structures, functions, objects, arrays, asynchronous JavaScript, AJAX, Promises, Fetch API, ES6+ features, error handling, testing, and debugging.
@@ -20,7 +18,7 @@ const assign_tags = `
 	8 - Onboarding: For onboarding processes and documentations.
 	9 - Library: For any library/package used in development.
 
-	Example: If the text is about HTML and CSS, return '1,2'.
+	Example: If the text is about HTML and CSS, return '1,2'. Remember Max of 3 tags only. If the text is unrelated to any tags, return 0.
 `;
 
 const getAnalyzedData = async (text) => {
@@ -62,6 +60,11 @@ const getAnalyzedData = async (text) => {
 
 		summary = completion.choices[0].message.content;
 
+		role_instructions = `
+			You are a technical design analyst and you assign tags based on the content you receive.
+			You also only assign a maximum of 3 tags.
+		`
+
 		gpt_response.summary = summary;
 		if (summary !== '') {
 			completion = await openai.chat.completions.create({
@@ -69,11 +72,11 @@ const getAnalyzedData = async (text) => {
 				messages: [
 					{
 						role: 'system',
-						content: summary,
+						content: role_instructions,
 					},
 					{
 						role: 'user',
-						content: `Assign tags using this ${assign_tags}.`,
+						content: `Analyze this text ${summary}, Assign tags using this ${assign_tags}.`,
 					},
 				],
 				temperature: 0,
