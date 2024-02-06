@@ -29,6 +29,9 @@ import {
             padding: '16px',
             margin: '0',
             letterSpacing: 'unset',
+            maxWidth: '307px',
+            width: '100%',
+            boxSizing: 'border-box',
           },
         }}
       >
@@ -86,9 +89,6 @@ import {
             lineHeight: '1.35',
             opacity: '0.7',
             padding: '0',
-            [theme.breakpoints.up('md')]: {
-              width: '307px',
-            },
             width: '100%',
           }}
         >
@@ -132,12 +132,11 @@ import {
                 onClick={onContinue}
                 sx={{
                 width: '50%',
-                textAlign: 'center',
+                textAlign: 'left',
                 fontFamily: 'Figtree-Medium,sans-serif',
                 fontWeight: '500',
                 fontSize: '16px',
                 lineHeight: 'normal',
-    
                 cursor: 'pointer',
                 }}
             >
