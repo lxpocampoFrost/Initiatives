@@ -36,6 +36,8 @@ interface ModeContextProps {
 	setPostTracker: React.Dispatch<React.SetStateAction<number>>;
 	render: boolean;
 	setRender: React.Dispatch<React.SetStateAction<boolean>>;
+	toCurrentUser: boolean;
+	setToCurrentUser: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ModeContext = createContext<ModeContextProps | undefined>(undefined);
@@ -51,6 +53,7 @@ export const ModeProvider: React.FC<ModeProviderProps> = ({ children }) => {
 	const [selectedTags, setSelectedTags] = useState<string[]>(['All']);
 	const [selectedSortBy, setSelectedSortBy] = useState('desc');
 	const [selectedPostedBy, setSelectedPostedBy] = useState('');
+	const [toCurrentUser, setToCurrentUser] = useState(false);
 
 	const [searchQuery, setSearchQuery] = useState('');
 	const [submitting, setSubmitting] = useState(false);
@@ -83,6 +86,8 @@ export const ModeProvider: React.FC<ModeProviderProps> = ({ children }) => {
 				setPostTracker,
 				render,
 				setRender,
+				toCurrentUser,
+				setToCurrentUser,
 			}}
 		>
 			{children}
