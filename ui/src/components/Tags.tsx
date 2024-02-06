@@ -10,7 +10,7 @@ const TagContainer = styled.div`
 	font-family: 'Figtree-SemiBold', sans-serif;
 	font-weight: 600;
 	font-size: 12px;
-	line-height: 14.4px;
+	line-height: 16px;
 	background-color: rgba(255, 255, 255, 0.12);
 	padding: 6px 12px;
 	color: #ffffff;
