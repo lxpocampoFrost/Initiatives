@@ -96,11 +96,16 @@ const Filter = () => {
 					},
 					minWidth: '100%',
 					transform: 'translateY(1px)',
+					justifyContent: 'space-between',
+					'> .sort-dropdown': {
+						minWidth: '0%',
+					}
 				}}
 			>
 				<Dropdown
 					options={sortItem}
 					type='Sort by'
+					className='sort-dropdown'
 				/>
 				<Dropdown
 					options={updatedPostedItem}
