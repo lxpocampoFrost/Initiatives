@@ -102,6 +102,7 @@ const Filter = () => {
 					},
 					'@media screen and (max-width:480px)': {
 						flexDirection: 'column',
+						gap: '8px',
 						'> div': {
 							marginLeft: '0px !important',
 						}
