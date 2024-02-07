@@ -111,15 +111,16 @@ const PostItem = ({ data, handleClick }: PostItemProps) => {
 							fontWeight: '400',
 							fontSize: '14px',
 							lineHeight: '1.5',
+							paddingTop: '10px',
 							a: {
 								color: '#ffffff',
 							},
 							'> p': {
 								opacity: '0.8',
 								fontFamily: 'Figtree-Regular, sans-serif !important',
-								margin: '0',
 								fontWeight: '400',
 								fontSize: '14px',
+								margin: '0',
 								lineHeight: '1.5',
 								a: {
 									color: '#ffffff',
