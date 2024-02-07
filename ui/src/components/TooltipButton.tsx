@@ -83,6 +83,7 @@ const TooltipButton = ({ onDelete, onShow }: any) => {
             width: '185px',
             marginTop: '10px',
             position: 'absolute',
+            top: '22px',
             zIndex: '99',
             display: 'block',
             right: '0',
