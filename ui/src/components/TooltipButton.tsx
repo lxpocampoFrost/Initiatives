@@ -29,14 +29,14 @@ const TooltipButton = ({ onDelete, onShow }: any) => {
 
   const actions = [
     {
-      type: 'Edit Post',
+      type: 'Edit post',
       icon: './assets/edit-icon.svg',
       onClick: () => {
         setMode('edit');
       },
     },
     {
-      type: 'Delete Post',
+      type: 'Delete post',
       icon: './assets/delete-icon.svg',
       onClick: () => {
         onDelete();
@@ -48,7 +48,8 @@ const TooltipButton = ({ onDelete, onShow }: any) => {
       sx={{
         marginLeft: 'auto',
         position: 'relative',
-        display: onShow ? 'block' : 'none',
+        display: onShow ? 'flex' : 'none',
+        alignItems: 'center',
       }}
     >
       <Box
@@ -82,6 +83,7 @@ const TooltipButton = ({ onDelete, onShow }: any) => {
             width: '185px',
             marginTop: '10px',
             position: 'absolute',
+            top: '22px',
             zIndex: '99',
             display: 'block',
             right: '0',

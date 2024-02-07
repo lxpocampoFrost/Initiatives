@@ -8,7 +8,7 @@ import { useTheme } from '@mui/material/styles';
 import { useMode } from '@/context/ModeContext';
 import UserContext from '@/context/UserContext';
 
-const Dropdown = ({ options, type, showCurrentUser = false }: any) => {
+const Dropdown = ({ options, type, showCurrentUser = false, className }: any) => {
 	useEffect(() => {
 		setSelectedValue(options[1].name);
 		setSelectedPostedBy(options[1].index);
@@ -55,6 +55,7 @@ const Dropdown = ({ options, type, showCurrentUser = false }: any) => {
 				variant='contained'
 				aria-label='contained button group'
 				onClick={handleClick}
+				className={className ? className : null}
 				sx={{
 					[theme.breakpoints.up('md')]: {
 						minWidth: 'max-content',
@@ -79,6 +80,14 @@ const Dropdown = ({ options, type, showCurrentUser = false }: any) => {
 						'&:hover': { backgroundColor: 'transparent' },
 						svg: {
 							marginLeft: '4px',
+						},
+						'> svg': {
+							minWidth: '24px',
+						},
+						'@media screen and (max-width:480px)': {
+							width: '100%',
+							justifyContent: 'space-between',
+							textAlign: 'left',
 						},
 					}}
 				>

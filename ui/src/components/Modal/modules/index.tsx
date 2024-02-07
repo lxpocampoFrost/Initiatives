@@ -81,6 +81,10 @@ export const ViewDialog = ({ data, onView, onDelete }: ViewDialogProps) => {
 							display: 'flex',
 							alignItems: 'center',
 							gap: '12px',
+							'@media screen and (max-width:480px)': {
+								width: '100%',
+								marginRight: '12px',
+							},
 						}}
 					>
 						<IconButton
@@ -141,6 +145,7 @@ export const ViewDialog = ({ data, onView, onDelete }: ViewDialogProps) => {
 								'@media screen and (max-width:480px)': {
 									flexDirection: 'column',
 									alignItems: 'flex-start',
+									marginLeft: 'auto',
 									gap: '4px',
 								},
 							}}

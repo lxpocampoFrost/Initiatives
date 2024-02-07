@@ -149,6 +149,9 @@ export default function Home() {
 											'& ul': {
 												padding: '0 0 0 20px',
 											},
+											'& p:first-of-type': {
+												marginTop: '12px',
+											}
 										}}
 									/>
 									<Box

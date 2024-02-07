@@ -109,6 +109,7 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
   const initializeEditor = async () => {
     const EditorJS = (await import('@editorjs/editorjs')).default;
     const Header = (await import('@editorjs/header')).default;
+    const RawTool = (await import('@editorjs/raw')).default;
     const Paragraph = (await import('@editorjs/paragraph')).default;
     const List = (await import('@editorjs/list')).default;
     const Code = (await import('@editorjs/code')).default;
@@ -134,46 +135,6 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
       tools: {
         header: {
           class: Header,
-        },
-        paragraph: {
-          class: Paragraph,
-          inlineToolbar: true,
-        },
-        list: {
-          class: List,
-          inlineToolbar: true,
-          config: {
-            defaultStyle: 'unordered',
-          },
-        },
-        code: {
-          class: Code,
-        },
-        inlineCode: {
-          class: InlineCode,
-          inlineToolbar: true,
-        },
-        quote: {
-          class: Quote,
-          inlineToolbar: true,
-          config: {
-            quotePlaceholder: 'Enter a quote',
-            captionPlaceholder: "Quote's author",
-          },
-        },
-        checklist: {
-          class: Checklist,
-          inlineToolbar: true,
-        },
-        textVariant: TextVariantTune,
-        underline: Underline,
-        warning: {
-          class: Warning,
-          inlineToolbar: true,
-          config: {
-            titlePlaceholder: 'Title',
-            messagePlaceholder: 'Message',
-          },
         },
         image: {
           class: ImageTool,
@@ -216,7 +177,49 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
             },
           },
         },
+        list: {
+          class: List,
+          inlineToolbar: true,
+          config: {
+            defaultStyle: 'unordered',
+          },
+        },
+        code: {
+          class: Code,
+        },
+        paragraph: {
+          class: Paragraph,
+          inlineToolbar: true,
+        },
+        inlineCode: {
+          class: InlineCode,
+          inlineToolbar: true,
+        },
+        quote: {
+          class: Quote,
+          inlineToolbar: true,
+          config: {
+            quotePlaceholder: 'Enter a quote',
+            captionPlaceholder: "Quote's author",
+          },
+        },
         delimiter: Delimiter,
+        table: Table,
+        raw: RawTool,
+        warning: {
+          class: Warning,
+          inlineToolbar: true,
+          config: {
+            titlePlaceholder: 'Title',
+            messagePlaceholder: 'Message',
+          },
+        },
+        checklist: {
+          class: Checklist,
+          inlineToolbar: true,
+        },
+        textVariant: TextVariantTune,
+        underline: Underline,
         AttachesTool: {
           class: AttachesTool,
           config: {
@@ -261,7 +264,6 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
           },
         },
         marker: Marker,
-        table: Table,
       },
       data:
         mode === 'view' || mode === 'edit'
@@ -518,7 +520,12 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
           '.ce-toolbar__content': {
             maxWidth: '598px',
           },
-
+          '[data-item-name="list"] > .ce-popover-item__icon': {
+            background: 'url(/assets/editor-list-icon.svg)',
+            '> svg': {
+              display: 'none',
+            },
+          },
           '@media (max-width: 650px)': {
             '.ce-toolbar__plus, .ce-toolbar__settings-btn': {
               backgroundColor: 'unset',
@@ -560,7 +567,7 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
               fontWeight: '500',
               fontSize: '16px',
               color: '#ffffff',
-              opacity: '0.3',
+              opacity: '0.5 ',
               lineHeight: '19.2px',
             }}
             onClick={() => setMode('view')}
