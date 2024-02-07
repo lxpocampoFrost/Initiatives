@@ -113,8 +113,7 @@ export const ViewDialog = ({ data, onView, onDelete }: ViewDialogProps) => {
 								display: 'flex',
 								alignItems: 'center',
 								'@media screen and (max-width:480px)': {
-									flexDirection: 'column',
-									alignItems: 'flex-start',
+									flexWrap: 'wrap',
 									gap: '4px',
 								},
 							}}
@@ -139,8 +138,7 @@ export const ViewDialog = ({ data, onView, onDelete }: ViewDialogProps) => {
 								display: 'flex',
 								alignItems: 'center',
 								'@media screen and (max-width:480px)': {
-									flexDirection: 'column',
-									alignItems: 'flex-start',
+									flexWrap: 'wrap',
 									gap: '4px',
 								},
 							}}

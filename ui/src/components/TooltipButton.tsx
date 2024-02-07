@@ -48,7 +48,8 @@ const TooltipButton = ({ onDelete, onShow }: any) => {
       sx={{
         marginLeft: 'auto',
         position: 'relative',
-        display: onShow ? 'block' : 'none',
+        display: onShow ? 'flex' : 'none',
+        alignItems: 'center',
       }}
     >
       <Box
