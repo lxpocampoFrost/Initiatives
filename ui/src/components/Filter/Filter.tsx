@@ -96,11 +96,23 @@ const Filter = () => {
 					},
 					minWidth: '100%',
 					transform: 'translateY(1px)',
+					justifyContent: 'space-between',
+					'> .sort-dropdown': {
+						minWidth: '0%',
+					},
+					'@media screen and (max-width:480px)': {
+						flexDirection: 'column',
+						gap: '8px',
+						'> div': {
+							marginLeft: '0px !important',
+						}
+					},
 				}}
 			>
 				<Dropdown
 					options={sortItem}
 					type='Sort by'
+					className='sort-dropdown'
 				/>
 				<Dropdown
 					options={updatedPostedItem}
