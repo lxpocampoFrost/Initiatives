@@ -109,6 +109,7 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
   const initializeEditor = async () => {
     const EditorJS = (await import('@editorjs/editorjs')).default;
     const Header = (await import('@editorjs/header')).default;
+	const RawTool = (await import('@editorjs/raw')).default;
     const Paragraph = (await import('@editorjs/paragraph')).default;
     const List = (await import('@editorjs/list')).default;
     const Code = (await import('@editorjs/code')).default;
@@ -126,6 +127,7 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
     const Table = (await import('@editorjs/table')).default;
     const AttachesTool = (await import('@editorjs/attaches')).default;
     const Delimiter = (await import('@editorjs/delimiter')).default;
+	
 
     const editor = new EditorJS({
       placeholder: 'Untitled',
@@ -135,19 +137,60 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
         header: {
           class: Header,
         },
+		image: {
+			class: ImageTool,
+			config: {
+			  uploader: {
+				async uploadByFile(file) {
+				  const formData = new FormData();
+				  formData.append('file', file);
+				  formData.append('upload_preset', 'yxgn0epf');
+  
+				  try {
+					const response = await fetch(
+					  `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUD_NAME}/upload`,
+					  {
+						method: 'POST',
+						body: formData,
+					  }
+					);
+  
+					const result = await response.json();
+  
+					if (result.secure_url) {
+					  const formattedResult = {
+						success: 1,
+						file: {
+						  url: result.secure_url,
+						},
+					  };
+					  return formattedResult;
+					} else {
+					  console.log({
+						success: 0,
+						error: result.error.message,
+					  });
+					}
+				  } catch (error) {
+					console.error('Error:', error);
+				  }
+				},
+			  },
+			},
+		},
+		list: {
+		class: List,
+		inlineToolbar: true,
+		config: {
+			defaultStyle: 'unordered',
+		},
+		},
+		code: {
+			class: Code,
+		},
         paragraph: {
           class: Paragraph,
           inlineToolbar: true,
-        },
-        list: {
-          class: List,
-          inlineToolbar: true,
-          config: {
-            defaultStyle: 'unordered',
-          },
-        },
-        code: {
-          class: Code,
         },
         inlineCode: {
           class: InlineCode,
@@ -161,62 +204,23 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
             captionPlaceholder: "Quote's author",
           },
         },
+		delimiter: Delimiter,
+		table: Table,
+		raw: RawTool,
+		warning: {
+			class: Warning,
+			inlineToolbar: true,
+			config: {
+			  titlePlaceholder: 'Title',
+			  messagePlaceholder: 'Message',
+			},
+		},
         checklist: {
           class: Checklist,
           inlineToolbar: true,
         },
         textVariant: TextVariantTune,
         underline: Underline,
-        warning: {
-          class: Warning,
-          inlineToolbar: true,
-          config: {
-            titlePlaceholder: 'Title',
-            messagePlaceholder: 'Message',
-          },
-        },
-        image: {
-          class: ImageTool,
-          config: {
-            uploader: {
-              async uploadByFile(file) {
-                const formData = new FormData();
-                formData.append('file', file);
-                formData.append('upload_preset', 'yxgn0epf');
-
-                try {
-                  const response = await fetch(
-                    `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUD_NAME}/upload`,
-                    {
-                      method: 'POST',
-                      body: formData,
-                    }
-                  );
-
-                  const result = await response.json();
-
-                  if (result.secure_url) {
-                    const formattedResult = {
-                      success: 1,
-                      file: {
-                        url: result.secure_url,
-                      },
-                    };
-                    return formattedResult;
-                  } else {
-                    console.log({
-                      success: 0,
-                      error: result.error.message,
-                    });
-                  }
-                } catch (error) {
-                  console.error('Error:', error);
-                }
-              },
-            },
-          },
-        },
-        delimiter: Delimiter,
         AttachesTool: {
           class: AttachesTool,
           config: {
@@ -261,7 +265,6 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
           },
         },
         marker: Marker,
-        table: Table,
       },
       data:
         mode === 'view' || mode === 'edit'
@@ -518,7 +521,12 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
           '.ce-toolbar__content': {
             maxWidth: '598px',
           },
-
+		  '[data-item-name="list"] > .ce-popover-item__icon': { 
+			background: 'url(/assets/editor-list-icon.svg)',
+			'> svg': {
+				display: 'none',
+			}
+		  },
           '@media (max-width: 650px)': {
             '.ce-toolbar__plus, .ce-toolbar__settings-btn': {
               backgroundColor: 'unset',
