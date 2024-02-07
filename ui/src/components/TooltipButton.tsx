@@ -29,14 +29,14 @@ const TooltipButton = ({ onDelete, onShow }: any) => {
 
   const actions = [
     {
-      type: 'Edit Post',
+      type: 'Edit post',
       icon: './assets/edit-icon.svg',
       onClick: () => {
         setMode('edit');
       },
     },
     {
-      type: 'Delete Post',
+      type: 'Delete post',
       icon: './assets/delete-icon.svg',
       onClick: () => {
         onDelete();
