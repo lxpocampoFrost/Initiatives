@@ -562,7 +562,7 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
               fontWeight: '500',
               fontSize: '16px',
               color: '#ffffff',
-              opacity: '0.5',
+              opacity: '0.5 ',
               lineHeight: '19.2px',
             }}
             onClick={() => setMode('view')}
