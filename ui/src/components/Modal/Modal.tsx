@@ -92,7 +92,7 @@ const Modal = ({ isOpen, onClose, onEdit, onDelete, children }: ModalProps) => {
                 ? ' 0 24px 24px!important'
                 : ' 24px 24px 24px!important',
           },
-          padding: '0 24px 16px!important',
+          padding: '24px!important',
           color: '#ffffff',
           overflow: 'unset',
           display: mode === 'view' ? 'flex' : 'block',
