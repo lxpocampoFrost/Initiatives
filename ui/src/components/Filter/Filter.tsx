@@ -99,7 +99,13 @@ const Filter = () => {
 					justifyContent: 'space-between',
 					'> .sort-dropdown': {
 						minWidth: '0%',
-					}
+					},
+					'@media screen and (max-width:480px)': {
+						flexDirection: 'column',
+						'> div': {
+							marginLeft: '0px !important',
+						}
+					},
 				}}
 			>
 				<Dropdown

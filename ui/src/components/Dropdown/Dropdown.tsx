@@ -83,7 +83,12 @@ const Dropdown = ({ options, type, showCurrentUser = false, className }: any) =>
 						},
 						'> svg': {
 							minWidth: '24px',
-						}
+						},
+						'@media screen and (max-width:480px)': {
+							width: '100%',
+							justifyContent: 'space-between',
+							textAlign: 'left',
+						},
 					}}
 				>
 					{selectedValue == currentUserDetails?.userId ? 'Me' : selectedValue}

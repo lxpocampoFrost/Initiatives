@@ -24,6 +24,7 @@ const FilterEmpty = () => {
           fontSize: '18px',
           fontWeight: '700',
           lineHeight: '21.6px',
+          textAlign: 'center',
         }}
       >
         Crickets? No results found!
