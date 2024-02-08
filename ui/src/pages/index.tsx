@@ -128,7 +128,7 @@ export default function Home() {
               <>
                 <Box
                   sx={{
-                    '@media (min-width: 960px)': {
+                    '@media (min-width: 961px)': {
                       width: '320px',
                     },
                     width: '100%',

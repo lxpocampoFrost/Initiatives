@@ -48,8 +48,6 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
 
       const { title, post } = formData;
 
-      console.log(selectedCardData);
-
       let mutation: any;
       let variables: any;
 
@@ -75,10 +73,8 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
         refetchQueries: [{ query: GET_POSTS }],
       });
 
-      console.log('data.updatePost = ',data.updatePost);
-      console.log('data.updatePost.success = ',data.updatePost.success);
-
-      if ((data.createPost && data.createPost.success === false) ||
+      if (
+        (data.createPost && data.createPost.success === false) ||
         (data.updatePost && data.updatePost.success === false)
       ) {
         setActionNotif(true);
@@ -336,7 +332,7 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
           },
           '.codex-editor__redactor': {
             minWidth: '564px',
-            paddingLeft: '60px',
+            paddingLeft: mode === 'create' ? '68px' : '0',
             paddingBottom: mode === 'view' ? '40px!important' : '100px',
             '.ce-block:first-of-type h1': {
               paddingTop: '0',
@@ -505,7 +501,10 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
             marginLeft: '4px',
           },
           '.ce-toolbar__actions': {
-            paddingRight: '8px',
+            backgroundColor: '#0C0E13',
+            border: '1px solid rgba(44, 49, 60, 1)',
+            borderRadius: '4px',
+            padding: '4px',
           },
           '.ce-block__content': {
             fontFamily: 'Figtree-Regular,sans-serif',
@@ -530,6 +529,11 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
               display: 'none',
             },
           },
+          '@media (max-width: 960px)': {
+            '.ce-block__content': {
+              maxWidth: '100%',
+            },
+          },
           '@media (max-width: 650px)': {
             '.ce-toolbar__plus, .ce-toolbar__settings-btn': {
               backgroundColor: 'unset',
@@ -542,25 +546,14 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
             '.cdx-block.cdx-list': {
               paddingLeft: '24px',
             },
-            '.ce-block__content': {
-              maxWidth: '500px',
-            },
+
             '.cdx-block': {
               padding: '0',
             },
           },
           '@media(max-width:480px)': {
-            '.ce-block__content': {
-              maxWidth: '360px',
-            },
             '.codex-editor__redactor': {
               paddingLeft: '0',
-            },
-            '.ce-toolbar__actions': {
-              backgroundColor: '#0C0E13',
-              border: '1px solid rgba(44, 49, 60, 1)',
-              borderRadius: '4px',
-              padding: '4px',
             },
           },
         }}
