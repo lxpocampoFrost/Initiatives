@@ -200,7 +200,7 @@ const resolvers = {
 					post: post || existingPost.post,
 					tagsId: gpt_response.tags,
 					explanation: gpt_response.summary,
-					updated_date: new Date().toISOString(),
+					updated_date: new Date().toISOString().slice(0, 19).replace('T', ' '),
 				};
 
 				const updatedPostId = await updatePost(postId, updatedPostData);
