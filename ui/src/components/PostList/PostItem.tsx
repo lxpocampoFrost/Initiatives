@@ -105,12 +105,22 @@ const PostItem = ({ data, handleClick }: PostItemProps) => {
 					<PostBody
 						sx={{
 							marginTop: '10px',
+							fontFamily: 'Figtree-Regular, sans-serif !important',
+							opacity: '0.8',
+							margin: '0',
+							fontWeight: '400',
+							fontSize: '14px',
+							lineHeight: '1.5',
+							paddingTop: '10px',
+							a: {
+								color: '#ffffff',
+							},
 							'> p': {
 								opacity: '0.8',
-								margin: '0',
-								fontFamily: 'Figtree-Regular, sans-serif',
+								fontFamily: 'Figtree-Regular, sans-serif !important',
 								fontWeight: '400',
 								fontSize: '14px',
+								margin: '0',
 								lineHeight: '1.5',
 								a: {
 									color: '#ffffff',
