@@ -75,10 +75,11 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
         refetchQueries: [{ query: GET_POSTS }],
       });
 
-      console.log('data.updatePost = ',data.updatePost);
-      console.log('data.updatePost.success = ',data.updatePost.success);
+      console.log('data.updatePost = ', data.updatePost);
+      console.log('data.updatePost.success = ', data.updatePost.success);
 
-      if ((data.createPost && data.createPost.success === false) ||
+      if (
+        (data.createPost && data.createPost.success === false) ||
         (data.updatePost && data.updatePost.success === false)
       ) {
         setActionNotif(true);
@@ -336,7 +337,7 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
           },
           '.codex-editor__redactor': {
             minWidth: '564px',
-            paddingLeft: '60px',
+            paddingLeft: '0',
             paddingBottom: mode === 'view' ? '40px!important' : '100px',
             '.ce-block:first-of-type h1': {
               paddingTop: '0',
@@ -528,6 +529,11 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
             background: 'url(/assets/editor-list-icon.svg)',
             '> svg': {
               display: 'none',
+            },
+          },
+          '@media (max-width: 980px)': {
+            '.codex-editor__redactor': {
+              paddingLeft: '60px',
             },
           },
           '@media (max-width: 650px)': {
