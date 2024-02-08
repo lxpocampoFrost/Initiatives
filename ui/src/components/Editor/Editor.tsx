@@ -74,8 +74,8 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
         variables,
         refetchQueries: [{ query: GET_POSTS }],
       });
-      
-      console.log('data.updatePost.success = ',data.updatePost);
+
+      console.log('data.updatePost = ',data.updatePost);
       console.log('data.updatePost.success = ',data.updatePost.success);
 
       if ((data.createPost && data.createPost.success === false) ||
