@@ -48,6 +48,8 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
 
       const { title, post } = formData;
 
+      console.log(selectedCardData);
+
       let mutation: any;
       let variables: any;
 
