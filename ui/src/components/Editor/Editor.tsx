@@ -535,6 +535,9 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
             '.ce-toolbar': {
               left: '0',
             },
+            '.cdx-block.cdx-list': {
+              paddingLeft: '24px',
+            },
             '.ce-block__content': {
               maxWidth: '500px',
             },
