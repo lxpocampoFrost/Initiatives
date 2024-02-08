@@ -59,7 +59,7 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
           postId: selectedCardData?.id,
           post: formData.post,
           title: formData.title,
-          updated_at: new Date().toISOString(),
+          updated_at: new Date().toISOString().slice(0, 19).replace('T', ' '),
         };
       } else {
         mutation = createPost;
