@@ -333,6 +333,7 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
           },
           '.codex-editor__redactor': {
             minWidth: '564px',
+            paddingLeft: '60px',
             paddingBottom: mode === 'view' ? '40px!important' : '100px',
             '.ce-block:first-of-type h1': {
               paddingTop: '0',
@@ -548,6 +549,15 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
           '@media(max-width:480px)': {
             '.ce-block__content': {
               maxWidth: '360px',
+            },
+            '.codex-editor__redactor': {
+              paddingLeft: '32px',
+            },
+            '.ce-toolbar__actions': {
+              flexDirection: 'column',
+            },
+            '.ce-toolbar__settings-btn': {
+              margin: '4px 0 0 0 ',
             },
           },
         }}
