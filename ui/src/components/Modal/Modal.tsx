@@ -97,7 +97,7 @@ const Modal = ({ isOpen, onClose, onEdit, onDelete, children }: ModalProps) => {
           overflow: 'unset',
           display: mode === 'view' ? 'flex' : 'block',
           gap: '40px',
-          '@media screen and (max-width:767px)': {
+          '@media screen and (max-width:960px)': {
             flexDirection: 'column',
             gap: '0',
           },
