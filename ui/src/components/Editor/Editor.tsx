@@ -48,8 +48,6 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
 
       const { title, post } = formData;
 
-      console.log(selectedCardData);
-
       let mutation: any;
       let variables: any;
 
@@ -74,9 +72,6 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
         variables,
         refetchQueries: [{ query: GET_POSTS }],
       });
-
-      console.log('data.updatePost = ', data.updatePost);
-      console.log('data.updatePost.success = ', data.updatePost.success);
 
       if (
         (data.createPost && data.createPost.success === false) ||
