@@ -116,7 +116,6 @@ const PostItem = ({ data, handleClick }: PostItemProps) => {
 								color: '#ffffff',
 							},
 							'> p': {
-								opacity: '0.8',
 								fontFamily: 'Figtree-Regular, sans-serif !important',
 								fontWeight: '400',
 								fontSize: '14px',
