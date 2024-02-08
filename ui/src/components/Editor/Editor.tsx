@@ -551,13 +551,13 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
               maxWidth: '360px',
             },
             '.codex-editor__redactor': {
-              paddingLeft: '32px',
+              paddingLeft: '0',
             },
             '.ce-toolbar__actions': {
-              flexDirection: 'column',
-            },
-            '.ce-toolbar__settings-btn': {
-              margin: '4px 0 0 0 ',
+              backgroundColor: '#0C0E13',
+              border: '1px solid rgba(44, 49, 60, 1)',
+              borderRadius: '4px',
+              padding: '4px',
             },
           },
         }}
