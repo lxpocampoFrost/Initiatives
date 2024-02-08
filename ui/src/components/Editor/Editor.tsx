@@ -75,8 +75,10 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
         refetchQueries: [{ query: GET_POSTS }],
       });
 
-      if (
-        (data.createPost && data.createPost.success === false) ||
+      console.log('data.updatePost = ',data.updatePost);
+      console.log('data.updatePost.success = ',data.updatePost.success);
+
+      if ((data.createPost && data.createPost.success === false) ||
         (data.updatePost && data.updatePost.success === false)
       ) {
         setActionNotif(true);
@@ -89,7 +91,6 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
       if (data.createPost && data.createPost.success === true) {
         setLoading(false);
         setSubmitting(false);
-
         setTimeout(() => {
           onSubmitSuccess();
           editorRef.current.destroy();
