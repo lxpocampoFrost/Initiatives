@@ -5,8 +5,6 @@ import Prism from 'prismjs';
 export default class CustomCodeTool extends CodeTool {
 	constructor(...args) {
 		super(...args);
-
-		this.copyButton = null;
 	}
 
 	save(codeWrapper) {
@@ -19,39 +17,34 @@ export default class CustomCodeTool extends CodeTool {
 
 	drawView() {
 		const wrapper = document.createElement('div'),
-			codeContainer = document.createElement('div');
-		// copyButton = document.createElement('div');
-
-		this.copyButton = document.createElement('div');
+			codeContainer = document.createElement('div'),
+			copyButton = document.createElement('div');
 
 		wrapper.classList.add(this.CSS.baseClass, this.CSS.wrapper);
 
 		codeContainer.classList.add('codetool-container');
 
 		if (this.readOnly) {
-			this.copyButton.addEventListener('click', () => {
+			copyButton.addEventListener('click', () => {
 				this.copyToClipboard();
 			});
 
 			const codeElement = document.createElement('code');
 			codeElement.classList.add(this.CSS.textarea, this.CSS.input, 'language-javascript');
 
-			this.copyButton.classList.add('copy-button');
-			this.copyButton.innerHTML = `
+			copyButton.classList.add('copy-button');
+			copyButton.innerHTML = `
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M19 21H8V7H19V21ZM19 5H8C7.46957 5 6.96086 5.21071 6.58579 5.58579C6.21071 5.96086 6 6.46957 6 7V21C6 21.5304 6.21071 22.0391 6.58579 22.4142C6.96086 22.7893 7.46957 23 8 23H19C19.5304 23 20.0391 22.7893 20.4142 22.4142C20.7893 22.0391 21 21.5304 21 21V7C21 6.46957 20.7893 5.96086 20.4142 5.58579C20.0391 5.21071 19.5304 5 19 5ZM16 1H4C3.46957 1 2.96086 1.21071 2.58579 1.58579C2.21071 1.96086 2 2.46957 2 3V17H4V3H16V1Z" fill="white"/>
       </svg>
     `;
-			codeContainer.appendChild(this.copyButton);
+			codeContainer.appendChild(copyButton);
 
 			const formattedCode = this.formatCode(this.data.code);
 			codeElement.textContent = formattedCode;
 
 			codeContainer.appendChild(codeElement);
 			Prism.highlightElement(codeElement);
-
-			this.copyButton = this.copyButton;
-			console.log('this', this.copyButton);
 		} else {
 			const textarea = document.createElement('textarea');
 			textarea.classList.add(this.CSS.textarea, this.CSS.input);
@@ -78,6 +71,8 @@ export default class CustomCodeTool extends CodeTool {
 	}
 
 	copyToClipboard() {
+		console.log('syntax', this.nodes);
+
 		const syntaxContent = this.nodes.holder.innerText;
 
 		navigator.clipboard.writeText(syntaxContent);
@@ -88,8 +83,6 @@ export default class CustomCodeTool extends CodeTool {
 		const tooltipOptions = {
 			placement: 'bottom',
 		};
-
-		console.log('this', this);
 
 		this.api.tooltip.show(this.nodes.holder.firstChild.children[0], tooltipContent, tooltipOptions);
 
