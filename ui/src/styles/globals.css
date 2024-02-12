@@ -25,6 +25,7 @@
 body {
 	background: #0c0e13;
 	margin: 0;
+	font-family: 'Figtree-Regular';
 }
 
 body::-webkit-scrollbar {

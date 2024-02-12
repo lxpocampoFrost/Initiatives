@@ -75,21 +75,30 @@ export default class CustomCodeTool extends CodeTool {
 
 		const syntaxContent = this.nodes.holder.innerText;
 
-		navigator.clipboard.writeText(syntaxContent);
+		if (navigator.clipboard && navigator.clipboard.writeText) {
+			navigator.clipboard
+				.writeText(syntaxContent)
+				.then(() => {
+					this.changeIconToCheckmark();
 
-		this.changeIconToCheckmark();
+					const tooltipContent = 'Copied';
+					const tooltipOptions = {
+						placement: 'bottom',
+					};
 
-		const tooltipContent = 'Copied';
-		const tooltipOptions = {
-			placement: 'bottom',
-		};
+					this.api.tooltip.show(this.nodes.holder.firstChild.children[0], tooltipContent, tooltipOptions);
 
-		this.api.tooltip.show(this.nodes.holder.firstChild.children[0], tooltipContent, tooltipOptions);
-
-		setTimeout(() => {
-			this.revertIcon();
-			this.api.tooltip.hide();
-		}, 2000);
+					setTimeout(() => {
+						this.revertIcon();
+						this.api.tooltip.hide();
+					}, 2000);
+				})
+				.catch((error) => {
+					console.error('Error copying to clipboard:', error);
+				});
+		} else {
+			console.error('Clipboard API not available');
+		}
 	}
 
 	changeIconToCheckmark() {
