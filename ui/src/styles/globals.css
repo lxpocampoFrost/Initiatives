@@ -36,3 +36,38 @@ body::-webkit-scrollbar {
 		padding: 40px;
 	}
 }
+
+.copy-button {
+	cursor: pointer;
+	position: absolute;
+	width: 32px;
+	height: 32px;
+	top: 16px;
+	right: 16px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.ct--shown {
+	z-index: 999999;
+}
+
+.ct > .ct__content {
+	font-family: Figtree-Bold;
+	font-size: 12px;
+	line-height: 14.4px;
+	background: rgba(22, 25, 31, 1);
+	padding: 10px 12px;
+	border-radius: 4px;
+	color: #ffffff;
+}
+
+@media screen and (max-width: 767px) {
+	.codetool-container {
+		overflow-x: auto;
+	}
+	.codetool-container::-webkit-scrollbar {
+		display: none;
+	}
+}
