@@ -15,14 +15,14 @@ const DropdownSelect = () => {
 
 	const { setSelectedPostTag, selectedCardData, mode } = useMode();
 
-	if (loading) return 'Loading...';
+	const tags = data && data.tags;
 
-	const tags = data.tags;
-
-	const options = tags.map((tag: { id: any; tag: any }) => ({
-		value: tag.id,
-		label: tag.tag,
-	}));
+	const options =
+		tags &&
+		tags.map((tag: { id: any; tag: any }) => ({
+			value: tag.id,
+			label: tag.tag,
+		}));
 
 	const handleChange = (newValue: any) => {
 		setSelectedOptions(newValue);
@@ -180,21 +180,29 @@ const DropdownSelect = () => {
 	};
 
 	useEffect(() => {
-		if (mode === 'edit' && selectedCardData) {
-			const options = tags.map((tag: { id: any; tag: any }) => ({
-				value: tag.id,
-				label: tag.tag,
-			}));
+		const updateSelectedOptions = async () => {
+			try {
+				if (mode === 'edit' && selectedCardData && tags) {
+					const options = tags.map((tag: { id: any; tag: any }) => ({
+						value: tag.id,
+						label: tag.tag,
+					}));
 
-			const tagsWithIds = selectedCardData.tags.map((tagName) => {
-				const matchingOption = options.find((option: { label: string }) => option.label === tagName);
-				return matchingOption ? matchingOption : { value: tagName, label: tagName };
-			});
+					const tagsWithIds = selectedCardData.tags.map((tagName) => {
+						const matchingOption = options.find((option: { label: string }) => option.label === tagName);
+						return matchingOption ? matchingOption : { value: tagName, label: tagName };
+					});
 
-			setSelectedOptions(tagsWithIds);
-		} else {
-			setSelectedOptions([]);
-		}
+					setSelectedOptions(tagsWithIds);
+				} else {
+					setSelectedOptions([]);
+				}
+			} catch (error) {
+				console.error('Error updating selected options:', error);
+			}
+		};
+
+		updateSelectedOptions();
 	}, [mode, selectedCardData, tags]);
 
 	return (
