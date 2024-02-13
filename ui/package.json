@@ -33,6 +33,7 @@
     "@emotion/styled": "^11.11.0",
     "@mui/material": "^5.15.4",
     "@types/react-select": "^5.0.1",
+    "copy-to-clipboard": "^3.3.3",
     "graphql": "^16.8.1",
     "next": "^12.2.0",
     "next-auth": "^4.24.5",

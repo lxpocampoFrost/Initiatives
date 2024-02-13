@@ -67,6 +67,7 @@ export default function Home() {
 	const handleEditorSubmitSuccess = () => {
 		setModalOpen(false);
 		setConfirmModalOpen(false);
+		setRender((prevRender) => !prevRender);
 	};
 
 	const handleConfirmModalClose = () => {

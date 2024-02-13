@@ -1,7 +1,7 @@
 import CodeTool from '@editorjs/code';
 import 'prismjs/themes/prism-okaidia.css';
 import Prism from 'prismjs';
-
+import copy from 'copy-to-clipboard';
 export default class CustomCodeTool extends CodeTool {
 	constructor(...args) {
 		super(...args);
@@ -75,45 +75,21 @@ export default class CustomCodeTool extends CodeTool {
 
 		const syntaxContent = this.nodes.holder.innerText;
 
-		if (navigator.clipboard && navigator.clipboard.writeText) {
-			navigator.clipboard
-				.writeText(syntaxContent)
-				.then(() => {
-					this.changeIconToCheckmark();
+		copy(syntaxContent);
 
-					const tooltipContent = 'Copied';
-					const tooltipOptions = {
-						placement: 'bottom',
-					};
+		this.changeIconToCheckmark();
 
-					this.api.tooltip.show(this.nodes.holder.firstChild.children[0], tooltipContent, tooltipOptions);
+		const tooltipContent = 'Copied';
+		const tooltipOptions = {
+			placement: 'bottom',
+		};
 
-					setTimeout(() => {
-						this.revertIcon();
-						this.api.tooltip.hide();
-					}, 2000);
-				})
-				.catch((error) => {
-					console.error('Error copying to clipboard:', error);
-				});
-		} else {
-			console.error('Clipboard API not available');
-			this.unsecuredCopyToClipboard(syntaxContent);
-		}
-	}
+		this.api.tooltip.show(this.nodes.holder.firstChild.children[0], tooltipContent, tooltipOptions);
 
-	unsecuredCopyToClipboard(text) {
-		const textArea = document.createElement('textarea');
-		textArea.value = text;
-		document.body.appendChild(textArea);
-		textArea.focus();
-		textArea.select();
-		try {
-			document.execCommand('copy');
-		} catch (err) {
-			console.error('Unable to copy to clipboard', err);
-		}
-		document.body.removeChild(textArea);
+		setTimeout(() => {
+			this.revertIcon();
+			this.api.tooltip.hide();
+		}, 2000);
 	}
 
 	changeIconToCheckmark() {

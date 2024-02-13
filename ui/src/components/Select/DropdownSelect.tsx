@@ -27,7 +27,6 @@ const DropdownSelect = () => {
 	const handleChange = (newValue: any) => {
 		setSelectedOptions(newValue);
 
-		console.log('new', newValue);
 		const selectedValues = newValue.map((option: { value: string }) => option.value);
 
 		setSelectedPostTag(selectedValues);
@@ -41,9 +40,10 @@ const DropdownSelect = () => {
 			});
 
 			if (mutationData.createdTag.success) {
-				console.log('Tag created successfully:', mutationData.createdTag.data);
+				const { id, tag } = mutationData.createdTag.data[0];
 
-				const newValue = [...selectedOptions, { label: inputValue, value: inputValue }];
+				const newValue = [...selectedOptions, { label: tag, value: id.toString() }];
+
 				handleChange(newValue);
 			} else {
 				console.error('Tag creation failed:', mutationData.createdTag.message);
@@ -194,8 +194,6 @@ const DropdownSelect = () => {
 					});
 
 					setSelectedOptions(tagsWithIds);
-				} else {
-					setSelectedOptions([]);
 				}
 			} catch (error) {
 				console.error('Error updating selected options:', error);
