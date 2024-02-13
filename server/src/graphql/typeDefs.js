@@ -3,6 +3,32 @@ const { gql } = require('apollo-server-express');
 module.exports = gql`
 	scalar JSON
 	scalar Int
+	scalar DateTime
+
+	input PostCreate {
+		title: String!
+		post: String!
+		created_by: String!
+		tagsId: [String]
+	}
+
+	input PostUpdate {
+		title: String!
+		post: String!
+		tagsId: [String]
+	}
+
+	input PostFilterInput {
+		orderBy: String
+		tags: [String]
+		createdBy: [String]
+		title: String
+	}
+
+	input PaginationInput {
+		page: Int
+		pageSize: Int
+	}
 
 	type Post {
 		id: ID
@@ -10,14 +36,14 @@ module.exports = gql`
 		post: String!
 		tags: [String!]!
 		created_by: String!
-		created_date: String!
-		updated_date: String!
+		created_date: DateTime!
+		updated_date: DateTime!
 		deleted: Boolean!
 		explanation: String
 	}
 
 	type PostPagination {
-		posts: [Post]!
+		items: [Post]!
 		count: Int!
 		currentPage: Int!
 	}
@@ -37,27 +63,32 @@ module.exports = gql`
 	}
 
 	type Query {
-		getAllPosts(orderBy: String, tags: [String], createdBy: [String], title: String, page: Int, pageSize: Int): PostPagination
-		getPostById(id: ID!): Post
+		posts(filter: PostFilterInput, pagination: PaginationInput): PostPagination
+		postId(id: ID!): Post
+		tag(id: [ID]!): Tag
 		tags: [Tag]
 		hailstormData: [User]
 	}
 
 	type Mutation {
-		createPost(title: String!, post: String!, created_by: String!): PostMessage
-		updatePost(postId: ID!, title: JSON, post: String!): PostMessage
-		deletePost(postId: ID!): Result
+		createdPost(input: PostCreate): Message
+		updatedPost(postId: ID!, input: PostUpdate): Message
+		deletedPost(postId: ID!): Message
 		generateExplanation(postId: ID!): String
+		createdTag(name: [String]!): Message
+		updatedTag(tagId: [ID]!, tag: String!): Message
+		deletedTag(tagId: ID!): Message
 	}
 
-	type Result {
+	type Message {
+		data: JSON
 		success: Boolean
 		message: String
+		error: Error
 	}
 
-	type PostMessage {
-		data: Post
-		success: Boolean
-		message: String
+	type Error {
+		message: String!
+		code: String
 	}
 `;

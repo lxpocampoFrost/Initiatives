@@ -71,4 +71,7 @@ body::-webkit-scrollbar {
 	.codetool-container::-webkit-scrollbar {
 		display: none;
 	}
+	.react-select-container {
+		padding-left: 0;
+	}
 }

@@ -38,6 +38,8 @@ interface ModeContextProps {
 	setRender: React.Dispatch<React.SetStateAction<boolean>>;
 	toCurrentUser: boolean;
 	setToCurrentUser: React.Dispatch<React.SetStateAction<boolean>>;
+	selectedPostTag: string[];
+	setSelectedPostTag: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 const ModeContext = createContext<ModeContextProps | undefined>(undefined);
@@ -60,6 +62,8 @@ export const ModeProvider: React.FC<ModeProviderProps> = ({ children }) => {
 	const [page, setPage] = useState(1);
 	const [postTracker, setPostTracker] = useState(0);
 	const [render, setRender] = useState(false);
+
+	const [selectedPostTag, setSelectedPostTag] = useState<string[]>([]);
 
 	return (
 		<ModeContext.Provider
@@ -88,6 +92,8 @@ export const ModeProvider: React.FC<ModeProviderProps> = ({ children }) => {
 				setRender,
 				toCurrentUser,
 				setToCurrentUser,
+				selectedPostTag,
+				setSelectedPostTag,
 			}}
 		>
 			{children}

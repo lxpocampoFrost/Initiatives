@@ -1,5 +1,4 @@
 import { createContext, useState, useContext, useEffect } from 'react';
-import { useAuth0 } from '@auth0/auth0-react';
 import { gql, useQuery } from '@apollo/client';
 import { useSession } from 'next-auth/react';
 

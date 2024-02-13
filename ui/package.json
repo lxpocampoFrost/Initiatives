@@ -32,12 +32,14 @@
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@mui/material": "^5.15.4",
+    "@types/react-select": "^5.0.1",
     "graphql": "^16.8.1",
     "next": "^12.2.0",
     "next-auth": "^4.24.5",
     "prismjs": "^1.29.0",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-select": "^5.8.0"
   },
   "devDependencies": {
     "@types/node": "^20",

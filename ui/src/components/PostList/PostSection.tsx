@@ -27,18 +27,22 @@ const PostSection = () => {
 		refetch,
 	} = useQuery(GET_POSTS, {
 		variables: {
-			tags: selectedTags.includes('All') ? [] : selectedTags,
-			orderBy: selectedSortBy ? selectedSortBy : {},
-			...(selectedPostedBy !== '100' ? { createdBy: selectedPostedBy } : ''),
-			title: searchQuery,
-			page: page,
+			filter: {
+				orderBy: selectedSortBy ? selectedSortBy : {},
+				tags: selectedTags.includes('All') ? [] : selectedTags,
+				...(selectedPostedBy !== '100' ? { createdBy: selectedPostedBy } : ''),
+				title: searchQuery,
+			},
+			pagination: {
+				page: page,
+			},
 		},
 	});
 
 	let totalPages;
 
 	if (!loading && !hailstormLoading && postData) {
-		const totalPost = postData.getAllPosts.count;
+		const totalPost = postData.posts.count;
 		const pageSize = 9;
 
 		totalPages = calculatePages(totalPost, pageSize);
@@ -46,7 +50,7 @@ const PostSection = () => {
 
 	const processedPosts = useMemo(() => {
 		if (!loading && !hailstormLoading && postData) {
-			return postData.getAllPosts.posts.map((post: any) => ({
+			return postData.posts.items.map((post: any) => ({
 				...post,
 				created_by: {
 					bindName: getBindnameForUserId(data, post.created_by),
@@ -77,8 +81,8 @@ const PostSection = () => {
 	useEffect(() => {
 		refetch();
 
-		if (postData && postData.getAllPosts.posts.length) {
-			setPostTracker(postData.getAllPosts.posts.length);
+		if (postData && postData.posts.items.length) {
+			setPostTracker(postData.posts.items.length);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [postData, mode, page, render]);

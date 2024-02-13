@@ -1,7 +1,7 @@
 const { pool } = require('../config/database');
 const poolQuery = require('util').promisify(pool.query).bind(pool);
 
-const getAllPosts = async (orderBy = 'desc', tags = [], createdBy = null, title = null, page = 1, pageSize = 9) => {
+const getAllPosts = async ({ orderBy = 'desc', tags = [], createdBy = null, title = null, page = 1, pageSize = 9 }) => {
 	try {
 		let createdByFilter = '';
 		if (createdBy) {

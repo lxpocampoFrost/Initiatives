@@ -1,5 +1,6 @@
-const { getAllTags } = require('../controllers/tags.controller');
+const { getAllTags, getTagById, createTag, updateTag, deleteTag } = require('../controllers/tags.controller');
 const { getAllPosts, getPostById, createPost, updatePost, deletePost } = require('../controllers/post.controller');
+
 const { OpenAI } = require('openai');
 const axios = require('axios');
 
@@ -7,26 +8,11 @@ const openai = new OpenAI({
 	apiKey: process.env.OPENAI_KEY,
 });
 
-const assign_tags = `
-	1 - HTML: This includes topics such as tags, attributes, forms, input types, text formatting, links, images, tables, lists, layouts, semantics, multimedia, SVG, canvas, and accessibility.
-	2 - CSS: This includes topics such as selectors, properties, values, pseudo-classes, pseudo-elements, box model, layout types (flexbox, grid), responsive design, animations, transitions, preprocessors (Sass, Less), methodologies (BEM, SMACSS), and CSS frameworks (Bootstrap, Tailwind).
-	3 - JS: This includes topics such as variables, data types, operators, control structures, functions, objects, arrays, asynchronous JavaScript, AJAX, Promises, Fetch API, ES6+ features, error handling, testing, and debugging.
-	4 - React: This includes topics such as React components, JSX, state management, props, lifecycle methods, hooks, React Router, context API, Redux, and testing React applications.
-	5 - Webflow: This includes topics such as Webflow design, CMS, interactions and animations, responsive design, ecommerce on Webflow, SEO settings, and custom code in Webflow.
-    6 - Frontend: This includes topics such as HTML, CSS, JavaScript, DOM manipulation, responsive design, performance optimization, accessibility, version control/Git, Web APIs, testing/debugging, browser developer tools, building and automation tools, web security knowledge, package managers, CSS pre-processing, command line, and frameworks/libraries like React or Angular.
-	7 - Backend: This includes servers, APIs, database configuration, data handling, middleware, server-side scripting, network communications, server hosting, data backup and recovery, security compliance, and server performance monitoring.
-	8 - Onboarding: For onboarding processes and documentations.
-	9 - Library: For any library/package used in development.
-
-	Example: If the text is about HTML and CSS, return '1,2'. Remember Max of 3 tags only. If the text is unrelated to any tags, return 0.
-`;
-
 const getAnalyzedData = async (text) => {
 	let summary = '';
 	let startTime = Date.now();
 	let gpt_response = {
 		summary: '',
-		tags: [],
 	};
 
 	const parsed = JSON.parse(text);
@@ -63,30 +49,9 @@ const getAnalyzedData = async (text) => {
 		role_instructions = `
 			You are a technical design analyst and you assign tags based on the content you receive.
 			You also only assign a maximum of 3 tags.
-		`
+		`;
 
 		gpt_response.summary = summary;
-		if (summary !== '') {
-			completion = await openai.chat.completions.create({
-				model: 'gpt-4',
-				messages: [
-					{
-						role: 'system',
-						content: role_instructions,
-					},
-					{
-						role: 'user',
-						content: `Analyze this text ${summary}, Assign tags using this ${assign_tags}.`,
-					},
-				],
-				temperature: 0,
-				max_tokens: 800,
-			});
-		}
-
-		let tagResponse = completion.choices[0].message.content;
-
-		gpt_response.tags = tagResponse.split(',');
 
 		const endTime = Date.now();
 		const responseTimeInSeconds = (endTime - startTime) / 1000;
@@ -109,11 +74,11 @@ const resolvers = {
 				throw new Error('Failed to fetch tags', error);
 			}
 		},
-		getAllPosts: async (_, { orderBy, tags, createdBy, title, page = 1, pageSize = 9 }) => {
+		posts: async (_, { filter, pagination }) => {
 			try {
-				const { posts, count, currentPage } = await getAllPosts(orderBy, tags, createdBy, title, page, pageSize);
+				const { posts, count, currentPage } = await getAllPosts({ ...filter, ...pagination });
 				return {
-					posts,
+					items: posts,
 					count,
 					currentPage,
 				};
@@ -121,7 +86,7 @@ const resolvers = {
 				throw new Error('Failed to fetch posts', error);
 			}
 		},
-		getPostById: async (_, { id }) => {
+		postId: async (_, { id }) => {
 			try {
 				const post = await getPostById(id);
 
@@ -134,6 +99,19 @@ const resolvers = {
 				throw new Error('Failed to fetch post by ID', error);
 			}
 		},
+		tag: async (_, { id }) => {
+			try {
+				const tags = await getTagById(id);
+
+				if (!tags || tags.length === 0) {
+					throw new Error('Tag not found');
+				}
+
+				return tags[0];
+			} catch (error) {
+				throw new Error('Failed to fetch tag by ID', error);
+			}
+		},
 		hailstormData: async () => {
 			try {
 				const res = await axios.get(process.env.HAILSTORM_API);
@@ -144,9 +122,11 @@ const resolvers = {
 		},
 	},
 	Mutation: {
-		createPost: async (_, { title, post, created_by }, context) => {
+		createdPost: async (_, { input }) => {
 			try {
-				if (!title || !post) {
+				const { title, post, tagsId, created_by } = input;
+
+				if (!title || !post || !tagsId) {
 					throw new Error('All fields are required.');
 				}
 
@@ -155,15 +135,11 @@ const resolvers = {
 				if (gpt_response && gpt_response.summary == 'Invalid') {
 					throw new Error('Invalid content provided');
 				}
-				
-				if (!gpt_response.tags || gpt_response.tags === 0) {
-					throw new Error('Invalid tagsId. Cannot proceed with post creation.');
-				}
 
 				const postData = {
 					title,
 					post,
-					tagsId: gpt_response.tags,
+					tagsId: tagsId,
 					explanation: gpt_response.summary,
 					created_by,
 				};
@@ -172,17 +148,23 @@ const resolvers = {
 
 				const createdPost = await getPostById(postId);
 
-				return { data: createdPost, success: true, message: 'Post created successfully' };
+				return { data: createdPost, success: true, message: 'Post created successfully', error: null };
 			} catch (error) {
 				return {
 					data: null,
 					success: false,
-					message: error.message,
+					message: 'Failed to create post',
+					error: {
+						message: error.message,
+						code: 'POST_CREATION_ERROR',
+					},
 				};
 			}
 		},
-		updatePost: async (_, { postId, post, title }) => {
+		updatedPost: async (_, { postId, input }) => {
 			try {
+				const { title, post, tagsId } = input;
+
 				const existingPost = await getPostById(postId);
 
 				if (!existingPost) {
@@ -198,7 +180,7 @@ const resolvers = {
 				const updatedPostData = {
 					title: title || existingPost.title,
 					post: post || existingPost.post,
-					tagsId: gpt_response.tags,
+					tagsId: tagsId,
 					explanation: gpt_response.summary,
 					updated_date: new Date().toISOString().slice(0, 19).replace('T', ' '),
 				};
@@ -207,21 +189,108 @@ const resolvers = {
 
 				const updatedPost = await getPostById(updatedPostId);
 
-				return { data: updatedPost, success: true, message: 'Post updated successfully' };
+				return { data: updatedPost, success: true, message: 'Post updated successfully', error: null };
 			} catch (error) {
 				return {
 					data: null,
 					success: false,
-					message: error.message,
+					message: 'Failed to update post',
+					error: {
+						message: error.message,
+						code: 'POST_UPDATE_ERROR',
+					},
 				};
 			}
 		},
-		deletePost: async (_, { postId }) => {
+		deletedPost: async (_, { postId }) => {
 			try {
 				await deletePost(postId);
-				return { success: true, message: 'Post deleted successfully' };
+				return { success: true, message: 'Post deleted successfully', error: null };
 			} catch (error) {
-				throw new Error('Failed to delete post', error);
+				return {
+					data: null,
+					success: false,
+					message: 'Failed to delete post',
+					error: {
+						message: error.message,
+						code: 'POST_DELETE_ERROR',
+					},
+				};
+			}
+		},
+		createdTag: async (_, { name }) => {
+			try {
+				const createdTags = await createTag(name);
+
+				const tagIds = createdTags.map((result) => result.insertId);
+				const tagsData = await getTagById(tagIds);
+
+				return { data: tagsData, success: true, message: 'Tag created successfully', error: null };
+			} catch (error) {
+				if (error.code === 'TAG_ALREADY_EXISTS') {
+					return {
+						data: null,
+						success: false,
+						message: 'Failed to create tag. Tag already exists.',
+						error: {
+							message: 'Tag already exists',
+							code: 'TAG_ALREADY_EXISTS',
+						},
+					};
+				} else {
+					return {
+						data: null,
+						success: false,
+						message: 'Failed to create tag',
+						error: {
+							message: error.message,
+							code: 'TAG_CREATION_ERROR',
+						},
+					};
+				}
+			}
+		},
+		updatedTag: async (_, { tagId, tag }) => {
+			try {
+				const existingTag = await getTagById(tagId);
+				const existingTagValue = existingTag[0].tag;
+
+				if (!existingTag || existingTag.length === 0) {
+					throw new Error('Tag not found');
+				}
+
+				if (tag !== existingTagValue) {
+					const updatedTag = await updateTag(tagId, tag);
+					const updatedTagData = await getTagById(updatedTag);
+
+					return { data: updatedTagData, success: true, message: 'Tag updated successfully', error: null };
+				}
+			} catch (error) {
+				return {
+					data: null,
+					success: false,
+					message: 'Failed to update tag',
+					error: {
+						message: error.message,
+						code: 'TAG_UPDATE_ERROR',
+					},
+				};
+			}
+		},
+		deletedTag: async (_, { tagId }) => {
+			try {
+				deleteTag(tagId);
+				return { success: true, message: 'Tag deleted successfully', error: null };
+			} catch (error) {
+				return {
+					data: null,
+					success: false,
+					message: 'Failed to delete tag',
+					error: {
+						message: error.message,
+						code: 'TAG_DELETE_ERROR',
+					},
+				};
 			}
 		},
 	},

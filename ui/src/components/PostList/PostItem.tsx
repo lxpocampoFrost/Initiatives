@@ -89,9 +89,7 @@ const PostItem = ({ data, handleClick }: PostItemProps) => {
 						Posted {created_date}
 					</Box>
 				</Box>
-				<Box
-					paddingRight='8px'
-				>
+				<Box paddingRight='8px'>
 					<Box
 						sx={{
 							fontFamily: 'Figtree-Bold, sans-serif',
@@ -136,12 +134,18 @@ const PostItem = ({ data, handleClick }: PostItemProps) => {
 					marginTop='auto'
 				>
 					{tags &&
-						tags.map((tag: string, index: number) => (
+						tags.slice(0, 3).map((tag: string, index: number) => (
 							<Tags
 								key={index}
 								name={tag}
 							/>
 						))}
+					{tags && tags.length > 3 && (
+						<Tags
+							key='more'
+							name='...'
+						/>
+					)}
 				</Stack>
 			</Box>
 		</>

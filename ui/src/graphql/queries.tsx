@@ -10,15 +10,17 @@ export const GET_TAGS = gql`
 `;
 
 export const GET_POSTS = gql`
-	query ($orderBy: String, $tags: [String], $createdBy: [String], $title: String, $page: Int, $pageSize: Int) {
-		getAllPosts(orderBy: $orderBy, tags: $tags, createdBy: $createdBy, title: $title, page: $page, pageSize: $pageSize) {
-			posts {
+	query Posts($filter: PostFilterInput, $pagination: PaginationInput) {
+		posts(filter: $filter, pagination: $pagination) {
+			items {
 				id
 				title
 				post
 				tags
 				created_by
 				created_date
+				updated_date
+				deleted
 				explanation
 			}
 			count
@@ -28,40 +30,57 @@ export const GET_POSTS = gql`
 `;
 
 export const ADD_POST = gql`
-	mutation CreatePost($title: String!, $post: String!, $createdBy: String!) {
-		createPost(title: $title, post: $post, created_by: $createdBy) {
-			data {
-				id
-				title
-				post
-				created_by
-			}
-			message
+	mutation CreatePost($input: PostCreate) {
+		createdPost(input: $input) {
+			data
 			success
+			message
+			error {
+				message
+				code
+			}
 		}
 	}
 `;
 
 export const UPDATE_POST = gql`
-	mutation UpdatePost($postId: ID!, $title: JSON, $post: String!) {
-		updatePost(postId: $postId, title: $title, post: $post) {
-			data {
-				id
-				title
-				post
-				updated_date
-			}
-			message
+	mutation UpdatedPost($postId: ID!, $input: PostUpdate) {
+		updatedPost(postId: $postId, input: $input) {
+			data
 			success
+			message
+			error {
+				message
+				code
+			}
 		}
 	}
 `;
 
 export const DELETE_POST = gql`
 	mutation DeletePost($postId: ID!) {
-		deletePost(postId: $postId) {
+		deletedPost(postId: $postId) {
+			data
 			success
 			message
+			error {
+				message
+				code
+			}
+		}
+	}
+`;
+
+export const ADD_TAG = gql`
+	mutation ($name: [String]!) {
+		createdTag(name: $name) {
+			data
+			success
+			message
+			error {
+				message
+				code
+			}
 		}
 	}
 `;
