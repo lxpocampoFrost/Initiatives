@@ -20,6 +20,7 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
 	const currentUserDetailsId = currentUserDetails && currentUserDetails.userId;
 
 	const [loading, setLoading] = useState(false);
+	const [isTagEmpty, setIsTagEmpty] = useState(false);
 	const [isEditorEmpty, setIsEditorEmpty] = useState(true);
 	const editorRef = useRef<any>(null);
 
@@ -50,6 +51,10 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
 		}
 	}, [selectedCardData, selectedPostTag]);
 
+	useEffect(() => {
+		setIsTagEmpty(selectedPostTag.length === 0);
+	}, [selectedPostTag]);
+
 	const [actionNotif, setActionNotif] = useState(false);
 
 	const [createPost] = useMutation(ADD_POST);
@@ -69,7 +74,7 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
 				input: {
 					post,
 					title,
-					tagsId: formData.tagsId,
+					tagsId: selectedPostTag,
 					...(isUpdate ? {} : { created_by: currentUserDetailsId }),
 				},
 			};
@@ -283,7 +288,8 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
 					const body = outputData.blocks.slice(1);
 					const bodyBlocks = JSON.stringify(body);
 
-					const isEmpty = outputData.blocks.length === 1;
+					const isEmpty = outputData.blocks.length === 0;
+
 					setIsEditorEmpty(isEmpty);
 
 					setFormData((prevState) => ({
@@ -297,6 +303,9 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
 			onReady: () => {
 				new DragDrop(editor);
 				console.log('editor ready');
+
+				const editorContent = editor.blocks.getBlocksCount();
+				// mode === 'view ' ? setIsEditorEmpty(editorContent === 0) : setIsEditorEmpty(true);
 			},
 		});
 
@@ -312,6 +321,8 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [mode]);
+
+	console.log('form', formData);
 
 	return (
 		<>
@@ -609,7 +620,7 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
 					padding='8px 20px'
 					borderRadius='63px'
 					lineHeight='19.2px'
-					disabled={isEditorEmpty || loading}
+					disabled={(isTagEmpty && isEditorEmpty) || loading}
 					action={() => handleSubmit()}
 				/>
 			</Box>

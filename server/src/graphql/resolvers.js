@@ -165,23 +165,31 @@ const resolvers = {
 			try {
 				const { title, post, tagsId } = input;
 
+				if (!tagsId) {
+					throw new Error('Tags are required.');
+				}
+
 				const existingPost = await getPostById(postId);
 
 				if (!existingPost) {
 					throw new Error('Post not found');
 				}
 
-				gpt_response = await getAnalyzedData(post);
+				let gpt_response;
 
-				if (gpt_response && gpt_response.summary == 'Invalid') {
-					throw new Error('Invalid content provided');
+				if (title && post) {
+					gpt_response = await getAnalyzedData(post);
+
+					if (gpt_response && gpt_response.summary == 'Invalid') {
+						throw new Error('Invalid content provided');
+					}
 				}
 
 				const updatedPostData = {
 					title: title || existingPost.title,
 					post: post || existingPost.post,
-					tagsId: tagsId,
-					explanation: gpt_response.summary,
+					tagsId: tagsId || existingPost.tags,
+					explanation: (gpt_response && gpt_response.summary) || existingPost.explanation,
 					updated_date: new Date().toISOString().slice(0, 19).replace('T', ' '),
 				};
 
