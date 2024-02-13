@@ -24,7 +24,7 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
 	const editorRef = useRef<any>(null);
 
 	const [formData, setFormData] = useState({
-		postId: mode !== 'create' ? selectedCardData.id : '',
+		postId: '',
 		title: '',
 		post: '',
 		tagsId: selectedPostTag,
@@ -33,11 +33,22 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
 	});
 
 	useEffect(() => {
-		setFormData((prevFormData) => ({
-			...prevFormData,
-			tagsId: selectedPostTag,
-		}));
-	}, [selectedPostTag]);
+		if (selectedCardData === null) {
+			setFormData({
+				postId: '',
+				title: '',
+				post: '',
+				tagsId: '',
+				created_by: '',
+				updated_at: '',
+			});
+		} else {
+			setFormData((prevFormData) => ({
+				...prevFormData,
+				postId: selectedCardData.id,
+			}));
+		}
+	}, [selectedCardData, selectedPostTag]);
 
 	const [actionNotif, setActionNotif] = useState(false);
 
@@ -277,6 +288,7 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
 
 					setFormData((prevState) => ({
 						...prevState,
+						postId: mode !== 'create' ? selectedCardData.id : '',
 						title: title,
 						post: bodyBlocks,
 					}));

@@ -37,7 +37,7 @@ export default function Home() {
 		});
 
 		try {
-			if (data.deletePost && data.deletePost.success === true) {
+			if (data.deletedPost && data.deletedPost.success === true) {
 				if (page > 1 && postTracker === 1) {
 					setPage(page - 1);
 				}
