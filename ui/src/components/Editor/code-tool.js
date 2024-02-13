@@ -98,7 +98,22 @@ export default class CustomCodeTool extends CodeTool {
 				});
 		} else {
 			console.error('Clipboard API not available');
+			unsecuredCopyToClipboard(copyText);
 		}
+	}
+
+	unsecuredCopyToClipboard(text) {
+		const textArea = document.createElement('textarea');
+		textArea.value = text;
+		document.body.appendChild(textArea);
+		textArea.focus();
+		textArea.select();
+		try {
+			document.execCommand('copy');
+		} catch (err) {
+			console.error('Unable to copy to clipboard', err);
+		}
+		document.body.removeChild(textArea);
 	}
 
 	changeIconToCheckmark() {
