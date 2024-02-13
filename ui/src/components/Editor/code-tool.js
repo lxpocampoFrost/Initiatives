@@ -98,7 +98,7 @@ export default class CustomCodeTool extends CodeTool {
 				});
 		} else {
 			console.error('Clipboard API not available');
-			this.unsecuredCopyToClipboard(copyText);
+			this.unsecuredCopyToClipboard(syntaxContent);
 		}
 	}
 
