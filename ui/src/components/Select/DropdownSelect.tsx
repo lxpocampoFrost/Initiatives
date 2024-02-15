@@ -78,6 +78,7 @@ const DropdownSelect = ({ usage, createStatus }: DropdownSelectProps) => {
 		},
 		'.tags-multiselect__indicators': {
 			height: 'max-content',
+			margin: 'auto 0',
 		},
 
 		'.tags-multiselect__input-container': {
@@ -86,7 +87,7 @@ const DropdownSelect = ({ usage, createStatus }: DropdownSelectProps) => {
 		'.tags-multiselect__clear-indicator': {
 			cursor: 'pointer',
 			padding: '0',
-			margin: usage === 'create' ? 'auto 0' : '0 10px 0 0',
+			marginRight: usage === 'create' ? '0' : '10px',
 			' > svg': {
 				display: 'none',
 			},
