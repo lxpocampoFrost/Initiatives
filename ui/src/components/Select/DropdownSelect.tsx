@@ -85,6 +85,7 @@ const DropdownSelect = ({ usage, createStatus }: DropdownSelectProps) => {
 		},
 		'.tags-multiselect__clear-indicator': {
 			cursor: 'pointer',
+			padding: '0',
 			marginRight: usage === 'create' ? '0' : '10px',
 			' > svg': {
 				display: 'none',

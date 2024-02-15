@@ -82,7 +82,6 @@ const CreateTagDropdown = ({ onClose }: CreateTagDropdownProps) => {
 		event.stopPropagation();
 	};
 
-	console.log('status', showBox);
 	return (
 		<div onClick={handleContentClick}>
 			<Box
