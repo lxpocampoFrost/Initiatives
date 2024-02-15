@@ -1,17 +1,22 @@
 import React, { useEffect, useState } from 'react';
+import Select from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 
-import { GET_TAGS, ADD_TAG } from '@/graphql/queries';
-import { useMutation, useQuery } from '@apollo/client';
+import { GET_TAGS } from '@/graphql/queries';
+import { useQuery } from '@apollo/client';
 import { useMode } from '@/context/ModeContext';
 
-const DropdownSelect = () => {
+interface DropdownSelectProps {
+	usage?: string;
+	createStatus?: boolean | null;
+}
+
+const DropdownSelect = ({ usage, createStatus }: DropdownSelectProps) => {
 	const [selectedOptions, setSelectedOptions] = useState<Array<{ label: string; value: string }>>([]);
 
 	const [menuIsOpen, setMenuIsOpen] = useState(false);
 
-	const { loading, error, data } = useQuery(GET_TAGS);
-	const [createTag] = useMutation(ADD_TAG);
+	const { data } = useQuery(GET_TAGS);
 
 	const { setSelectedPostTag, selectedCardData, mode } = useMode();
 
@@ -24,6 +29,29 @@ const DropdownSelect = () => {
 			label: tag.tag,
 		}));
 
+	const handleCreate = async (inputValue: any) => {
+		try {
+			const newOption = { label: inputValue, value: inputValue.toLowerCase() };
+
+			setSelectedOptions((prevOptions) => [...prevOptions, newOption]);
+		} catch (error) {
+			console.error('GraphQL mutation error:', error.message);
+		}
+	};
+
+	useEffect(() => {
+		if (usage === 'create' || usage === 'create') {
+			const formattedOptions = selectedOptions.map((option) => option.value);
+			setSelectedPostTag(formattedOptions);
+		}
+
+		if (createStatus) {
+			setTimeout(() => {
+				setSelectedOptions([]);
+			}, 2000);
+		}
+	}, [selectedOptions, createStatus]);
+
 	const handleChange = (newValue: any) => {
 		setSelectedOptions(newValue);
 
@@ -32,42 +60,24 @@ const DropdownSelect = () => {
 		setSelectedPostTag(selectedValues);
 	};
 
-	const handleCreate = async (inputValue: any) => {
-		try {
-			const { data: mutationData } = await createTag({
-				variables: { name: [inputValue] },
-				refetchQueries: [{ query: GET_TAGS }],
-			});
-
-			if (mutationData.createdTag.success) {
-				const { id, tag } = mutationData.createdTag.data[0];
-
-				const newValue = [...selectedOptions, { label: tag, value: id.toString() }];
-
-				handleChange(newValue);
-			} else {
-				console.error('Tag creation failed:', mutationData.createdTag.message);
-			}
-		} catch (error) {
-			console.error('GraphQL mutation error:', error.message);
-		}
-	};
-
 	const controlStyles = {
-		backgroundColor: '#25282E',
+		backgroundColor: usage === 'create' ? 'transparent' : '#25282E',
 		color: '#ffffff',
-		border: '1px solid #40444C',
+		border: createStatus === true ? '1px solid rgba(1, 125, 87, 1)' : createStatus === false ? '1px solid rgba(209, 133, 133, 1)' : '1px solid #40444C',
 		borderRadius: menuIsOpen ? '4px 4px 0 0' : '4px',
 		padding: '12px',
 		boxShadow: 'none',
 		display: 'flex',
 		'&:hover': {
-			borderColor: 'rgba(64, 68, 76, 1)',
+			borderColor: createStatus === true ? 'rgba(1, 125, 87, 1)' : createStatus === false ? 'rgba(209, 133, 133, 1)' : '#40444C',
 		},
 
 		'.tags-multiselect__value-container': {
 			gap: '10px',
 			padding: '0',
+		},
+		'.tags-multiselect__indicators': {
+			height: 'max-content',
 		},
 
 		'.tags-multiselect__input-container': {
@@ -93,9 +103,11 @@ const DropdownSelect = () => {
 
 		'.tags-multiselect__indicator-separator': {
 			backgroundColor: 'rgba(255, 255, 255, 0.3)',
+			display: usage === 'create' ? 'none' : 'flex',
 		},
 
 		'.tags-multiselect__dropdown-indicator': {
+			display: usage === 'create' ? 'none' : 'flex',
 			cursor: 'pointer',
 			marginLeft: '10px',
 			' > svg': {
@@ -203,39 +215,57 @@ const DropdownSelect = () => {
 		updateSelectedOptions();
 	}, [mode, selectedCardData, tags]);
 
+	const commonProps = {
+		isMulti: true,
+		className: 'react-select-container',
+		classNamePrefix: 'tags-multiselect',
+		onChange: handleChange,
+		placeholder: 'Add new tag',
+		styles: {
+			menuPortal: (base: any) => ({ ...base, zIndex: 9999 }),
+			control: () => ({
+				...controlStyles,
+			}),
+			multiValue: () => ({
+				...multiValueStyles,
+			}),
+			menu: () => ({
+				...menuStyles,
+			}),
+			option: () => ({
+				...optionStyles,
+			}),
+		},
+	};
+
 	return (
-		<CreatableSelect
-			isMulti={true}
-			className='react-select-container'
-			classNamePrefix='tags-multiselect'
-			onChange={handleChange}
-			menuIsOpen={menuIsOpen}
-			menuPortalTarget={document.body}
-			onMenuOpen={() => setMenuIsOpen(true)}
-			onMenuClose={() => setMenuIsOpen(false)}
-			onCreateOption={handleCreate}
-			createOptionPosition='first'
-			options={options}
-			value={selectedOptions}
-			placeholder='Tags'
-			styles={{
-				menuPortal: (base) => ({ ...base, zIndex: 9999 }),
-				control: (baseStyles, state) => ({
-					...controlStyles,
-				}),
+		<>
+			{usage === 'create' ? (
 				//@ts-ignore
-				multiValue: () => ({
-					...multiValueStyles,
-				}),
-				menu: () => ({
-					...menuStyles,
-				}),
+				<CreatableSelect
+					{...commonProps}
+					onCreateOption={handleCreate}
+					createOptionPosition='first'
+					components={{
+						Menu: () => null,
+					}}
+					value={selectedOptions}
+					isValidNewOption={() => true}
+				/>
+			) : (
 				//@ts-ignore
-				option: (baseStyles, state) => ({
-					...optionStyles,
-				}),
-			}}
-		/>
+				<Select
+					noOptionsMessage={() => 'Tag not Found'}
+					{...commonProps}
+					menuIsOpen={menuIsOpen}
+					menuPortalTarget={document.body}
+					onMenuOpen={() => setMenuIsOpen(true)}
+					onMenuClose={() => setMenuIsOpen(false)}
+					value={selectedOptions}
+					options={options}
+				/>
+			)}
+		</>
 	);
 };
 

@@ -3,7 +3,12 @@ const poolQuery = require('util').promisify(pool.query).bind(pool);
 
 const getAllTags = async () => {
 	try {
-		const results = await poolQuery('SELECT * FROM tags');
+		const results = await poolQuery(`
+      SELECT tags.id, tags.tag, COUNT(posts_tags.post_id) AS post_count
+      FROM tags
+      LEFT JOIN posts_tags ON tags.id = posts_tags.tag_id
+      GROUP BY tags.id, tags.tag
+    `);
 		return results;
 	} catch (error) {
 		throw error;

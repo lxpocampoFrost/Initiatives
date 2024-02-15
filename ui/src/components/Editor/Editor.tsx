@@ -303,9 +303,6 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
 			onReady: () => {
 				new DragDrop(editor);
 				console.log('editor ready');
-
-				const editorContent = editor.blocks.getBlocksCount();
-				// mode === 'view ' ? setIsEditorEmpty(editorContent === 0) : setIsEditorEmpty(true);
 			},
 		});
 
@@ -321,8 +318,6 @@ const Editor = ({ onSubmitSuccess }: EditorProps) => {
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [mode]);
-
-	console.log('form', formData);
 
 	return (
 		<>

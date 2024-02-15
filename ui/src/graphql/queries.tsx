@@ -5,6 +5,7 @@ export const GET_TAGS = gql`
 		tags {
 			id
 			tag
+			post_count
 		}
 	}
 `;

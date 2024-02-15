@@ -15,6 +15,7 @@ import DeleteModal from '@/components/Modal/DeleteModal';
 import TooltipButton from '@/components/TooltipButton';
 import ConfirmModal from '@/components/Modal/ConfirmModal';
 import DropdownSelect from '@/components/Select/DropdownSelect';
+import TagDropdown from '@/components/Dropdown/CreateTagDropdown';
 
 const TagWrapper = styled.div`
 	display: flex;
@@ -76,9 +77,6 @@ export default function ComponentLibrary() {
 				gap: '20px',
 			}}
 		>
-			<Box marginTop={4}>
-				<DropdownSelect />
-			</Box>
 			<TagWrapper>
 				<Tags name='All' />
 				<Tags name='Frontend' />

@@ -51,6 +51,7 @@ module.exports = gql`
 	type Tag {
 		id: ID!
 		tag: String!
+		post_count: Int!
 	}
 
 	type User {
