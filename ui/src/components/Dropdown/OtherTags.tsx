@@ -47,7 +47,7 @@ const OtherTags = () => {
 						fontWeight: '700',
 					}}
 				>
-					<Box sx={{ fontSize: '16px', lineHeight: '1.5' }}>Selected Tags</Box>
+					<Box sx={{ fontSize: '16px', lineHeight: '1.5' }}>Select Tags</Box>
 					{selectedTagsCount !== 0 && (
 						<Box
 							sx={{
