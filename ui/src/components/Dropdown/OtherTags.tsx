@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box } from '@mui/material';
 import { useQuery } from '@apollo/client';
 import { GET_TAGS } from '@/graphql/queries';
@@ -20,15 +20,21 @@ const OtherTags = () => {
 		}
 	};
 
-	const handleClearAll = () => {
-		setSelectedTags([]);
-	};
+	const remainingTagValues = remainingTags.map((tag) => tag.tag);
+	const selectedTagsCount = selectedTags.filter((tag) => remainingTagValues.includes(tag)).length;
 
-	const selectedTagsCount = remainingTags.filter((tag) => selectedTags.includes(tag.tag)).length;
+	const handleClearAll = () => {
+		const updatedSelectedTags = selectedTags.filter((tag) => !remainingTagValues.includes(tag));
+
+		setSelectedTags(updatedSelectedTags);
+	};
 
 	const handleContentClick = (event: { stopPropagation: () => void }) => {
 		event.stopPropagation();
 	};
+
+	useEffect(() => {}, [selectedTags]);
+
 	return (
 		<>
 			<div onClick={handleContentClick}>
@@ -42,7 +48,7 @@ const OtherTags = () => {
 					}}
 				>
 					<Box sx={{ fontSize: '16px', lineHeight: '1.5' }}>Selected Tags</Box>
-					{selectedTags.length > 0 && (
+					{selectedTagsCount !== 0 && (
 						<Box
 							sx={{
 								borderRadius: '20px',
@@ -57,7 +63,7 @@ const OtherTags = () => {
 								lineHeight: '1.4',
 							}}
 						>
-							{selectedTagsCount > 0 && <span>{selectedTagsCount}</span>}
+							{selectedTagsCount !== 0 && <span>{selectedTagsCount}</span>}
 						</Box>
 					)}
 				</Box>
@@ -86,18 +92,6 @@ const OtherTags = () => {
 								active={selectedTags.includes(option.tag)}
 							/>
 						))}
-					{/* {data.tags.slice(4).map((tag) => (
-					<Box
-						key={tag}
-						onClick={() => handleChipClick(tag)}
-						selected={selectedTags.includes(tag)}
-					>
-						<Tags
-							name={tag}
-							// active={selectedTags.includes(tag)}
-						></Tags>
-					</Box>
-				))} */}
 				</Box>
 				<Box
 					onClick={handleClearAll}

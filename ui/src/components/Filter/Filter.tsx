@@ -67,6 +67,10 @@ const Filter = () => {
 
 	const updatedPostedItem = [...postedItem, ...currentDevTeam];
 
+	const tagsWithMostPost = data && data.tags ? [...data.tags].sort((a, b) => (b.post_count || 0) - (a.post_count || 0)).slice(0, 5) : [];
+
+	const remainingTags = data && data.tags ? [...data.tags].sort((a, b) => (b.post_count || 0) - (a.post_count || 0)).slice(5) : [];
+
 	const handleTagToggle = (tag: string) => {
 		setPage(1);
 
@@ -75,16 +79,18 @@ const Filter = () => {
 			setActiveAction('');
 		} else {
 			setSelectedTags((prevTags) => {
-				if (prevTags.includes('All')) {
-					return [tag];
-				} else {
-					return prevTags.includes(tag) ? prevTags : [...prevTags, tag];
+				const updatedTags = prevTags.includes('All') ? [tag] : prevTags.includes(tag) ? prevTags : [...prevTags, tag];
+
+				const anySelectedTagsIncludedInRemaining = updatedTags.some((tag) => remainingTags.some((remainingTag) => remainingTag.tag === tag));
+
+				if (!anySelectedTagsIncludedInRemaining) {
+					setActiveAction('');
 				}
+
+				return updatedTags;
 			});
 		}
 	};
-
-	const tagsWithMostPost = data && data.tags ? [...data.tags].sort((a, b) => (b.post_count || 0) - (a.post_count || 0)).slice(0, 5) : [];
 
 	return (
 		<>
