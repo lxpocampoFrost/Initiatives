@@ -18,10 +18,14 @@ const Container = ({ children, anchor, open, onClose }: ContainerProp) => {
 
 		if (!containerRect) return {};
 
+		let pixelOffset;
+
+		window.innerWidth < 600 ? (pixelOffset = 8) : (pixelOffset = 10);
+
 		const leftPosition = anchorRect.left - containerRect.left + anchorRect.width / 2;
 
 		return {
-			left: leftPosition - 10 + 'px',
+			left: leftPosition - pixelOffset + 'px',
 		};
 	};
 
@@ -93,6 +97,7 @@ const Container = ({ children, anchor, open, onClose }: ContainerProp) => {
 					},
 					'@media screen and (max-width:576px)': {
 						maxWidth: '100%',
+						borderRadius: '4px',
 					},
 				},
 			}}

@@ -63,13 +63,13 @@ const DropdownSelect = ({ usage, createStatus }: DropdownSelectProps) => {
 	const controlStyles = {
 		backgroundColor: usage === 'create' ? 'transparent' : '#25282E',
 		color: '#ffffff',
-		border: createStatus === true ? '1px solid rgba(1, 125, 87, 1)' : createStatus === false ? '1px solid rgba(209, 133, 133, 1)' : '1px solid #40444C',
+		border: createStatus === true ? '1px solid #1DBA8A' : createStatus === false ? '1px solid rgba(209, 133, 133, 1)' : '1px solid #40444C',
 		borderRadius: menuIsOpen ? '4px 4px 0 0' : '4px',
 		padding: '12px',
 		boxShadow: 'none',
 		display: 'flex',
 		'&:hover': {
-			borderColor: createStatus === true ? 'rgba(1, 125, 87, 1)' : createStatus === false ? 'rgba(209, 133, 133, 1)' : '#40444C',
+			borderColor: createStatus === true ? '#1DBA8A' : createStatus === false ? 'rgba(209, 133, 133, 1)' : '#40444C',
 		},
 
 		'.tags-multiselect__value-container': {
@@ -85,7 +85,7 @@ const DropdownSelect = ({ usage, createStatus }: DropdownSelectProps) => {
 		},
 		'.tags-multiselect__clear-indicator': {
 			cursor: 'pointer',
-			marginRight: '10px',
+			marginRight: usage === 'create' ? '0' : '10px',
 			' > svg': {
 				display: 'none',
 			},

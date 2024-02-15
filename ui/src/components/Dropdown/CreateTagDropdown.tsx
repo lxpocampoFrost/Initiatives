@@ -39,10 +39,12 @@ const CreateTagDropdown = ({ onClose }: CreateTagDropdownProps) => {
 				console.error('Tag creation failed:', mutationData.createdTag.message);
 			}
 
+			setMessage(mutationData.createdTag.message);
+			setShowBox(true);
+
 			setTimeout(() => {
 				setStatus(null);
 			}, 2000);
-			setMessage(mutationData.createdTag.message);
 		} catch (error) {
 			console.error('GraphQL mutation error:', error.message);
 		}
@@ -61,7 +63,7 @@ const CreateTagDropdown = ({ onClose }: CreateTagDropdownProps) => {
 			paddingLeft: '11px',
 		},
 		'&.success': {
-			color: 'rgba(1, 125, 87, 1)',
+			color: '#1DBA8A',
 			paddingLeft: '10px',
 		},
 	};
@@ -80,8 +82,21 @@ const CreateTagDropdown = ({ onClose }: CreateTagDropdownProps) => {
 		event.stopPropagation();
 	};
 
+	console.log('status', showBox);
 	return (
 		<div onClick={handleContentClick}>
+			<Box
+				sx={{
+					fontSize: '16px',
+					lineHeight: '24px',
+					fontFamily: 'Figtree-Bold,sans-serif',
+					fontWeight: '700',
+					marginBottom: '12px',
+				}}
+			>
+				Create tag
+			</Box>
+
 			<DropdownSelect
 				usage='create'
 				createStatus={status}
