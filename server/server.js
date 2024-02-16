@@ -8,7 +8,6 @@ const db = require('./src/config/database');
 const typeDefs = require('./src/graphql/typeDefs');
 const resolvers = require('./src/graphql/resolvers');
 
-const { verifyJwt } = require('./src/utils/auth');
 const { errorHandler } = require('./src/utils/error');
 
 const app = express();
@@ -39,7 +38,6 @@ async function startServer() {
 	// Middleware
 	app.use(express.json(), express.urlencoded({ extended: true }));
 
-	// app.use(verifyJwt);
 	app.use(errorHandler);
 
 	app.get('/', (req, res) => {
