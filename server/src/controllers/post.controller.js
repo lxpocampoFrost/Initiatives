@@ -1,23 +1,7 @@
 const { pool } = require('../config/database');
 const poolQuery = require('util').promisify(pool.query).bind(pool);
 
-const getAllPosts = async () => {
-	
-};
-
-const getPostById = async () => {
-	
-};
-
-const createPost = async () => {
-	
-};
-
-const updatePost = async () => {
-	
-};
-
-const deletePost = async () => {
+const getAllInitiatives = async () => {
 	
 };
 
@@ -27,9 +11,5 @@ const formatDate = (dateString) => {
 };
 
 module.exports = {
-	getAllPosts,
-	getPostById,
-	createPost,
-	updatePost,
-	deletePost,
+	getAllInitiatives,
 };
